@@ -1,0 +1,877 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model call_comments {
+  id          Int    @id @default(autoincrement()) @db.UnsignedInt
+  call_id     Int    @db.UnsignedInt
+  reviewer_id Int    @db.UnsignedInt
+  comment     String @db.Text
+}
+
+model call_notes {
+  id          Int @id @default(autoincrement()) @db.UnsignedInt
+  note        Int @db.UnsignedSmallInt
+  call_id     Int @db.UnsignedInt
+  reviewer_id Int @db.UnsignedInt
+  type        Int @db.UnsignedTinyInt
+
+  @@index([call_id], map: "call_id")
+  @@index([reviewer_id], map: "reviewer_id")
+}
+
+model call_proposals {
+  id             Int                    @id @default(autoincrement()) @db.UnsignedInt
+  last_name      String?                @db.VarChar(255)
+  first_name     String?                @db.VarChar(255)
+  nationality    Int?                   @db.UnsignedMediumInt
+  gender         call_proposals_gender?
+  age            Int?                   @db.UnsignedSmallInt
+  status         Int?                   @db.UnsignedTinyInt
+  domain         String?                @db.VarChar(255)
+  diploma        String?                @db.VarChar(255)
+  email          String?                @db.VarChar(120)
+  mele           String?                @db.VarChar(255)
+  university     String?                @db.VarChar(255)
+  department     String?                @db.VarChar(255)
+  country        Int?                   @db.UnsignedMediumInt
+  phd_title      String?                @db.VarChar(255)
+  phd_ad_name    String?                @db.VarChar(255)
+  phd_year       String?                @db.VarChar(120)
+  phd_ad_mail    String?                @db.VarChar(255)
+  phd_summary    String?                @db.Text
+  cv             String?                @db.VarChar(255)
+  paper          String?                @db.VarChar(255)
+  reviewer_group Int?                   @db.TinyInt
+  created        DateTime               @default(now()) @db.DateTime(0)
+  modified       DateTime               @default(now()) @db.DateTime(0)
+
+  @@index([last_name], map: "last_name")
+  @@index([reviewer_group], map: "reviewer_group")
+}
+
+model call_proposals_2014 {
+  id             Int                        @id @default(autoincrement()) @db.UnsignedInt
+  last_name      String                     @db.VarChar(255)
+  first_name     String                     @db.VarChar(255)
+  nationality    Int                        @db.UnsignedMediumInt
+  gender         call_proposals_2014_gender
+  age            Int                        @db.UnsignedSmallInt
+  status         Int                        @db.UnsignedTinyInt
+  domain         String                     @db.VarChar(255)
+  diploma        String                     @db.VarChar(255)
+  email          String                     @db.VarChar(255)
+  mele           String                     @db.VarChar(255)
+  university     String                     @db.VarChar(255)
+  department     String                     @db.VarChar(255)
+  country        Int                        @db.UnsignedMediumInt
+  phd_title      String                     @db.VarChar(255)
+  phd_ad_name    String                     @db.VarChar(255)
+  phd_year       Int                        @db.Year
+  phd_ad_mail    String                     @db.VarChar(255)
+  phd_summary    String                     @db.Text
+  cv             String                     @db.VarChar(255)
+  paper          String                     @db.VarChar(255)
+  reviewer_group Int                        @db.TinyInt
+  created        DateTime                   @db.DateTime(0)
+  modified       DateTime                   @db.DateTime(0)
+
+  @@index([last_name], map: "last_name")
+  @@index([reviewer_group], map: "reviewer_group")
+}
+
+model call_proposals_2015 {
+  id             Int                        @id @default(autoincrement()) @db.UnsignedInt
+  last_name      String                     @db.VarChar(255)
+  first_name     String                     @db.VarChar(255)
+  nationality    Int                        @db.UnsignedMediumInt
+  gender         call_proposals_2015_gender
+  age            Int                        @db.UnsignedSmallInt
+  status         Int                        @db.UnsignedTinyInt
+  domain         String                     @db.VarChar(255)
+  diploma        String                     @db.VarChar(255)
+  email          String                     @db.VarChar(255)
+  mele           String                     @db.VarChar(255)
+  university     String                     @db.VarChar(255)
+  department     String                     @db.VarChar(255)
+  country        Int                        @db.UnsignedMediumInt
+  phd_title      String                     @db.VarChar(255)
+  phd_ad_name    String                     @db.VarChar(255)
+  phd_year       Int                        @db.Year
+  phd_ad_mail    String                     @db.VarChar(255)
+  phd_summary    String                     @db.Text
+  cv             String                     @db.VarChar(255)
+  paper          String                     @db.VarChar(255)
+  reviewer_group Int                        @db.TinyInt
+  created        DateTime                   @db.DateTime(0)
+  modified       DateTime                   @db.DateTime(0)
+
+  @@index([last_name], map: "last_name")
+  @@index([reviewer_group], map: "reviewer_group")
+}
+
+model call_proposals_2016 {
+  id             Int                        @id @default(autoincrement()) @db.UnsignedInt
+  last_name      String                     @db.VarChar(255)
+  first_name     String                     @db.VarChar(255)
+  nationality    Int                        @db.UnsignedMediumInt
+  gender         call_proposals_2016_gender
+  age            Int                        @db.UnsignedSmallInt
+  status         Int                        @db.UnsignedTinyInt
+  domain         String                     @db.VarChar(255)
+  diploma        String                     @db.VarChar(255)
+  email          String                     @db.VarChar(255)
+  mele           String                     @db.VarChar(255)
+  university     String                     @db.VarChar(255)
+  department     String                     @db.VarChar(255)
+  country        Int                        @db.UnsignedMediumInt
+  phd_title      String                     @db.VarChar(255)
+  phd_ad_name    String                     @db.VarChar(255)
+  phd_year       Int                        @db.Year
+  phd_ad_mail    String                     @db.VarChar(255)
+  phd_summary    String                     @db.Text
+  cv             String                     @db.VarChar(255)
+  paper          String                     @db.VarChar(255)
+  reviewer_group Int                        @db.TinyInt
+  created        DateTime                   @db.DateTime(0)
+  modified       DateTime                   @db.DateTime(0)
+
+  @@index([last_name], map: "last_name")
+  @@index([reviewer_group], map: "reviewer_group")
+}
+
+model call_proposals_2017 {
+  id             Int                        @id @default(autoincrement()) @db.UnsignedInt
+  last_name      String                     @db.VarChar(255)
+  first_name     String                     @db.VarChar(255)
+  nationality    Int                        @db.UnsignedMediumInt
+  gender         call_proposals_2017_gender
+  age            Int                        @db.UnsignedSmallInt
+  status         Int                        @db.UnsignedTinyInt
+  domain         String                     @db.VarChar(255)
+  diploma        String                     @db.VarChar(255)
+  email          String                     @db.VarChar(255)
+  mele           String                     @db.VarChar(255)
+  university     String                     @db.VarChar(255)
+  department     String                     @db.VarChar(255)
+  country        Int                        @db.UnsignedMediumInt
+  phd_title      String                     @db.VarChar(255)
+  phd_ad_name    String                     @db.VarChar(255)
+  phd_year       Int                        @db.Year
+  phd_ad_mail    String                     @db.VarChar(255)
+  phd_summary    String                     @db.Text
+  cv             String                     @db.VarChar(255)
+  paper          String                     @db.VarChar(255)
+  reviewer_group Int                        @db.TinyInt
+  created        DateTime                   @db.DateTime(0)
+  modified       DateTime                   @db.DateTime(0)
+
+  @@index([last_name], map: "last_name")
+  @@index([reviewer_group], map: "reviewer_group")
+}
+
+model call_proposals_2018 {
+  id             Int                        @id @default(autoincrement()) @db.UnsignedInt
+  last_name      String                     @db.VarChar(255)
+  first_name     String                     @db.VarChar(255)
+  nationality    Int                        @db.UnsignedMediumInt
+  gender         call_proposals_2018_gender
+  age            Int                        @db.UnsignedSmallInt
+  status         Int                        @db.UnsignedTinyInt
+  domain         String                     @db.VarChar(255)
+  diploma        String                     @db.VarChar(255)
+  email          String                     @db.VarChar(255)
+  mele           String                     @db.VarChar(255)
+  university     String                     @db.VarChar(255)
+  department     String                     @db.VarChar(255)
+  country        Int                        @db.UnsignedMediumInt
+  phd_title      String                     @db.VarChar(255)
+  phd_ad_name    String                     @db.VarChar(255)
+  phd_year       Int                        @db.Year
+  phd_ad_mail    String                     @db.VarChar(255)
+  phd_summary    String                     @db.Text
+  cv             String                     @db.VarChar(255)
+  paper          String                     @db.VarChar(255)
+  reviewer_group Int                        @db.TinyInt
+  created        DateTime                   @db.DateTime(0)
+  modified       DateTime                   @db.DateTime(0)
+
+  @@index([last_name], map: "last_name")
+  @@index([reviewer_group], map: "reviewer_group")
+}
+
+model call_proposals_2019 {
+  id             Int                        @id @default(autoincrement()) @db.UnsignedInt
+  last_name      String                     @db.VarChar(255)
+  first_name     String                     @db.VarChar(255)
+  nationality    Int                        @db.UnsignedMediumInt
+  gender         call_proposals_2019_gender
+  age            Int                        @db.UnsignedSmallInt
+  status         Int                        @db.UnsignedTinyInt
+  domain         String                     @db.VarChar(255)
+  diploma        String                     @db.VarChar(255)
+  email          String                     @db.VarChar(255)
+  mele           String                     @db.VarChar(255)
+  university     String                     @db.VarChar(255)
+  department     String                     @db.VarChar(255)
+  country        Int                        @db.UnsignedMediumInt
+  phd_title      String                     @db.VarChar(255)
+  phd_ad_name    String                     @db.VarChar(255)
+  phd_year       Int                        @db.Year
+  phd_ad_mail    String                     @db.VarChar(255)
+  phd_summary    String                     @db.Text
+  cv             String                     @db.VarChar(255)
+  paper          String                     @db.VarChar(255)
+  reviewer_group Int                        @db.TinyInt
+  created        DateTime                   @db.DateTime(0)
+  modified       DateTime                   @db.DateTime(0)
+
+  @@index([last_name], map: "last_name")
+  @@index([reviewer_group], map: "reviewer_group")
+}
+
+model call_proposals_2020 {
+  id             Int                         @id @default(autoincrement()) @db.UnsignedInt
+  last_name      String?                     @db.VarChar(255)
+  first_name     String?                     @db.VarChar(255)
+  nationality    Int?                        @db.UnsignedMediumInt
+  gender         call_proposals_2020_gender?
+  age            Int?                        @db.UnsignedSmallInt
+  status         Int?                        @db.UnsignedTinyInt
+  domain         String?                     @db.VarChar(255)
+  diploma        String?                     @db.VarChar(255)
+  email          String?                     @db.VarChar(120)
+  mele           String?                     @db.VarChar(255)
+  university     String?                     @db.VarChar(255)
+  department     String?                     @db.VarChar(255)
+  country        Int?                        @db.UnsignedMediumInt
+  phd_title      String?                     @db.VarChar(255)
+  phd_ad_name    String?                     @db.VarChar(255)
+  phd_year       String?                     @db.VarChar(120)
+  phd_ad_mail    String?                     @db.VarChar(255)
+  phd_summary    String?                     @db.Text
+  cv             String?                     @db.VarChar(255)
+  paper          String?                     @db.VarChar(255)
+  reviewer_group Int?                        @db.TinyInt
+  created        DateTime                    @default(now()) @db.DateTime(0)
+  modified       DateTime                    @default(now()) @db.DateTime(0)
+
+  @@index([last_name], map: "last_name")
+  @@index([reviewer_group], map: "reviewer_group")
+}
+
+model call_proposals_2022 {
+  id             Int                         @id @default(autoincrement()) @db.UnsignedInt
+  last_name      String?                     @db.VarChar(255)
+  first_name     String?                     @db.VarChar(255)
+  nationality    Int?                        @db.UnsignedMediumInt
+  gender         call_proposals_2022_gender?
+  age            Int?                        @db.UnsignedSmallInt
+  status         Int?                        @db.UnsignedTinyInt
+  domain         String?                     @db.VarChar(255)
+  diploma        String?                     @db.VarChar(255)
+  email          String?                     @db.VarChar(120)
+  mele           String?                     @db.VarChar(255)
+  university     String?                     @db.VarChar(255)
+  department     String?                     @db.VarChar(255)
+  country        Int?                        @db.UnsignedMediumInt
+  phd_title      String?                     @db.VarChar(255)
+  phd_ad_name    String?                     @db.VarChar(255)
+  phd_year       String?                     @db.VarChar(120)
+  phd_ad_mail    String?                     @db.VarChar(255)
+  phd_summary    String?                     @db.Text
+  cv             String?                     @db.VarChar(255)
+  paper          String?                     @db.VarChar(255)
+  reviewer_group Int?                        @db.TinyInt
+  created        DateTime                    @default(now()) @db.DateTime(0)
+  modified       DateTime                    @default(now()) @db.DateTime(0)
+
+  @@index([last_name], map: "last_name")
+  @@index([reviewer_group], map: "reviewer_group")
+}
+
+model call_proposals_2023 {
+  id             Int                         @id @default(autoincrement()) @db.UnsignedInt
+  last_name      String?                     @db.VarChar(255)
+  first_name     String?                     @db.VarChar(255)
+  nationality    Int?                        @db.UnsignedMediumInt
+  gender         call_proposals_2023_gender?
+  age            Int?                        @db.UnsignedSmallInt
+  status         Int?                        @db.UnsignedTinyInt
+  domain         String?                     @db.VarChar(255)
+  diploma        String?                     @db.VarChar(255)
+  email          String?                     @db.VarChar(120)
+  mele           String?                     @db.VarChar(255)
+  university     String?                     @db.VarChar(255)
+  department     String?                     @db.VarChar(255)
+  country        Int?                        @db.UnsignedMediumInt
+  phd_title      String?                     @db.VarChar(255)
+  phd_ad_name    String?                     @db.VarChar(255)
+  phd_year       String?                     @db.VarChar(120)
+  phd_ad_mail    String?                     @db.VarChar(255)
+  phd_summary    String?                     @db.Text
+  cv             String?                     @db.VarChar(255)
+  paper          String?                     @db.VarChar(255)
+  reviewer_group Int?                        @db.TinyInt
+  created        DateTime                    @default(now()) @db.DateTime(0)
+  modified       DateTime                    @default(now()) @db.DateTime(0)
+
+  @@index([last_name], map: "last_name")
+  @@index([reviewer_group], map: "reviewer_group")
+}
+
+model call_proposals_2024 {
+  id             Int                         @id @default(autoincrement()) @db.UnsignedInt
+  last_name      String?                     @db.VarChar(255)
+  first_name     String?                     @db.VarChar(255)
+  nationality    Int?                        @db.UnsignedMediumInt
+  gender         call_proposals_2024_gender?
+  age            Int?                        @db.UnsignedSmallInt
+  status         Int?                        @db.UnsignedTinyInt
+  domain         String?                     @db.VarChar(255)
+  diploma        String?                     @db.VarChar(255)
+  email          String?                     @db.VarChar(120)
+  mele           String?                     @db.VarChar(255)
+  university     String?                     @db.VarChar(255)
+  department     String?                     @db.VarChar(255)
+  country        Int?                        @db.UnsignedMediumInt
+  phd_title      String?                     @db.VarChar(255)
+  phd_ad_name    String?                     @db.VarChar(255)
+  phd_year       String?                     @db.VarChar(120)
+  phd_ad_mail    String?                     @db.VarChar(255)
+  phd_summary    String?                     @db.Text
+  cv             String?                     @db.VarChar(255)
+  paper          String?                     @db.VarChar(255)
+  reviewer_group Int?                        @db.TinyInt
+  created        DateTime                    @default(now()) @db.DateTime(0)
+  modified       DateTime                    @default(now()) @db.DateTime(0)
+
+  @@index([last_name], map: "last_name")
+  @@index([reviewer_group], map: "reviewer_group")
+}
+
+model call_proposals_bak {
+  id             Int                       @id @default(autoincrement()) @db.UnsignedInt
+  last_name      String                    @db.VarChar(255)
+  first_name     String                    @db.VarChar(255)
+  nationality    Int                       @db.UnsignedMediumInt
+  gender         call_proposals_bak_gender
+  age            Int                       @db.UnsignedSmallInt
+  status         Int                       @db.UnsignedTinyInt
+  domain         String                    @db.VarChar(255)
+  diploma        String                    @db.VarChar(255)
+  email          String                    @db.VarChar(255)
+  mele           String                    @db.VarChar(255)
+  university     String                    @db.VarChar(255)
+  department     String                    @db.VarChar(255)
+  country        Int                       @db.UnsignedMediumInt
+  phd_title      String                    @db.VarChar(255)
+  phd_ad_name    String                    @db.VarChar(255)
+  phd_year       Int                       @db.Year
+  phd_ad_mail    String                    @db.VarChar(255)
+  phd_summary    String                    @db.Text
+  cv             String                    @db.VarChar(255)
+  paper          String                    @db.VarChar(255)
+  reviewer_group Int                       @db.TinyInt
+  created        DateTime                  @db.DateTime(0)
+  modified       DateTime                  @db.DateTime(0)
+
+  @@index([last_name], map: "last_name")
+  @@index([reviewer_group], map: "reviewer_group")
+}
+
+model call_proposals_old2012 {
+  id             Int                           @id @default(autoincrement()) @db.UnsignedInt
+  last_name      String                        @db.VarChar(255)
+  first_name     String                        @db.VarChar(255)
+  nationality    Int                           @db.UnsignedMediumInt
+  gender         call_proposals_old2012_gender
+  age            Int                           @db.UnsignedSmallInt
+  status         Int                           @db.UnsignedTinyInt
+  domain         String                        @db.VarChar(255)
+  diploma        String                        @db.VarChar(255)
+  email          String                        @db.VarChar(255)
+  mele           String                        @db.VarChar(255)
+  university     String                        @db.VarChar(255)
+  department     String                        @db.VarChar(255)
+  country        Int                           @db.UnsignedMediumInt
+  phd_title      String                        @db.VarChar(255)
+  phd_ad_name    String                        @db.VarChar(255)
+  phd_year       Int                           @db.Year
+  phd_ad_mail    String                        @db.VarChar(255)
+  phd_summary    String                        @db.Text
+  cv             String                        @db.VarChar(255)
+  paper          String                        @db.VarChar(255)
+  reviewer_group Int                           @db.TinyInt
+  created        DateTime                      @db.DateTime(0)
+  modified       DateTime                      @db.DateTime(0)
+
+  @@index([last_name], map: "last_name")
+  @@index([reviewer_group], map: "reviewer_group")
+}
+
+model call_reviewers {
+  id       Int                 @id @default(autoincrement()) @db.UnsignedInt
+  type     call_reviewers_type @default(reviewer)
+  name     String              @db.VarChar(150)
+  email    String              @db.VarChar(150)
+  password String              @unique(map: "password") @db.VarChar(12)
+  group    Int                 @db.UnsignedTinyInt
+  rank     Int                 @db.UnsignedTinyInt
+
+  @@index([group], map: "groupe")
+  @@index([name], map: "last_name")
+}
+
+model chairs {
+  id         Int    @id @default(autoincrement()) @db.UnsignedInt
+  group_id   Int    @db.TinyInt
+  year       Int    @db.Year
+  last_name  String @db.VarChar(120)
+  first_name String @db.VarChar(120)
+  instit     String @db.VarChar(250)
+  photo      String @db.VarChar(50)
+  home       String @db.VarChar(255)
+  email      String @db.VarChar(120)
+}
+
+model ci_sessions {
+  session_id    String  @id @default("0") @db.VarChar(40)
+  ip_address    String  @default("0") @db.VarChar(16)
+  user_agent    String? @db.VarChar(120)
+  last_activity Int     @default(0) @db.UnsignedInt
+  user_data     String  @db.Text
+
+  @@index([last_activity], map: "last_activity_idx")
+}
+
+model countries {
+  id      Int     @id @default(autoincrement())
+  iso     String  @default("") @db.VarChar(2)
+  name    String  @default("") @db.VarChar(80)
+  iso3    String? @db.VarChar(3)
+  numcode Int?    @db.SmallInt
+}
+
+model data_transfers {
+  id   Int    @id @default(autoincrement()) @db.UnsignedInt
+  name String @default("") @db.VarChar(50)
+}
+
+model data_villes {
+  id   Int    @id @default(autoincrement()) @db.UnsignedInt
+  name String @db.VarChar(50)
+}
+
+model e_ecoles {
+  id_ecole    Int @id @default(autoincrement()) @db.UnsignedTinyInt
+  annee       Int @default(0) @db.UnsignedMediumInt
+  lectures_id Int @default(0) @db.UnsignedTinyInt
+
+  @@map("e-ecoles")
+}
+
+model e_auteurs {
+  id     Int    @id @default(autoincrement()) @db.UnsignedInt
+  prenom String @default("") @db.VarChar(50)
+  nom    String @default("") @db.VarChar(50)
+  instit String @default("") @db.VarChar(255)
+  home   String @default("") @db.VarChar(255)
+  photo  String @default("") @db.VarChar(120)
+  email  String @default("") @db.VarChar(255)
+}
+
+model e_auteurs_BAK {
+  id     Int    @id @default(autoincrement()) @db.UnsignedInt
+  prenom String @default("") @db.VarChar(50)
+  nom    String @default("") @db.VarChar(50)
+  instit String @default("") @db.VarChar(255)
+  home   String @default("") @db.VarChar(255)
+  photo  String @default("") @db.VarChar(120)
+  email  String @default("") @db.VarChar(255)
+}
+
+model e_presentation {
+  id        Int    @id @default(autoincrement()) @db.UnsignedInt
+  id_auteur Int    @default(0) @db.UnsignedInt
+  titre     String @default("") @db.VarChar(255)
+  resume    String @db.Text
+  lien      String @default("") @db.VarChar(255)
+  id_themes Int    @default(0) @db.UnsignedTinyInt
+  rang      Int    @default(1) @db.UnsignedTinyInt
+
+  @@index([id_auteur], map: "id_auteur")
+  @@index([id_themes], map: "id_themes")
+}
+
+model e_references {
+  id              Int                   @id @default(autoincrement()) @db.UnsignedInt
+  reference       String                @db.Text
+  lienref         String                @default("") @db.VarChar(255)
+  mustread        e_references_mustread @default(dbgenerated("0"))
+  id_presentation Int                   @default(0) @db.UnsignedInt
+  rank            Int                   @default(1) @db.TinyInt
+  past_ref        Int                   @default(0)
+
+  @@index([id_presentation], map: "id_presentation")
+}
+
+model e_themes {
+  id       Int      @id @default(autoincrement()) @db.UnsignedInt
+  theme    String   @db.VarChar(255)
+  lecwp    String   @default("lectures") @db.VarChar(50)
+  date_new DateTime @db.Date
+}
+
+model journees {
+  id      Int    @id @default(autoincrement()) @db.UnsignedInt
+  contenu String @db.Text
+}
+
+model journees_form {
+  id          Int      @id @default(autoincrement()) @db.UnsignedInt
+  first_name  String   @default("") @db.VarChar(255)
+  last_name   String   @default("") @db.VarChar(255)
+  institution String   @default("") @db.VarChar(255)
+  mele        String   @default("") @db.VarChar(255)
+  created     DateTime @db.DateTime(0)
+}
+
+model quest_esnie {
+  id         Int    @id @default(autoincrement()) @db.UnsignedInt
+  id_student Int    @default(0) @db.UnsignedInt
+  qa1        String @default("0")
+  qa2        String @default("0")
+  qa3        String @default("0")
+  qa4        String @default("0")
+  qa5        String @default("0")
+  qa6        String @default("0")
+  qa7        String @default("0")
+  qa8        String @default("0")
+  qa9        String @default("0")
+  qa10       String @default("0")
+  qb1        String @default("0")
+  qb2        String @default("0")
+  qb3        String @default("0")
+  qb4        String @default("0")
+  qb5        String @default("0")
+  qb6        String @default("0")
+  qb7        String @default("0")
+  qb8        String @default("0")
+  qb9        String @default("0")
+  qb10       String @default("0")
+  q1         String @db.Text
+  q2         String @db.Text
+  q3         String @db.Text
+  q4         String @db.Text
+  q5         String @db.Text
+}
+
+model quest_instit {
+  id         Int    @id @default(autoincrement()) @db.UnsignedInt
+  id_student Int    @default(0)
+  qa1        String @default("")
+  qa2        String @default("")
+  qa3        String @default("")
+  qa4        String @default("")
+  q1         String @db.Text
+  qb1        String @default("")
+  qb2        String @default("")
+  qb3        String @default("")
+  qb4        String @default("")
+  q2         String @db.Text
+  qc1        String @default("")
+  q3         String @db.Text
+}
+
+model students {
+  id          Int       @id @default(autoincrement()) @db.UnsignedInt
+  first_name  String    @db.VarChar(255)
+  last_name   String    @db.VarChar(255)
+  nationality Int?      @db.UnsignedMediumInt
+  gender      String    @db.VarChar(2)
+  birth_date  DateTime? @db.Date
+  email       String    @db.VarChar(255)
+  university  String?   @db.VarChar(255)
+  residence   Int       @db.UnsignedMediumInt
+  special     String?   @db.VarChar(255)
+  photo       String?   @db.VarChar(255)
+
+  @@index([first_name], map: "last_name")
+}
+
+model students_2015 {
+  id          Int                  @id @default(autoincrement()) @db.UnsignedInt
+  last_name   String               @db.VarChar(255)
+  first_name  String               @db.VarChar(255)
+  nationality Int                  @db.UnsignedMediumInt
+  gender      students_2015_gender
+  birth_date  DateTime             @db.Date
+  email       String               @db.VarChar(255)
+  university  String               @db.VarChar(255)
+  residence   Int                  @db.UnsignedMediumInt
+  photo       String               @db.VarChar(255)
+
+  @@index([last_name], map: "last_name")
+}
+
+model students_2016 {
+  id          Int      @id @default(autoincrement()) @db.UnsignedInt
+  last_name   String   @db.VarChar(255)
+  first_name  String   @db.VarChar(255)
+  nationality Int      @db.UnsignedMediumInt
+  gender      String   @db.VarChar(2)
+  birth_date  DateTime @db.Date
+  email       String   @db.VarChar(255)
+  university  String   @db.VarChar(255)
+  residence   Int      @db.UnsignedMediumInt
+  special     String   @db.VarChar(255)
+  photo       String   @db.VarChar(255)
+
+  @@index([last_name], map: "last_name")
+}
+
+model students_2017 {
+  id          Int      @id @default(autoincrement()) @db.UnsignedInt
+  last_name   String   @db.VarChar(255)
+  first_name  String   @db.VarChar(255)
+  nationality Int      @db.UnsignedMediumInt
+  gender      String   @db.VarChar(2)
+  birth_date  DateTime @db.Date
+  email       String   @db.VarChar(255)
+  university  String   @db.VarChar(255)
+  residence   Int      @db.UnsignedMediumInt
+  special     String   @db.VarChar(255)
+  photo       String   @db.VarChar(255)
+
+  @@index([last_name], map: "last_name")
+}
+
+model students_2018 {
+  id          Int      @id @default(autoincrement()) @db.UnsignedInt
+  last_name   String   @db.VarChar(255)
+  first_name  String   @db.VarChar(255)
+  nationality Int      @db.UnsignedMediumInt
+  gender      String   @db.VarChar(2)
+  birth_date  DateTime @db.Date
+  email       String   @db.VarChar(255)
+  university  String   @db.VarChar(255)
+  residence   Int      @db.UnsignedMediumInt
+  special     String   @db.VarChar(255)
+  photo       String   @db.VarChar(255)
+
+  @@index([last_name], map: "last_name")
+}
+
+model students_2020 {
+  id          Int      @id @default(autoincrement()) @db.UnsignedInt
+  last_name   String   @db.VarChar(255)
+  first_name  String   @db.VarChar(255)
+  nationality Int      @db.UnsignedMediumInt
+  gender      String   @db.VarChar(2)
+  birth_date  DateTime @db.Date
+  email       String   @db.VarChar(255)
+  university  String   @db.VarChar(255)
+  residence   Int      @db.UnsignedMediumInt
+  special     String   @db.VarChar(255)
+  photo       String   @db.VarChar(255)
+
+  @@index([last_name], map: "last_name")
+}
+
+model students_2022 {
+  id          Int      @id @default(autoincrement()) @db.UnsignedInt
+  last_name   String   @db.VarChar(255)
+  first_name  String   @db.VarChar(255)
+  nationality Int      @db.UnsignedMediumInt
+  gender      String   @db.VarChar(2)
+  birth_date  DateTime @db.Date
+  email       String   @db.VarChar(255)
+  university  String   @db.VarChar(255)
+  residence   Int      @db.UnsignedMediumInt
+  special     String   @db.VarChar(255)
+  photo       String   @db.VarChar(255)
+
+  @@index([last_name], map: "last_name")
+}
+
+model students_2023 {
+  id          Int       @id @default(autoincrement()) @db.UnsignedInt
+  last_name   String    @db.VarChar(255)
+  first_name  String    @db.VarChar(255)
+  nationality Int?      @db.UnsignedMediumInt
+  gender      String    @db.VarChar(2)
+  birth_date  DateTime? @db.Date
+  email       String    @db.VarChar(255)
+  university  String?   @db.VarChar(255)
+  residence   Int       @db.UnsignedMediumInt
+  special     String?   @db.VarChar(255)
+  photo       String?   @db.VarChar(255)
+
+  @@index([last_name], map: "last_name")
+}
+
+model students_2024 {
+  id          Int       @id @default(autoincrement()) @db.UnsignedInt
+  first_name  String    @db.VarChar(255)
+  last_name   String    @db.VarChar(255)
+  nationality Int?      @db.UnsignedMediumInt
+  gender      String    @db.VarChar(2)
+  birth_date  DateTime? @db.Date
+  email       String    @db.VarChar(255)
+  university  String?   @db.VarChar(255)
+  residence   Int       @db.UnsignedMediumInt
+  special     String?   @db.VarChar(255)
+  photo       String?   @db.VarChar(255)
+
+  @@index([first_name], map: "last_name")
+}
+
+model students_groups {
+  id         Int @id @default(autoincrement()) @db.UnsignedInt
+  student_id Int @db.UnsignedInt
+  group_id   Int @db.UnsignedInt
+
+  @@index([student_id, group_id], map: "student_id")
+}
+
+model students_papers {
+  id         Int    @id @default(autoincrement()) @db.UnsignedInt
+  student_id Int    @default(0) @db.UnsignedInt
+  type       String @db.VarChar(8)
+  title      String @default("") @db.VarChar(255)
+  abstract   String @db.Text
+  file       String @default("") @db.VarChar(150)
+  slides     String @default("") @db.VarChar(150)
+
+  @@index([student_id], map: "student_id")
+}
+
+model students_persons {
+  id         Int @id @default(autoincrement()) @db.UnsignedInt
+  student_id Int @default(0) @db.UnsignedSmallInt
+  person_id  Int @default(0) @db.UnsignedSmallInt
+
+  @@index([student_id], map: "student_id")
+}
+
+model students_travels {
+  id                  Int      @id @default(autoincrement()) @db.UnsignedInt
+  student_id          String   @default("") @db.VarChar(150)
+  arrival_date_time   DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  arrival_transport   String   @db.VarChar(8)
+  arrival_location    String   @default("") @db.VarChar(20)
+  arrival_flight      String   @default("") @db.VarChar(255)
+  arrival_transfer    Int      @default(0) @db.UnsignedTinyInt
+  departure_date_time DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  departure_transport String   @db.VarChar(8)
+  departure_location  String   @default("") @db.VarChar(20)
+  departure_flight    String   @default("") @db.VarChar(255)
+  departure_transfer  Int      @default(0) @db.UnsignedTinyInt
+  check               Int      @default(0) @db.UnsignedTinyInt
+}
+
+model students_travels_locations {
+  id       Int    @id @default(autoincrement())
+  location String @db.VarChar(128)
+}
+
+model students_travels_transfer {
+  id       Int    @id @default(autoincrement())
+  transfer String @db.VarChar(128)
+}
+
+model ws_form {
+  id          Int      @id @default(autoincrement()) @db.UnsignedInt
+  first_name  String   @default("") @db.VarChar(255)
+  last_name   String   @default("") @db.VarChar(255)
+  institution String   @default("") @db.VarChar(255)
+  mele        String   @default("") @db.VarChar(255)
+  sessions    String   @db.VarChar(12)
+  created     DateTime @db.DateTime(0)
+}
+
+enum call_reviewers_type {
+  reviewer
+  manager
+}
+
+enum e_references_mustread {
+  NO @map("0")
+  YES @map("1")
+}
+
+enum call_proposals_gender {
+  F
+  M
+}
+
+enum call_proposals_2014_gender {
+  F
+  M
+}
+
+enum call_proposals_2015_gender {
+  F
+  M
+}
+
+enum call_proposals_2016_gender {
+  F
+  M
+}
+
+enum call_proposals_2017_gender {
+  F
+  M
+}
+
+enum call_proposals_2018_gender {
+  F
+  M
+}
+
+enum call_proposals_2019_gender {
+  F
+  M
+}
+
+enum call_proposals_2020_gender {
+  F
+  M
+}
+
+enum call_proposals_2022_gender {
+  F
+  M
+}
+
+enum call_proposals_2023_gender {
+  F
+  M
+}
+
+enum call_proposals_bak_gender {
+  F
+  M
+}
+
+enum call_proposals_old2012_gender {
+  F
+  M
+}
+
+enum students_2015_gender {
+  F
+  M
+}
+
+enum call_proposals_2024_gender {
+  F
+  M
+}

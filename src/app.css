@@ -1,0 +1,377 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * IOEA Color Palette
+ * Derived from logo colors: #C85399 #70BABE #7A6294 #4FB161 #D5D945
+ * Academic, persuasive, understated
+ */
+:root {
+	/* Primary - Deep Purple (academic, sophisticated) */
+	--color-primary: #5d4a78;
+	--color-primary-light: #7A6294;
+	--color-primary-dark: #453659;
+	--color-primary-faded: rgba(93, 74, 120, 0.08);
+
+	/* Secondary - Teal (fresh, trustworthy) */
+	--color-secondary: #5a9fa2;
+	--color-secondary-light: #70BABE;
+	--color-secondary-dark: #4a8588;
+
+	/* Accent colors from logo (used sparingly) */
+	--color-accent-pink: #C85399;
+	--color-accent-green: #4FB161;
+	--color-accent-lime: #D5D945;
+
+	/* Text - Warm charcoal tones */
+	--color-text: #3d3a42;
+	--color-text-light: #6b6773;
+	--color-text-muted: #9490a0;
+
+	/* Backgrounds - Warm, subtle */
+	--color-bg: #faf9fb;
+	--color-bg-alt: #f3f1f5;
+	--color-bg-warm: #f8f6f4;
+
+	/* Borders & Dividers */
+	--color-border: #e8e5ed;
+	--color-border-light: #f0eef3;
+
+	/* Functional colors */
+	--color-success: #4FB161;
+	--color-error: #c75a5a;
+	--color-warning: #d5a935;
+	--color-info: #70BABE;
+}
+
+@layer base {
+	body {
+		@apply font-sans text-text bg-bg leading-relaxed text-base antialiased;
+	}
+
+	h1, h2, h3, h4, h5, h6 {
+		@apply font-serif font-semibold leading-tight text-primary-dark tracking-tight;
+	}
+
+	h1 {
+		@apply text-4xl;
+	}
+
+	h2 {
+		@apply text-3xl;
+	}
+
+	h3 {
+		@apply text-2xl;
+	}
+
+	a {
+		@apply text-primary no-underline transition-colors duration-200;
+	}
+
+	a:hover {
+		@apply text-secondary;
+	}
+
+	/* Explicit class for inline text links that need to stand out */
+	a.text-link {
+		color: var(--color-primary-dark);
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 3px;
+		text-decoration-color: var(--color-primary);
+		font-weight: 500;
+	}
+
+	a.text-link:hover {
+		color: var(--color-secondary-dark);
+		text-decoration-color: var(--color-secondary);
+	}
+
+	.lead {
+		@apply text-lg text-text-light leading-loose;
+	}
+}
+
+@layer components {
+	.section-space {
+		@apply py-8;
+	}
+
+	.section-space-lg {
+		@apply py-16;
+	}
+
+	.container {
+		@apply w-full max-w-6xl mx-auto px-4 md:px-8;
+	}
+
+	.btn {
+		@apply inline-flex items-center justify-center gap-2 px-7 py-3 font-semibold text-[0.9375rem] rounded-lg transition-all duration-200 cursor-pointer border-none tracking-wide;
+	}
+
+	.btn-primary {
+		@apply bg-primary text-white shadow-md;
+		box-shadow: 0 2px 4px rgba(93, 74, 120, 0.15);
+	}
+
+	.btn-primary:hover {
+		@apply bg-primary-dark shadow-lg -translate-y-px;
+		box-shadow: 0 4px 8px rgba(93, 74, 120, 0.2);
+	}
+
+	.btn-secondary {
+		@apply bg-secondary text-white shadow-md;
+		box-shadow: 0 2px 4px rgba(90, 159, 162, 0.15);
+	}
+
+	.btn-secondary:hover {
+		@apply bg-secondary-dark shadow-lg -translate-y-px;
+		box-shadow: 0 4px 8px rgba(90, 159, 162, 0.2);
+		color: white !important;
+	}
+
+	.btn-outline {
+		@apply bg-transparent text-primary border-2 border-primary;
+	}
+
+	.btn-outline:hover {
+		@apply bg-primary text-white;
+	}
+
+	.card {
+		@apply bg-white rounded-xl p-6 border border-border-light transition-all duration-200;
+		box-shadow: 0 1px 3px rgba(61, 58, 66, 0.06), 0 1px 2px rgba(61, 58, 66, 0.04);
+	}
+
+	.card:hover {
+		@apply shadow-lg;
+		box-shadow: 0 4px 12px rgba(61, 58, 66, 0.08), 0 2px 4px rgba(61, 58, 66, 0.04);
+	}
+
+	.card-featured {
+		@apply border-l-4 border-secondary;
+	}
+
+	.form-input {
+		@apply w-full px-4 py-3.5 border border-border rounded-lg text-base bg-white transition-all duration-200;
+	}
+
+	.form-input:focus {
+		@apply outline-none border-primary-light;
+		box-shadow: 0 0 0 3px var(--color-primary-faded);
+	}
+
+	.form-input::placeholder {
+		@apply text-text-muted;
+	}
+
+	.form-label {
+		@apply block mb-2 font-semibold text-[0.9375rem] text-text;
+	}
+
+	.table {
+		@apply w-full border-collapse;
+	}
+
+	.table th,
+	.table td {
+		@apply px-4 py-3.5 text-left border-b border-border-light;
+	}
+
+	.table th {
+		@apply bg-bg-alt font-semibold text-sm uppercase tracking-wider text-text-light;
+	}
+
+	.table tr:hover {
+		@apply bg-primary-faded;
+	}
+
+	.table td a {
+		@apply text-primary font-medium;
+	}
+
+	.table td a:hover {
+		@apply text-secondary;
+	}
+
+	.sidebar-widget {
+		@apply bg-white rounded-xl p-6 mb-6 border border-border-light;
+		box-shadow: 0 1px 3px rgba(61, 58, 66, 0.04);
+	}
+
+	.sidebar-widget h3 {
+		@apply text-base font-sans font-bold uppercase tracking-wider mb-4 pb-3 border-b-2 border-secondary-light text-primary-dark;
+	}
+
+	.nav-link {
+		@apply block px-4 py-2 text-text font-medium rounded-md transition-all duration-200;
+	}
+
+	.nav-link:hover {
+		@apply bg-primary-faded text-primary;
+	}
+
+	.nav-link.active {
+		@apply bg-primary text-white;
+	}
+
+	.submenu {
+		@apply flex flex-wrap gap-2 py-4 mb-6 border-b border-border-light;
+	}
+
+	.submenu a {
+		@apply px-4 py-2 bg-bg-alt rounded-full text-sm font-medium text-text-light transition-all duration-200;
+	}
+
+	.submenu a:hover {
+		@apply bg-secondary-light text-white;
+	}
+
+	.submenu a.active {
+		@apply bg-primary text-white;
+	}
+
+	.alert {
+		@apply px-6 py-4 rounded-lg mb-4 text-[0.9375rem];
+	}
+
+	.alert-success {
+		@apply bg-success/10 text-[#2d6a3a] border border-success/30;
+	}
+
+	.alert-error {
+		@apply bg-error/10 text-[#8b3a3a] border border-error/30;
+	}
+
+	.alert-info {
+		@apply bg-info/10 text-[#3a6d70] border border-info/30;
+	}
+
+	.alert-warning {
+		@apply bg-warning/10 text-[#7a5f1a] border border-warning/30;
+	}
+
+	.img-rounded {
+		@apply rounded-lg;
+	}
+
+	.img-circle {
+		@apply rounded-full;
+	}
+
+	.grid-auto {
+		@apply grid gap-6;
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	}
+
+	.page-header {
+		@apply text-white py-10 mb-8 relative overflow-hidden;
+		background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+	}
+
+	.page-header::before {
+		@apply content-[''] absolute inset-0 opacity-50;
+		background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+	}
+
+	.page-header h1 {
+		@apply text-white m-0 relative text-3xl;
+	}
+
+	.footer {
+		@apply bg-primary-dark text-white/90 py-12 pb-6 mt-16;
+	}
+
+	.footer a {
+		@apply text-secondary-light transition-colors duration-200;
+	}
+
+	.footer a:hover {
+		@apply text-white;
+	}
+
+	.footer-muted {
+		@apply text-white/60;
+	}
+
+	.sponsors-grid {
+		@apply flex flex-wrap justify-center items-center gap-8 py-8;
+	}
+
+	.sponsor-logo {
+		@apply max-h-[60px] w-auto grayscale opacity-70 transition-all duration-300;
+	}
+
+	.sponsor-logo:hover {
+		@apply grayscale-0 opacity-100;
+	}
+
+	.spinner {
+		@apply w-8 h-8 border-[3px] border-border border-t-secondary rounded-full;
+		animation: spin 0.8s linear infinite;
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	.badge {
+		@apply inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full uppercase tracking-wider;
+	}
+
+	.badge-primary {
+		@apply bg-primary-faded text-primary;
+	}
+
+	.badge-secondary {
+		@apply bg-secondary-light/15 text-secondary-dark;
+	}
+
+	.badge-success {
+		@apply bg-success/15 text-[#2d6a3a];
+	}
+
+	.divider {
+		@apply h-px my-8;
+		background: linear-gradient(to right, transparent, var(--color-border), transparent);
+	}
+
+	.hidden-mobile {
+		@apply hidden md:block;
+	}
+
+	.hidden-desktop {
+		@apply block md:hidden;
+	}
+}
+
+@layer utilities {
+	/* Utility classes - these map directly to Tailwind utilities */
+	.text-primary { color: var(--color-primary); }
+	.text-secondary { color: var(--color-secondary); }
+	.text-muted { color: var(--color-text-muted); }
+	.text-light { color: var(--color-text-light); }
+	.bg-primary { background-color: var(--color-primary); }
+	.bg-secondary { background-color: var(--color-secondary); }
+	.bg-alt { background-color: var(--color-bg-alt); }
+	.border-primary { border-color: var(--color-primary); }
+	.border-secondary { border-color: var(--color-secondary); }
+	.accent-pink { color: var(--color-accent-pink); }
+	.accent-green { color: var(--color-accent-green); }
+	.accent-teal { color: var(--color-secondary-light); }
+}
+
+@layer base {
+	::selection {
+		@apply bg-secondary-light text-white;
+	}
+
+	:focus-visible {
+		@apply outline-2 outline-secondary outline-offset-2;
+	}
+}
+
