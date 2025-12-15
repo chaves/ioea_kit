@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { config } from '$lib/config';
 	import { page } from '$app/stores';
-	import { pdfUrl } from '$lib/utils/files';
 
 	interface Props {
 		showBrochure?: boolean;
@@ -61,7 +60,7 @@
 {#if showBrochure}
 	<div class="sidebar-widget brochure-widget">
 		<h3>Brochure</h3>
-		<a href={pdfUrl(config.brochure.name)} target="_blank" class="brochure-preview">
+		<a href={`/pdf/${config.brochure.name}`} target="_blank" class="brochure-preview">
 			<img
 				src={`/images/${config.brochure.imageName}`}
 				alt="IOEA Brochure {config.currentYear}"

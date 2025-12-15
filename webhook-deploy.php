@@ -1,10 +1,10 @@
 <?php
 /**
  * GitHub Webhook Deployment Script for AlwaysData
- * 
+ *
  * Place this file in your web root (e.g., ~/www/webhook-deploy.php)
  * Configure it in GitHub: Settings → Webhooks → Add webhook
- * 
+ *
  * Security: Add a secret in GitHub and verify it here
  */
 
@@ -21,7 +21,7 @@ $headers = getallheaders();
 if (!empty($SECRET) && $SECRET !== 'YOUR_WEBHOOK_SECRET_HERE') {
     $signature = $headers['X-Hub-Signature-256'] ?? '';
     $expected = 'sha256=' . hash_hmac('sha256', $payload, $SECRET);
-    
+
     if (!hash_equals($expected, $signature)) {
         http_response_code(403);
         die('Invalid signature');

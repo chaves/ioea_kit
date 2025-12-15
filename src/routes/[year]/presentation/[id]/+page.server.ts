@@ -3,7 +3,6 @@ import type { PageServerLoad } from './$types';
 import { prisma } from '$lib/server/db';
 import { stat } from 'fs/promises';
 import { join } from 'path';
-import { config } from '$lib/config';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const year = parseInt(params.year);
@@ -61,15 +60,15 @@ export const load: PageServerLoad = async ({ params }) => {
 		throw error(404, 'Presentation not found for this year');
 	}
 
-	// Convert link to external URL if it's a local PDF path
+	// Convert link to local path if it's a filename
 	let presentationLink: string | null = p.lien;
-	if (p.lien && !p.lien.startsWith('http')) {
-		// It's a local path, convert to external URL
-		let cleanPath = p.lien.startsWith('/') ? p.lien.slice(1) : p.lien;
-		if (cleanPath.startsWith('pdf/')) {
-			cleanPath = cleanPath.slice(4); // Remove "pdf/" prefix
-		}
-		presentationLink = `${config.filesBaseUrl.pdf}/${cleanPath}`;
+	if (p.lien && !p.lien.startsWith('http') && !p.lien.startsWith('/')) {
+		// It's just a filename, construct the full path
+		// Assume it's in pdf/textes_{year}/ directory
+		presentationLink = `/pdf/textes_${year}/${p.lien}`;
+	} else if (p.lien && !p.lien.startsWith('http') && !p.lien.startsWith('/pdf/')) {
+		// It's a relative path, ensure it starts with /pdf/
+		presentationLink = `/pdf/${p.lien}`;
 	}
 
 	// File size calculation removed since files are now external

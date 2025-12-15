@@ -5,12 +5,6 @@ export const config = {
   archiveFromYear: 2002,
   archiveToYear: 2025,
 
-  // External file URLs
-  filesBaseUrl: {
-    images: "https://files.ioea.eu/images",
-    pdf: "https://files.ioea.eu/pdf",
-  },
-
   // Bad sessions (cancelled years)
   badSessions: [2013, 2020, 2021] as number[],
   badPhotos: [2020, 2021] as number[],
