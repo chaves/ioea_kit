@@ -13,48 +13,47 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="main-grid">
+		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
+				<div>
+					<h2 class="text-primary my-8 mb-4 pb-2 border-b-2 border-secondary">What have they become?</h2>
+					<h3 class="text-text-light text-lg mb-4">Current professions of former students</h3>
 
-				<div class="content">
-					<h2>What have they become?</h2>
-					<h3>Current professions of former students</h3>
-
-					<div class="table-container">
-						<table class="data-table">
+					<div class="overflow-x-auto my-6">
+						<table class="w-full border-collapse text-sm">
 							<thead>
 								<tr>
-									<th>Professions</th>
-									<th>Current Positions</th>
-									<th>Frequency</th>
+									<th class="bg-primary text-white px-4 py-3 text-left font-semibold">Professions</th>
+									<th class="bg-primary text-white px-4 py-3 text-left font-semibold">Current Positions</th>
+									<th class="bg-primary text-white px-4 py-3 text-left font-semibold">Frequency</th>
 								</tr>
 							</thead>
 							<tbody>
 								{#each professions as row}
-									<tr>
-										<td class="profession">{row.profession}</td>
-										<td class="positions">{row.positions}</td>
-										<td class="frequency">{row.frequency}</td>
+									<tr class="even:bg-bg-alt">
+										<td class="px-4 py-3 border-b border-border font-semibold text-primary">{row.profession}</td>
+										<td class="px-4 py-3 border-b border-border text-xs text-text-light">{row.positions}</td>
+										<td class="px-4 py-3 border-b border-border text-center">{row.frequency}</td>
 									</tr>
 								{/each}
 							</tbody>
 						</table>
 					</div>
 
-					<p>
+					<p class="mb-4 leading-relaxed">
 						Most former participants have chosen a career in academia. Indeed, the majority of the participants
 						who have completed their PhD or their post doc are now academics (55%), namely they obtained a position
 						as full, associate or assistant professor in various universities, or they work as a researcher in a
 						research institute (such as CNRS and INRA in France, or CNR in Italy etc.).
 					</p>
 
-					<p>
+					<p class="mb-4 leading-relaxed">
 						Another significant number of former students are currently working as economists in international institutions,
 						national banks, regulatory agencies, development agencies and international research centers. As a non-exhaustive list,
 						we can highlight the following institutions where IOEA alumni currently hold positions:
 					</p>
 
-					<div class="institutions-cloud">
+					<div class="bg-bg-alt p-6 rounded-lg text-sm leading-loose text-text-light my-4">
 						Brazilian Regulatory Agency • Central Bank of Malaysia • Deutsche Bank • European Banking Authority •
 						European Central Bank • European Commission • European Court of Justice • European Investment Bank •
 						European Medicines Agency • European Regional Development Fund • French Agency for Development •
@@ -64,64 +63,64 @@
 						Organization for Economic Cooperation and Development • United Nations • World Bank
 					</div>
 
-					<p>
+					<p class="mb-4 leading-relaxed">
 						Some alumni also went to the private sector (11.8%), working for international firms, banks or consulting groups
 						including: Capgemini, Crédit Suisse, Ernst and Young, McKinsey and even Facebook.
 					</p>
 
-					<h2>Most Representative Institutions of Alumni</h2>
+					<h2 class="text-primary my-8 mb-4 pb-2 border-b-2 border-secondary">Most Representative Institutions of Alumni</h2>
 
-					<div class="table-container">
-						<table class="data-table">
+					<div class="overflow-x-auto my-6">
+						<table class="w-full border-collapse text-sm">
 							<thead>
 								<tr>
-									<th>Number of Former Participants</th>
-									<th>Current Institutions</th>
+									<th class="bg-primary text-white px-4 py-3 text-left font-semibold">Number of Former Participants</th>
+									<th class="bg-primary text-white px-4 py-3 text-left font-semibold">Current Institutions</th>
 								</tr>
 							</thead>
 							<tbody>
 								{#each topInstitutions as row}
-									<tr>
-										<td class="count">{row.count}</td>
-										<td>{row.institutions}</td>
+									<tr class="even:bg-bg-alt">
+										<td class="px-4 py-3 border-b border-border font-semibold text-primary">{row.count}</td>
+										<td class="px-4 py-3 border-b border-border">{row.institutions}</td>
 									</tr>
 								{/each}
 							</tbody>
 						</table>
 					</div>
 
-					<h2>Former Students Who Returned as Organizers</h2>
+					<h2 class="text-primary my-8 mb-4 pb-2 border-b-2 border-secondary">Former Students Who Returned as Organizers</h2>
 
-					<p>
+					<p class="mb-4 leading-relaxed">
 						As an additional illustration of the attractiveness of IOEA, 18 former students came back
 						to the academy as workshop organizers:
 					</p>
 
-					<div class="returned-list">
+					<div class="flex flex-wrap gap-2 my-4">
 						{#each returnedAsOrganizers as name}
-							<span class="alumni-name">{name}</span>
+							<span class="bg-primary text-white px-3 py-1.5 rounded-full text-xs">{name}</span>
 						{/each}
 					</div>
 
-					<h2>Number of Participations</h2>
+					<h2 class="text-primary my-8 mb-4 pb-2 border-b-2 border-secondary">Number of Participations</h2>
 
-					<div class="table-container">
-						<table class="data-table">
+					<div class="overflow-x-auto my-6">
+						<table class="w-full border-collapse text-sm">
 							<thead>
 								<tr>
-									<th>Number of Participations</th>
-									<th>Students</th>
-									<th>Lecturers</th>
-									<th>Workshop Organizers</th>
+									<th class="bg-primary text-white px-4 py-3 text-left font-semibold">Number of Participations</th>
+									<th class="bg-primary text-white px-4 py-3 text-left font-semibold">Students</th>
+									<th class="bg-primary text-white px-4 py-3 text-left font-semibold">Lecturers</th>
+									<th class="bg-primary text-white px-4 py-3 text-left font-semibold">Workshop Organizers</th>
 								</tr>
 							</thead>
 							<tbody>
 								{#each participationStats as row}
-									<tr>
-										<td class="count">{row.participations}</td>
-										<td class="number">{row.students}</td>
-										<td class="number">{row.lecturers}</td>
-										<td class="number">{row.organizers}</td>
+									<tr class="even:bg-bg-alt">
+										<td class="px-4 py-3 border-b border-border font-semibold text-primary">{row.participations}</td>
+										<td class="px-4 py-3 border-b border-border text-center">{row.students}</td>
+										<td class="px-4 py-3 border-b border-border text-center">{row.lecturers}</td>
+										<td class="px-4 py-3 border-b border-border text-center">{row.organizers}</td>
 									</tr>
 								{/each}
 							</tbody>
@@ -130,121 +129,11 @@
 				</div>
 			</div>
 
-			<aside class="sidebar">
+			<aside class="sticky top-[100px] self-start hidden lg:block">
 				<Sidebar />
 			</aside>
 		</div>
 	</div>
 </section>
 
-<style>
-	.main-grid {
-		display: grid;
-		grid-template-columns: 1fr 320px;
-		gap: 3rem;
-	}
-
-	.content p {
-		margin-bottom: 1rem;
-		line-height: 1.7;
-	}
-
-	.content h2 {
-		color: var(--color-primary);
-		margin: 2rem 0 1rem;
-		padding-bottom: 0.5rem;
-		border-bottom: 2px solid var(--color-secondary);
-	}
-
-	.content h3 {
-		color: var(--color-text-light);
-		font-size: 1.1rem;
-		margin-bottom: 1rem;
-	}
-
-	.table-container {
-		overflow-x: auto;
-		margin: 1.5rem 0;
-	}
-
-	.data-table {
-		width: 100%;
-		border-collapse: collapse;
-		font-size: 0.9rem;
-	}
-
-	.data-table th {
-		background: var(--color-primary);
-		color: white;
-		padding: 0.75rem 1rem;
-		text-align: left;
-		font-weight: 600;
-	}
-
-	.data-table td {
-		padding: 0.75rem 1rem;
-		border-bottom: 1px solid var(--color-border);
-	}
-
-	.data-table tr:nth-child(even) {
-		background: var(--color-bg-alt);
-	}
-
-	.data-table .profession,
-	.data-table .count {
-		font-weight: 600;
-		color: var(--color-primary);
-	}
-
-	.data-table .positions {
-		font-size: 0.85rem;
-		color: var(--color-text-light);
-	}
-
-	.data-table .frequency,
-	.data-table .number {
-		text-align: center;
-	}
-
-	.institutions-cloud {
-		background: var(--color-bg-alt);
-		padding: 1.5rem;
-		border-radius: 0.5rem;
-		font-size: 0.9rem;
-		line-height: 2;
-		color: var(--color-text-light);
-		margin: 1rem 0;
-	}
-
-	.returned-list {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-		margin: 1rem 0;
-	}
-
-	.alumni-name {
-		background: var(--color-primary);
-		color: white;
-		padding: 0.375rem 0.75rem;
-		border-radius: 2rem;
-		font-size: 0.85rem;
-	}
-
-	.sidebar {
-		position: sticky;
-		top: 100px;
-		align-self: start;
-	}
-
-	@media (max-width: 1024px) {
-		.main-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.sidebar {
-			position: static;
-		}
-	}
-</style>
 

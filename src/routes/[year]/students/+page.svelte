@@ -55,17 +55,15 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="main-grid">
+		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-
 				{#if data.students.length > 0 || data.chairs.length > 0}
 					<!-- Filter buttons -->
 					{#if data.showGroups && data.groups.length > 0}
-						<div class="filters">
+						<div class="flex flex-wrap gap-2 mb-8">
 							<button
 								type="button"
-								class="filter-btn"
-								class:active={viewMode === 'all'}
+								class="px-4 py-2 bg-white border border-border rounded-md text-sm cursor-pointer transition-all duration-200 {viewMode === 'all' ? 'bg-primary text-white border-primary' : 'hover:border-primary hover:bg-bg-alt'}"
 								onclick={() => setViewMode('all')}
 							>
 								All ({data.students.length})
@@ -75,8 +73,7 @@
 								{#if count > 0}
 									<button
 										type="button"
-										class="filter-btn"
-										class:active={viewMode === group}
+										class="px-4 py-2 bg-white border border-border rounded-md text-sm cursor-pointer transition-all duration-200 {viewMode === group ? 'bg-primary text-white border-primary' : 'hover:border-primary hover:bg-bg-alt'}"
 										onclick={() => setViewMode(group)}
 									>
 										Group {group} ({count})
@@ -88,37 +85,38 @@
 
 					<!-- Seminar Chairs Section -->
 					{#if data.showGroups && filteredChairs.length > 0}
-						<section class="chairs-section">
-							<h2>Seminar Chairs</h2>
-							<div class="chairs-grid">
+						<section class="mb-12">
+							<h2 class="text-primary text-2xl mb-6 pb-2 border-b-2 border-secondary">Seminar Chairs</h2>
+							<div class="grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-6">
 								{#each filteredChairs as chair}
-									<div class="chair-card">
-										<div class="chair-photo">
+									<div class="bg-white rounded-lg overflow-hidden border border-border transition-shadow duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+										<div class="aspect-square overflow-hidden bg-bg-alt">
 											{#if chair.photo}
 												<img
 													src={`/images/semchairs/${chair.photo}`}
 													alt="{chair.firstName} {chair.lastName}"
+													class="w-full h-full object-cover"
 													onerror={(e) => { (e.currentTarget as HTMLImageElement).src = '/images/placeholder-person.jpg'; }}
 												/>
 											{:else}
-												<div class="photo-placeholder">
+												<div class="w-full h-full flex items-center justify-center bg-primary text-white text-3xl font-semibold">
 													{chair.firstName[0]}{chair.lastName[0]}
 												</div>
 											{/if}
 										</div>
-										<div class="chair-info">
+										<div class="p-4 flex flex-col gap-1">
 											{#if chair.website}
-												<a href={chair.website} target="_blank" rel="noopener">
+												<a href={chair.website} target="_blank" rel="noopener" class="text-primary font-semibold no-underline hover:text-secondary">
 													{chair.firstName} {chair.lastName}
 												</a>
 											{:else}
-												<span class="name">{chair.firstName} {chair.lastName}</span>
+												<span class="font-semibold text-primary">{chair.firstName} {chair.lastName}</span>
 											{/if}
 											{#if chair.institution}
-												<span class="institution">{chair.institution}</span>
+												<span class="text-xs text-text-light">{chair.institution}</span>
 											{/if}
 											{#if chair.groupId}
-												<span class="group-badge">Group {chair.groupId}</span>
+												<span class="inline-block w-fit mt-1 px-2 py-0.5 bg-secondary text-white text-xs font-semibold rounded">{chair.groupId}</span>
 											{/if}
 										</div>
 									</div>
@@ -129,66 +127,67 @@
 
 					<!-- Students Table -->
 					{#if filteredStudents.length > 0}
-						<section class="students-section">
-							<h2>Participants</h2>
-							<div class="students-table-wrapper">
-								<table class="students-table">
+						<section>
+							<h2 class="text-primary text-2xl mb-6 pb-2 border-b-2 border-secondary">Participants</h2>
+							<div class="bg-white rounded-lg overflow-hidden border border-border overflow-x-auto">
+								<table class="w-full border-collapse text-sm">
 									<thead>
 										<tr>
-											<th>Full Name</th>
-											<th>Affiliation / University</th>
-											<th>Paper or Project</th>
+											<th class="bg-primary text-white px-4 py-3.5 text-left font-semibold whitespace-nowrap">Full Name</th>
+											<th class="bg-primary text-white px-4 py-3.5 text-left font-semibold whitespace-nowrap">Affiliation / University</th>
+											<th class="bg-primary text-white px-4 py-3.5 text-left font-semibold whitespace-nowrap">Paper or Project</th>
 											{#if data.showGroups && data.groups.length > 0}
-												<th class="group-col">Group</th>
+												<th class="bg-primary text-white px-4 py-3.5 text-left font-semibold whitespace-nowrap w-20 text-center">Group</th>
 											{/if}
-											<th class="photo-col">Photo</th>
+											<th class="bg-primary text-white px-4 py-3.5 text-left font-semibold whitespace-nowrap w-20 text-center">Photo</th>
 										</tr>
 									</thead>
 									<tbody>
 										{#each filteredStudents as student}
-											<tr>
-												<td class="name-cell">
-													<a href="/{data.year}/students/{student.id}">
+											<tr class="hover:bg-bg-alt last:[&>td]:border-b-0">
+												<td class="px-4 py-3 border-b border-border align-middle">
+													<a href="/{data.year}/students/{student.id}" class="text-primary font-medium no-underline hover:text-secondary hover:underline">
 														{student.lastName}, {student.firstName}
 													</a>
 												</td>
-												<td class="university-cell">
+												<td class="px-4 py-3 border-b border-border align-middle text-text-light">
 													{student.university ?? '-'}
 												</td>
-												<td class="paper-cell">
+												<td class="px-4 py-3 border-b border-border align-middle max-w-[300px] sm:max-w-[150px]">
 													{#if student.paperTitle}
-														<span class="paper-title" title={student.paperTitle}>
+														<span class="block whitespace-nowrap overflow-hidden text-ellipsis" title={student.paperTitle}>
 															{student.paperTitle}
 														</span>
 													{:else}
-														<span class="no-paper">Details not uploaded</span>
+														<span class="text-[#dc3545] text-xs">Details not uploaded</span>
 													{/if}
 												</td>
 												{#if data.showGroups && data.groups.length > 0}
-													<td class="group-cell">
+													<td class="px-4 py-3 border-b border-border align-middle text-center">
 														{#if student.groupId}
 															{#if viewMode === 'all'}
 																<button
 																	type="button"
-																	class="group-link"
+																	class="inline-block px-3 py-1 bg-bg-alt border border-border rounded text-xs font-medium text-primary cursor-pointer transition-all duration-200 hover:bg-primary hover:text-white hover:border-primary"
 																	onclick={() => setViewMode(student.groupId as number)}
 																>
 																	{student.groupId}
 																</button>
 															{:else}
-																<span class="group-number">{student.groupId}</span>
+																<span class="inline-block px-3 py-1 text-xs font-medium text-text">{student.groupId}</span>
 															{/if}
 														{:else}
 															-
 														{/if}
 													</td>
 												{/if}
-												<td class="photo-cell">
+												<td class="px-4 py-3 border-b border-border align-middle text-center">
 													{#if student.photo}
-														<a href="/{data.year}/students/{student.id}" class="photo-link">
+														<a href="/{data.year}/students/{student.id}" class="inline-block no-underline">
 															<img
 																src={`/images/students/${student.photo}`}
 																alt="{student.firstName} {student.lastName}"
+																class="w-15 h-15 object-cover rounded-md transition-transform duration-200 hover:scale-110"
 																onerror={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
 															/>
 														</a>
@@ -202,341 +201,19 @@
 						</section>
 					{/if}
 				{:else}
-					<div class="no-data">
-						<div class="no-data-icon">📋</div>
-						<p>Participant information for IOEA {data.year} will be available soon.</p>
-						<p class="subtext">Check back closer to the session date.</p>
+					<div class="text-center py-16 px-8 bg-bg-alt rounded-lg">
+						<div class="text-5xl mb-4">📋</div>
+						<p class="text-lg text-text mb-2">Participant information for IOEA {data.year} will be available soon.</p>
+						<p class="text-sm text-text-light m-0">Check back closer to the session date.</p>
 					</div>
 				{/if}
 			</div>
 
-			<aside class="sidebar">
+			<aside class="sticky top-[100px] self-start hidden lg:block">
 				<Sidebar />
 			</aside>
 		</div>
 	</div>
 </section>
 
-<style>
-	.main-grid {
-		display: grid;
-		grid-template-columns: 1fr 320px;
-		gap: 3rem;
-	}
-
-	.filters {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-		margin-bottom: 2rem;
-	}
-
-	.filter-btn {
-		padding: 0.5rem 1rem;
-		background: white;
-		border: 1px solid var(--color-border);
-		border-radius: 0.375rem;
-		font-size: 0.9rem;
-		cursor: pointer;
-		transition: all 0.2s ease;
-	}
-
-	.filter-btn:hover {
-		border-color: var(--color-primary);
-		background: var(--color-bg-alt);
-	}
-
-	.filter-btn.active {
-		background: var(--color-primary);
-		color: white;
-		border-color: var(--color-primary);
-	}
-
-	/* Chairs Section */
-	.chairs-section {
-		margin-bottom: 3rem;
-	}
-
-	.chairs-section h2 {
-		color: var(--color-primary);
-		font-size: 1.5rem;
-		margin-bottom: 1.5rem;
-		padding-bottom: 0.5rem;
-		border-bottom: 2px solid var(--color-secondary);
-	}
-
-	.chairs-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-		gap: 1.5rem;
-	}
-
-	.chair-card {
-		background: white;
-		border-radius: 0.5rem;
-		overflow: hidden;
-		border: 1px solid var(--color-border);
-		transition: box-shadow 0.2s ease;
-	}
-
-	.chair-card:hover {
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-	}
-
-	.chair-photo {
-		aspect-ratio: 1;
-		overflow: hidden;
-		background: var(--color-bg-alt);
-	}
-
-	.chair-photo img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
-
-	.photo-placeholder {
-		width: 100%;
-		height: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background: var(--color-primary);
-		color: white;
-		font-size: 2rem;
-		font-weight: 600;
-	}
-
-	.chair-info {
-		padding: 1rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
-	}
-
-	.chair-info a {
-		color: var(--color-primary);
-		font-weight: 600;
-		text-decoration: none;
-	}
-
-	.chair-info a:hover {
-		color: var(--color-secondary);
-	}
-
-	.chair-info .name {
-		font-weight: 600;
-		color: var(--color-primary);
-	}
-
-	.chair-info .institution {
-		font-size: 0.85rem;
-		color: var(--color-text-light);
-	}
-
-	.chair-info .group-badge {
-		display: inline-block;
-		width: fit-content;
-		margin-top: 0.25rem;
-		padding: 0.2rem 0.5rem;
-		background: var(--color-secondary);
-		color: white;
-		font-size: 0.75rem;
-		font-weight: 600;
-		border-radius: 0.25rem;
-	}
-
-	/* Students Section */
-	.students-section h2 {
-		color: var(--color-primary);
-		font-size: 1.5rem;
-		margin-bottom: 1.5rem;
-		padding-bottom: 0.5rem;
-		border-bottom: 2px solid var(--color-secondary);
-	}
-
-	.students-table-wrapper {
-		background: white;
-		border-radius: 0.5rem;
-		overflow: hidden;
-		border: 1px solid var(--color-border);
-		overflow-x: auto;
-	}
-
-	.students-table {
-		width: 100%;
-		border-collapse: collapse;
-		font-size: 0.9rem;
-	}
-
-	.students-table th {
-		background: var(--color-primary);
-		color: white;
-		padding: 0.875rem 1rem;
-		text-align: left;
-		font-weight: 600;
-		white-space: nowrap;
-	}
-
-	.students-table td {
-		padding: 0.75rem 1rem;
-		border-bottom: 1px solid var(--color-border);
-		vertical-align: middle;
-	}
-
-	.students-table tbody tr:hover {
-		background: var(--color-bg-alt);
-	}
-
-	.students-table tbody tr:last-child td {
-		border-bottom: none;
-	}
-
-	.name-cell a {
-		color: var(--color-primary);
-		font-weight: 500;
-		text-decoration: none;
-	}
-
-	.name-cell a:hover {
-		color: var(--color-secondary);
-		text-decoration: underline;
-	}
-
-	.university-cell {
-		color: var(--color-text-light);
-	}
-
-	.paper-cell {
-		max-width: 300px;
-	}
-
-	.paper-title {
-		display: block;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
-	.no-paper {
-		color: #dc3545;
-		font-size: 0.85rem;
-	}
-
-	.group-col {
-		width: 80px;
-		text-align: center;
-	}
-
-	.group-cell {
-		text-align: center;
-	}
-
-	.group-link {
-		display: inline-block;
-		padding: 0.25rem 0.75rem;
-		background: var(--color-bg-alt);
-		border: 1px solid var(--color-border);
-		border-radius: 0.25rem;
-		font-size: 0.85rem;
-		font-weight: 500;
-		color: var(--color-primary);
-		cursor: pointer;
-		transition: all 0.2s ease;
-	}
-
-	.group-link:hover {
-		background: var(--color-primary);
-		color: white;
-		border-color: var(--color-primary);
-	}
-
-	.group-number {
-		display: inline-block;
-		padding: 0.25rem 0.75rem;
-		font-size: 0.85rem;
-		font-weight: 500;
-		color: var(--color-text);
-	}
-
-	.photo-col {
-		width: 80px;
-		text-align: center;
-	}
-
-	.photo-cell {
-		text-align: center;
-	}
-
-	.photo-link img {
-		width: 60px;
-		height: 60px;
-		object-fit: cover;
-		border-radius: 0.375rem;
-		transition: transform 0.2s ease;
-	}
-
-	.photo-link:hover img {
-		transform: scale(1.1);
-	}
-
-	/* No Data */
-	.no-data {
-		text-align: center;
-		padding: 4rem 2rem;
-		background: var(--color-bg-alt);
-		border-radius: 0.5rem;
-	}
-
-	.no-data-icon {
-		font-size: 3rem;
-		margin-bottom: 1rem;
-	}
-
-	.no-data p {
-		font-size: 1.1rem;
-		color: var(--color-text);
-		margin-bottom: 0.5rem;
-	}
-
-	.no-data .subtext {
-		font-size: 0.9rem;
-		color: var(--color-text-light);
-	}
-
-	.sidebar {
-		position: sticky;
-		top: 100px;
-		align-self: start;
-	}
-
-	@media (max-width: 1024px) {
-		.main-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.sidebar {
-			position: static;
-		}
-	}
-
-	@media (max-width: 767px) {
-		.chairs-grid {
-			grid-template-columns: repeat(2, 1fr);
-		}
-
-		.paper-cell {
-			max-width: 150px;
-		}
-
-		.students-table {
-			font-size: 0.85rem;
-		}
-
-		.students-table th,
-		.students-table td {
-			padding: 0.5rem;
-		}
-	}
-</style>
 

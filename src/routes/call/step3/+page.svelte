@@ -25,21 +25,21 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="main-grid">
+		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
 				<!-- Progress Steps -->
-				<div class="steps">
-					<div class="step completed">
-						<span class="step-number">✓</span>
-						<span class="step-label">{config.callSteps[1]}</span>
+				<div class="flex justify-between mb-8 p-6 bg-bg-alt rounded-lg">
+					<div class="flex flex-col items-center gap-2 flex-1 text-center opacity-100">
+						<span class="flex items-center justify-center w-9 h-9 bg-accent text-white rounded-full font-semibold">✓</span>
+						<span class="text-sm text-text-light">{config.callSteps[1]}</span>
 					</div>
-					<div class="step completed">
-						<span class="step-number">✓</span>
-						<span class="step-label">{config.callSteps[2]}</span>
+					<div class="flex flex-col items-center gap-2 flex-1 text-center opacity-100">
+						<span class="flex items-center justify-center w-9 h-9 bg-accent text-white rounded-full font-semibold">✓</span>
+						<span class="text-sm text-text-light">{config.callSteps[2]}</span>
 					</div>
-					<div class="step active">
-						<span class="step-number">3</span>
-						<span class="step-label">{config.callSteps[3]}</span>
+					<div class="flex flex-col items-center gap-2 flex-1 text-center opacity-100">
+						<span class="flex items-center justify-center w-9 h-9 bg-secondary text-white rounded-full font-semibold">3</span>
+						<span class="text-sm text-text-light">{config.callSteps[3]}</span>
 					</div>
 				</div>
 
@@ -63,68 +63,70 @@
 							}
 						};
 					}}
-					class="application-form"
+					class="bg-white p-8 rounded-lg border border-border"
 				>
-					<h2>Upload Your Files</h2>
+					<h2 class="mb-4 pb-3 border-b-2 border-border">Upload Your Files</h2>
 
-					<p class="upload-intro">
+					<p class="text-text-light mb-8">
 						Please upload your CV and a research paper or writing sample in PDF format.
 						Maximum file size: 5MB per file.
 					</p>
 
-					<div class="form-group">
+					<div class="mb-8">
 						<label for="cv" class="form-label">Curriculum Vitae (CV) *</label>
-						<div class="file-upload">
+						<div class="relative border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer transition-all duration-200 hover:border-primary hover:bg-bg-alt">
 							<input
 								type="file"
 								id="cv"
 								name="cv"
 								accept=".pdf"
 								required
+								class="absolute inset-0 opacity-0 cursor-pointer"
 								onchange={(e) => {
 									const target = e.target as HTMLInputElement;
 									cvFile = target.files?.[0] ?? null;
 								}}
 							/>
-							<div class="file-upload-label">
+							<div class="text-text-light">
 								{#if cvFile}
-									<span class="file-name">{cvFile.name}</span>
+									<span class="text-primary font-semibold">{cvFile.name}</span>
 								{:else}
 									<span>Choose PDF file or drag here</span>
 								{/if}
 							</div>
 						</div>
-						<p class="form-help">PDF format, max 5MB</p>
+						<p class="text-sm text-text-light mt-2">PDF format, max 5MB</p>
 					</div>
 
-					<div class="form-group">
+					<div class="mb-8">
 						<label for="paper" class="form-label">Research Paper / Writing Sample *</label>
-						<div class="file-upload">
+						<div class="relative border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer transition-all duration-200 hover:border-primary hover:bg-bg-alt">
 							<input
 								type="file"
 								id="paper"
 								name="paper"
 								accept=".pdf"
 								required
+								class="absolute inset-0 opacity-0 cursor-pointer"
 								onchange={(e) => {
 									const target = e.target as HTMLInputElement;
 									paperFile = target.files?.[0] ?? null;
 								}}
 							/>
-							<div class="file-upload-label">
+							<div class="text-text-light">
 								{#if paperFile}
-									<span class="file-name">{paperFile.name}</span>
+									<span class="text-primary font-semibold">{paperFile.name}</span>
 								{:else}
 									<span>Choose PDF file or drag here</span>
 								{/if}
 							</div>
 						</div>
-						<p class="form-help">PDF format, max 5MB. This can be a work in progress.</p>
+						<p class="text-sm text-text-light mt-2">PDF format, max 5MB. This can be a work in progress.</p>
 					</div>
 
-					<div class="form-group checkbox-group">
-						<label class="checkbox-label">
-							<input type="checkbox" name="consent" required />
+					<div class="mt-8">
+						<label class="flex gap-3 cursor-pointer text-sm text-text-light">
+							<input type="checkbox" name="consent" required class="mt-1 flex-shrink-0" />
 							<span>
 								I confirm that the information provided is accurate and I agree to the
 								processing of my personal data for the purpose of this application.
@@ -132,13 +134,13 @@
 						</label>
 					</div>
 
-					<div class="form-actions">
+					<div class="mt-8 pt-6 border-t border-border flex justify-between gap-4 flex-col sm:flex-row">
 						<a href="/call/step2" class="btn btn-secondary">
 							← Back to Step 2
 						</a>
 						<button type="submit" class="btn btn-primary" disabled={loading}>
 							{#if loading}
-								<span class="spinner-small"></span>
+								<span class="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></span>
 								Submitting...
 							{:else}
 								Submit Application
@@ -148,191 +150,11 @@
 				</form>
 			</div>
 
-			<aside class="sidebar">
+			<aside class="sticky top-[100px] self-start hidden lg:block">
 				<Sidebar showBrochure={true} showPhotos={false} />
 			</aside>
 		</div>
 	</div>
 </section>
 
-<style>
-	.main-grid {
-		display: grid;
-		grid-template-columns: 1fr 320px;
-		gap: 3rem;
-	}
-
-	.steps {
-		display: flex;
-		justify-content: space-between;
-		margin-bottom: 2rem;
-		padding: 1.5rem;
-		background: var(--color-bg-alt);
-		border-radius: 0.5rem;
-	}
-
-	.step {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.5rem;
-		flex: 1;
-		text-align: center;
-		opacity: 0.5;
-	}
-
-	.step.active,
-	.step.completed {
-		opacity: 1;
-	}
-
-	.step-number {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 36px;
-		height: 36px;
-		background: var(--color-primary);
-		color: white;
-		border-radius: 50%;
-		font-weight: 600;
-	}
-
-	.step.active .step-number {
-		background: var(--color-secondary);
-	}
-
-	.step.completed .step-number {
-		background: var(--color-accent);
-	}
-
-	.step-label {
-		font-size: 0.85rem;
-		color: var(--color-text-light);
-	}
-
-	.application-form {
-		background: white;
-		padding: 2rem;
-		border-radius: 0.5rem;
-		border: 1px solid var(--color-border);
-	}
-
-	.application-form h2 {
-		margin-bottom: 1rem;
-		padding-bottom: 0.75rem;
-		border-bottom: 2px solid var(--color-border);
-	}
-
-	.upload-intro {
-		color: var(--color-text-light);
-		margin-bottom: 2rem;
-	}
-
-	.form-group {
-		margin-bottom: 2rem;
-	}
-
-	.file-upload {
-		position: relative;
-		border: 2px dashed var(--color-border);
-		border-radius: 0.5rem;
-		padding: 2rem;
-		text-align: center;
-		cursor: pointer;
-		transition: all 0.2s ease;
-	}
-
-	.file-upload:hover {
-		border-color: var(--color-primary);
-		background: var(--color-bg-alt);
-	}
-
-	.file-upload input[type="file"] {
-		position: absolute;
-		inset: 0;
-		opacity: 0;
-		cursor: pointer;
-	}
-
-	.file-upload-label {
-		color: var(--color-text-light);
-	}
-
-	.file-name {
-		color: var(--color-primary);
-		font-weight: 600;
-	}
-
-	.form-help {
-		font-size: 0.85rem;
-		color: var(--color-text-light);
-		margin-top: 0.5rem;
-	}
-
-	.checkbox-group {
-		margin-top: 2rem;
-	}
-
-	.checkbox-label {
-		display: flex;
-		gap: 0.75rem;
-		cursor: pointer;
-		font-size: 0.9rem;
-		color: var(--color-text-light);
-	}
-
-	.checkbox-label input {
-		margin-top: 0.25rem;
-		flex-shrink: 0;
-	}
-
-	.form-actions {
-		margin-top: 2rem;
-		padding-top: 1.5rem;
-		border-top: 1px solid var(--color-border);
-		display: flex;
-		justify-content: space-between;
-		gap: 1rem;
-	}
-
-	.spinner-small {
-		display: inline-block;
-		width: 1rem;
-		height: 1rem;
-		border: 2px solid rgba(255, 255, 255, 0.3);
-		border-top-color: white;
-		border-radius: 50%;
-		animation: spin 0.8s linear infinite;
-		margin-right: 0.5rem;
-	}
-
-	@keyframes spin {
-		to {
-			transform: rotate(360deg);
-		}
-	}
-
-	.sidebar {
-		position: sticky;
-		top: 100px;
-		align-self: start;
-	}
-
-	@media (max-width: 1024px) {
-		.main-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.sidebar {
-			position: static;
-		}
-	}
-
-	@media (max-width: 600px) {
-		.form-actions {
-			flex-direction: column;
-		}
-	}
-</style>
 

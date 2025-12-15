@@ -27,21 +27,21 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="main-grid">
+		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
 				<!-- Progress Steps -->
-				<div class="steps">
-					<div class="step completed">
-						<span class="step-number">✓</span>
-						<span class="step-label">{config.callSteps[1]}</span>
+				<div class="flex justify-between mb-8 p-6 bg-bg-alt rounded-lg">
+					<div class="flex flex-col items-center gap-2 flex-1 text-center opacity-100">
+						<span class="flex items-center justify-center w-9 h-9 bg-accent text-white rounded-full font-semibold">✓</span>
+						<span class="text-sm text-text-light">{config.callSteps[1]}</span>
 					</div>
-					<div class="step active">
-						<span class="step-number">2</span>
-						<span class="step-label">{config.callSteps[2]}</span>
+					<div class="flex flex-col items-center gap-2 flex-1 text-center opacity-100">
+						<span class="flex items-center justify-center w-9 h-9 bg-secondary text-white rounded-full font-semibold">2</span>
+						<span class="text-sm text-text-light">{config.callSteps[2]}</span>
 					</div>
-					<div class="step">
-						<span class="step-number">3</span>
-						<span class="step-label">{config.callSteps[3]}</span>
+					<div class="flex flex-col items-center gap-2 flex-1 text-center opacity-50">
+						<span class="flex items-center justify-center w-9 h-9 bg-primary text-white rounded-full font-semibold">3</span>
+						<span class="text-sm text-text-light">{config.callSteps[3]}</span>
 					</div>
 				</div>
 
@@ -64,12 +64,12 @@
 							}
 						};
 					}}
-					class="application-form"
+					class="bg-white p-8 rounded-lg border border-border"
 				>
-					<h2>Affiliation</h2>
+					<h2 class="mt-0 mb-6 pb-3 border-b-2 border-border">Affiliation</h2>
 
-					<div class="form-row">
-						<div class="form-group">
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+						<div class="mb-6">
 							<label for="university" class="form-label">University / Institution *</label>
 							<input
 								type="text"
@@ -80,7 +80,7 @@
 								value={form?.values?.university ?? ''}
 							/>
 						</div>
-						<div class="form-group">
+						<div class="mb-6">
 							<label for="department" class="form-label">Department *</label>
 							<input
 								type="text"
@@ -93,7 +93,7 @@
 						</div>
 					</div>
 
-					<div class="form-group">
+					<div class="mb-6">
 						<label for="country" class="form-label">Country *</label>
 						<select id="country" name="country" class="form-input" required>
 							<option value="">-----------------</option>
@@ -105,9 +105,9 @@
 						</select>
 					</div>
 
-					<h2>PhD Project / Current Research</h2>
+					<h2 class="mt-8 mb-6 pb-3 border-b-2 border-border">PhD Project / Current Research</h2>
 
-					<div class="form-group">
+					<div class="mb-6">
 						<label for="phd_title" class="form-label">Title of PhD / Research Project *</label>
 						<input
 							type="text"
@@ -119,8 +119,8 @@
 						/>
 					</div>
 
-					<div class="form-row">
-						<div class="form-group">
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+						<div class="mb-6">
 							<label for="phd_ad_name" class="form-label">Supervisor Name *</label>
 							<input
 								type="text"
@@ -131,7 +131,7 @@
 								value={form?.values?.phd_ad_name ?? ''}
 							/>
 						</div>
-						<div class="form-group">
+						<div class="mb-6">
 							<label for="phd_ad_mail" class="form-label">Supervisor Email *</label>
 							<input
 								type="email"
@@ -144,7 +144,7 @@
 						</div>
 					</div>
 
-					<div class="form-group">
+					<div class="mb-6">
 						<label for="phd_year" class="form-label">Expected Year of Completion *</label>
 						<input
 							type="number"
@@ -158,27 +158,27 @@
 						/>
 					</div>
 
-					<div class="form-group">
+					<div class="mb-6">
 						<label for="phd_summary" class="form-label">
 							Summary of Research (max 500 words) *
 						</label>
 						<textarea
 							id="phd_summary"
 							name="phd_summary"
-							class="form-input"
+							class="form-input resize-y min-h-[150px]"
 							rows="8"
 							required
 							placeholder="Describe your research project, methodology, and expected contributions..."
 						>{form?.values?.phd_summary ?? ''}</textarea>
 					</div>
 
-					<div class="form-actions">
+					<div class="mt-8 pt-6 border-t border-border flex justify-between gap-4 flex-col sm:flex-row">
 						<a href="/call" class="btn btn-secondary">
 							← Back to Step 1
 						</a>
 						<button type="submit" class="btn btn-primary" disabled={loading}>
 							{#if loading}
-								<span class="spinner-small"></span>
+								<span class="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></span>
 								Processing...
 							{:else}
 								Continue to Step 3 →
@@ -188,152 +188,11 @@
 				</form>
 			</div>
 
-			<aside class="sidebar">
+			<aside class="sticky top-[100px] self-start hidden lg:block">
 				<Sidebar showBrochure={true} showPhotos={false} />
 			</aside>
 		</div>
 	</div>
 </section>
 
-<style>
-	.main-grid {
-		display: grid;
-		grid-template-columns: 1fr 320px;
-		gap: 3rem;
-	}
-
-	.steps {
-		display: flex;
-		justify-content: space-between;
-		margin-bottom: 2rem;
-		padding: 1.5rem;
-		background: var(--color-bg-alt);
-		border-radius: 0.5rem;
-	}
-
-	.step {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.5rem;
-		flex: 1;
-		text-align: center;
-		opacity: 0.5;
-	}
-
-	.step.active,
-	.step.completed {
-		opacity: 1;
-	}
-
-	.step-number {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 36px;
-		height: 36px;
-		background: var(--color-primary);
-		color: white;
-		border-radius: 50%;
-		font-weight: 600;
-	}
-
-	.step.active .step-number {
-		background: var(--color-secondary);
-	}
-
-	.step.completed .step-number {
-		background: var(--color-accent);
-	}
-
-	.step-label {
-		font-size: 0.85rem;
-		color: var(--color-text-light);
-	}
-
-	.application-form {
-		background: white;
-		padding: 2rem;
-		border-radius: 0.5rem;
-		border: 1px solid var(--color-border);
-	}
-
-	.application-form h2 {
-		margin-top: 2rem;
-		margin-bottom: 1.5rem;
-		padding-bottom: 0.75rem;
-		border-bottom: 2px solid var(--color-border);
-	}
-
-	.application-form h2:first-child {
-		margin-top: 0;
-	}
-
-	.form-row {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1rem;
-	}
-
-	.form-group {
-		margin-bottom: 1.5rem;
-	}
-
-	textarea.form-input {
-		resize: vertical;
-		min-height: 150px;
-	}
-
-	.form-actions {
-		margin-top: 2rem;
-		padding-top: 1.5rem;
-		border-top: 1px solid var(--color-border);
-		display: flex;
-		justify-content: space-between;
-		gap: 1rem;
-	}
-
-	.spinner-small {
-		display: inline-block;
-		width: 1rem;
-		height: 1rem;
-		border: 2px solid rgba(255, 255, 255, 0.3);
-		border-top-color: white;
-		border-radius: 50%;
-		animation: spin 0.8s linear infinite;
-		margin-right: 0.5rem;
-	}
-
-	@keyframes spin {
-		to {
-			transform: rotate(360deg);
-		}
-	}
-
-	.sidebar {
-		position: sticky;
-		top: 100px;
-		align-self: start;
-	}
-
-	@media (max-width: 1024px) {
-		.main-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.sidebar {
-			position: static;
-		}
-	}
-
-	@media (max-width: 600px) {
-		.form-row {
-			grid-template-columns: 1fr;
-		}
-
-		.form-actions {
-			flex-direction: column;
-		}
-	}
-</style>
 

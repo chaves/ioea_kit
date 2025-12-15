@@ -23,117 +23,51 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="main-grid">
+		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-
-				<article class="content">
-					<p class="lead">
+				<article>
+					<p class="text-xl text-text-light mb-6 leading-relaxed">
 						The IOE is characterized by a multi-disciplinary approach, and as a consequence,
 						by reliance on multiple scientific methodologies (case studies, econometrics,
 						field experiments, experimental economics, etc.) as well as a diversity of
 						analytical frameworks.
 					</p>
 
-					<p>
+					<p class="leading-relaxed mb-5">
 						Its field is composed of a wide range of approaches which creates synergies
 						and complementarities: economics and organizational sociology, historical and
 						institutional dynamics analysis, formal and informal coordination mechanisms
 						analysis, public-private relations analysis, etc.
 					</p>
 
-					<p>
+					<p class="leading-relaxed mb-5">
 						The ability to mobilize for one week international specialists of these themes
 						provides a unique opportunity to spread research works and to give the students
 						a chance to benefit from top researchers' experience through lectures and interactions.
 					</p>
 
-					<h2>Main Research Fields</h2>
+					<h2 class="text-primary my-8 mb-4 pb-2 border-b-2 border-secondary">Main Research Fields</h2>
 
-					<p>Over the years, the main fields covered by the lectures and workshops have been:</p>
+					<p class="mb-5">Over the years, the main fields covered by the lectures and workshops have been:</p>
 
-					<ul class="research-list">
+					<ul class="bg-bg-alt py-6 px-6 pl-10 rounded-lg my-6 border-l-4 border-secondary">
 						{#each researchAreas as area}
-							<li>{area}</li>
+							<li class="py-2 text-text font-medium">{area}</li>
 						{/each}
 					</ul>
 
-					<p class="note">
+					<p class="italic text-text-light mb-0">
 						That said the school also hosted talks in finance, labor economics and human
 						resource management, history of economic thought and methodology, etc.
 					</p>
 				</article>
 			</div>
 
-			<aside class="sidebar">
+			<aside class="sticky top-[100px] self-start hidden lg:block">
 				<Sidebar />
 			</aside>
 		</div>
 	</div>
 </section>
 
-<style>
-	.main-grid {
-		display: grid;
-		grid-template-columns: 1fr 320px;
-		gap: 3rem;
-	}
-
-	.content p {
-		line-height: 1.7;
-		margin-bottom: 1.25rem;
-	}
-
-	.lead {
-		font-size: 1.2rem;
-		color: var(--color-text-light);
-		margin-bottom: 1.5rem;
-		line-height: 1.7;
-	}
-
-	.content h2 {
-		color: var(--color-primary);
-		margin: 2rem 0 1rem;
-		padding-bottom: 0.5rem;
-		border-bottom: 2px solid var(--color-secondary);
-	}
-
-	.research-list {
-		background: var(--color-bg-alt);
-		padding: 1.5rem 1.5rem 1.5rem 2.5rem;
-		border-radius: 0.5rem;
-		margin: 1.5rem 0;
-		border-left: 4px solid var(--color-secondary);
-	}
-
-	.research-list li {
-		padding: 0.5rem 0;
-		color: var(--color-text);
-		font-weight: 500;
-	}
-
-	.research-list li::marker {
-		color: var(--color-secondary);
-	}
-
-	.note {
-		font-style: italic;
-		color: var(--color-text-light);
-	}
-
-	.sidebar {
-		position: sticky;
-		top: 100px;
-		align-self: start;
-	}
-
-	@media (max-width: 1024px) {
-		.main-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.sidebar {
-			position: static;
-		}
-	}
-</style>
 

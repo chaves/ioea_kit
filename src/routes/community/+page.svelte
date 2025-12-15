@@ -12,220 +12,77 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="main-grid">
+		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-				<article class="content">
-					<p class="lead">
+				<article>
+					<p class="text-xl text-text-light mb-8 leading-relaxed">
 						The IOEA community brings together scholars from around the world who share
 						a passion for institutional and organizational economics. Our alumni network
 						spans continents and generations of researchers.
 					</p>
 
-					<div class="community-stats">
-						<div class="stat-card">
-							<span class="stat-number">1200+</span>
-							<span class="stat-label">Alumni Worldwide</span>
+					<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12">
+						<div class="bg-primary text-white p-6 rounded-lg text-center">
+							<span class="block text-4xl font-bold leading-none mb-2">1200+</span>
+							<span class="text-sm opacity-90">Alumni Worldwide</span>
 						</div>
-						<div class="stat-card">
-							<span class="stat-number">20+</span>
-							<span class="stat-label">Years of Excellence</span>
+						<div class="bg-primary text-white p-6 rounded-lg text-center">
+							<span class="block text-4xl font-bold leading-none mb-2">20+</span>
+							<span class="text-sm opacity-90">Years of Excellence</span>
 						</div>
-						<div class="stat-card">
-							<span class="stat-number">50+</span>
-							<span class="stat-label">Countries Represented</span>
+						<div class="bg-primary text-white p-6 rounded-lg text-center">
+							<span class="block text-4xl font-bold leading-none mb-2">50+</span>
+							<span class="text-sm opacity-90">Countries Represented</span>
 						</div>
-						<div class="stat-card">
-							<span class="stat-number">100+</span>
-							<span class="stat-label">Faculty Members</span>
+						<div class="bg-primary text-white p-6 rounded-lg text-center">
+							<span class="block text-4xl font-bold leading-none mb-2">100+</span>
+							<span class="text-sm opacity-90">Faculty Members</span>
 						</div>
 					</div>
 
-					<h2>Who We Are</h2>
-					<p>
+					<h2 class="mt-8 mb-4">Who We Are</h2>
+					<p class="text-[1.05rem] leading-relaxed mb-4">
 						The IOEA community includes doctoral students, post-doctoral researchers,
 						junior faculty, and established scholars who have participated in or contributed
 						to our summer school over the years.
 					</p>
 
-					<div class="community-sections">
-						<a href="/community/faculty" class="community-card">
-							<h3>The Faculty</h3>
-							<p>Meet the renowned scholars who teach at IOEA.</p>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">
+						<a href="/community/faculty" class="bg-white p-6 rounded-lg border border-border transition-all duration-200 no-underline hover:border-primary hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:-translate-y-0.5">
+							<h3 class="text-primary mb-2 text-lg">The Faculty</h3>
+							<p class="text-text-light m-0 text-sm">Meet the renowned scholars who teach at IOEA.</p>
 						</a>
-						<a href="/community/organizers" class="community-card">
-							<h3>The Organizers</h3>
-							<p>The team behind the IOEA summer school.</p>
+						<a href="/community/organizers" class="bg-white p-6 rounded-lg border border-border transition-all duration-200 no-underline hover:border-primary hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:-translate-y-0.5">
+							<h3 class="text-primary mb-2 text-lg">The Organizers</h3>
+							<p class="text-text-light m-0 text-sm">The team behind the IOEA summer school.</p>
 						</a>
-						<a href="/community/alumni" class="community-card">
-							<h3>Alumni Network</h3>
-							<p>Connect with former IOEA participants.</p>
+						<a href="/community/alumni" class="bg-white p-6 rounded-lg border border-border transition-all duration-200 no-underline hover:border-primary hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:-translate-y-0.5">
+							<h3 class="text-primary mb-2 text-lg">Alumni Network</h3>
+							<p class="text-text-light m-0 text-sm">Connect with former IOEA participants.</p>
 						</a>
-						<a href="/community/testimonials" class="community-card">
-							<h3>Testimonials</h3>
-							<p>Hear from past participants about their experience.</p>
+						<a href="/community/testimonials" class="bg-white p-6 rounded-lg border border-border transition-all duration-200 no-underline hover:border-primary hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:-translate-y-0.5">
+							<h3 class="text-primary mb-2 text-lg">Testimonials</h3>
+							<p class="text-text-light m-0 text-sm">Hear from past participants about their experience.</p>
 						</a>
 					</div>
 
-					<div class="join-section">
-						<h2>Join the Community</h2>
-						<p>
+					<div class="mt-12 p-8 bg-gradient-to-br from-primary to-primary-dark rounded-lg text-white text-center">
+						<h2 class="text-white mt-0 mb-4">Join the Community</h2>
+						<p class="text-white/90 max-w-[600px] mx-auto mb-6">
 							Stay connected with the IOEA community by subscribing to our mailing list.
 							You'll receive updates about upcoming sessions, community news, and opportunities
 							for collaboration.
 						</p>
-						<a href="/community/join" class="btn btn-primary btn-lg">Subscribe Now</a>
+						<a href="/community/join" class="btn btn-primary px-8 py-4 text-lg no-underline">Subscribe Now</a>
 					</div>
 				</article>
 			</div>
 
-			<aside class="sidebar">
+			<aside class="sticky top-[100px] self-start hidden lg:block">
 				<Sidebar />
 			</aside>
 		</div>
 	</div>
 </section>
 
-<style>
-	.main-grid {
-		display: grid;
-		grid-template-columns: 1fr 320px;
-		gap: 3rem;
-	}
-
-	.lead {
-		font-size: 1.2rem;
-		color: var(--color-text-light);
-		margin-bottom: 2rem;
-		line-height: 1.7;
-	}
-
-	.community-stats {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: 1rem;
-		margin-bottom: 3rem;
-	}
-
-	.stat-card {
-		background: var(--color-primary);
-		color: white;
-		padding: 1.5rem;
-		border-radius: 0.5rem;
-		text-align: center;
-	}
-
-	.stat-number {
-		display: block;
-		font-size: 2.5rem;
-		font-weight: 700;
-		line-height: 1;
-		margin-bottom: 0.5rem;
-	}
-
-	.stat-label {
-		font-size: 0.85rem;
-		opacity: 0.9;
-	}
-
-	.content h2 {
-		margin-top: 2rem;
-		margin-bottom: 1rem;
-	}
-
-	.content p {
-		font-size: 1.05rem;
-		line-height: 1.7;
-		margin-bottom: 1rem;
-	}
-
-	.community-sections {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 1.5rem;
-		margin-top: 2rem;
-	}
-
-	.community-card {
-		background: white;
-		padding: 1.5rem;
-		border-radius: 0.5rem;
-		border: 1px solid var(--color-border);
-		transition: all 0.2s ease;
-		text-decoration: none;
-	}
-
-	.community-card:hover {
-		border-color: var(--color-primary);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-		transform: translateY(-2px);
-	}
-
-	.community-card h3 {
-		color: var(--color-primary);
-		margin-bottom: 0.5rem;
-		font-size: 1.1rem;
-	}
-
-	.community-card p {
-		color: var(--color-text-light);
-		margin: 0;
-		font-size: 0.95rem;
-	}
-
-	.join-section {
-		margin-top: 3rem;
-		padding: 2rem;
-		background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-		border-radius: 0.5rem;
-		color: white;
-		text-align: center;
-	}
-
-	.join-section h2 {
-		color: white;
-		margin-top: 0;
-	}
-
-	.join-section p {
-		color: rgba(255, 255, 255, 0.9);
-		max-width: 600px;
-		margin-left: auto;
-		margin-right: auto;
-	}
-
-	.btn-lg {
-		padding: 1rem 2rem;
-		font-size: 1.1rem;
-	}
-
-	.sidebar {
-		position: sticky;
-		top: 100px;
-		align-self: start;
-	}
-
-	@media (max-width: 1024px) {
-		.main-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.sidebar {
-			position: static;
-		}
-	}
-
-	@media (max-width: 767px) {
-		.community-stats {
-			grid-template-columns: repeat(2, 1fr);
-		}
-
-		.community-sections {
-			grid-template-columns: 1fr;
-		}
-
-		.stat-number {
-			font-size: 2rem;
-		}
-	}
-</style>
 
