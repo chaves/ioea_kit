@@ -26,21 +26,21 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="main-grid">
+		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-				<p class="lead">
+				<p class="text-xl text-text-light mb-8 leading-relaxed">
 					Watch recorded lectures, presentations, and highlights from past IOEA sessions.
 					These videos provide a glimpse into the academic content and atmosphere of our
 					summer school.
 				</p>
 
 				{#each videoSections as section}
-					<div class="video-section">
-						<h2>{section.title}</h2>
-						<div class="videos-grid">
+					<div class="mb-12">
+						<h2 class="text-primary text-2xl mb-6 pb-2 border-b-2 border-secondary">{section.title}</h2>
+						<div class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6">
 							{#each section.videos as video}
-								<div class="video-card">
-									<div class="video-wrapper">
+								<div class="bg-white border border-border rounded-lg overflow-hidden transition-all duration-200 hover:border-primary hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+									<div class="relative pb-[56.25%] h-0 overflow-hidden bg-black">
 										{#if loadedVideos.has(video.id)}
 											<iframe
 												src="https://www.youtube.com/embed/{video.id}?autoplay=1"
@@ -48,11 +48,12 @@
 												frameborder="0"
 												allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 												allowfullscreen
+												class="absolute top-0 left-0 w-full h-full"
 											></iframe>
 										{:else}
 											<button
 												type="button"
-												class="video-thumbnail"
+												class="absolute top-0 left-0 w-full h-full border-0 p-0 bg-transparent cursor-pointer flex items-center justify-center transition-opacity duration-200 hover:opacity-90"
 												onclick={() => loadVideo(video.id)}
 												aria-label="Play {video.name}"
 											>
@@ -60,13 +61,14 @@
 													src={getThumbnailUrl(video.id)}
 													alt="{video.name}"
 													loading="lazy"
+													class="absolute top-0 left-0 w-full h-full object-cover"
 													onerror={(e) => {
 														// Fallback to hqdefault if maxresdefault doesn't exist
 														const img = e.currentTarget as HTMLImageElement;
 														img.src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;
 													}}
 												/>
-												<div class="play-button" aria-hidden="true">
+												<div class="relative z-10 w-[68px] h-12 transition-transform duration-200 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:scale-110" aria-hidden="true">
 													<svg xmlns="http://www.w3.org/2000/svg" width="68" height="48" viewBox="0 0 68 48">
 														<path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.63-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"/>
 														<path d="M 45,24 27,14 27,34" fill="#fff"/>
@@ -75,13 +77,13 @@
 											</button>
 										{/if}
 									</div>
-									<div class="video-info">
-										<strong class="video-name">{video.name}</strong>
+									<div class="p-4 flex flex-col gap-1">
+										<strong class="text-primary text-sm">{video.name}</strong>
 										{#if video.institution}
-											<span class="video-institution">{video.institution}</span>
+											<span class="text-text-light text-xs">{video.institution}</span>
 										{/if}
 										{#if video.topic}
-											<span class="video-topic">"{video.topic}"</span>
+											<span class="text-text text-xs italic mt-1">"{video.topic}"</span>
 										{/if}
 									</div>
 								</div>
@@ -91,15 +93,15 @@
 				{/each}
 			</div>
 
-			<aside class="sidebar">
-				<div class="sidebar-widget">
-					<p>
-						<strong>Discover our on-line learning platform on its dedicated website:</strong>
+			<aside class="sticky top-[100px] self-start hidden lg:block">
+				<div class="bg-bg-alt rounded-lg p-6 text-center">
+					<p class="mb-4 text-sm leading-relaxed">
+						<strong class="text-primary block mb-2">Discover our on-line learning platform on its dedicated website:</strong>
 					</p>
-					<a href="https://learn.ioea.eu" target="_blank" rel="noopener" class="platform-link">
-						<img src="/images/logo_learn.svg" alt="IOEA Learn" class="learn-logo" />
+					<a href="https://learn.ioea.eu" target="_blank" rel="noopener" class="inline-block my-4 transition-opacity duration-200 hover:opacity-80 no-underline">
+						<img src="/images/logo_learn.svg" alt="IOEA Learn" class="max-w-[180px] w-full h-auto" />
 					</a>
-					<p class="platform-tagline">
+					<p class="mt-4 mb-0 text-sm text-text-light leading-normal">
 						<em>Learn everything about institutional and organizational economics!</em>
 					</p>
 				</div>
@@ -108,203 +110,3 @@
 	</div>
 </section>
 
-<style>
-	.main-grid {
-		display: grid;
-		grid-template-columns: 1fr 320px;
-		gap: 3rem;
-	}
-
-	.lead {
-		font-size: 1.2rem;
-		color: var(--color-text-light);
-		margin-bottom: 2rem;
-		line-height: 1.7;
-	}
-
-	.youtube-cta {
-		margin-bottom: 3rem;
-		padding: 2rem;
-		background: var(--color-bg-alt);
-		border-radius: 0.5rem;
-		text-align: center;
-	}
-
-	.video-section {
-		margin-bottom: 3rem;
-	}
-
-	.video-section h2 {
-		color: var(--color-primary);
-		font-size: 1.5rem;
-		margin-bottom: 1.5rem;
-		padding-bottom: 0.5rem;
-		border-bottom: 2px solid var(--color-secondary);
-	}
-
-	.videos-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-		gap: 1.5rem;
-	}
-
-	.video-card {
-		background: white;
-		border: 1px solid var(--color-border);
-		border-radius: 0.5rem;
-		overflow: hidden;
-		transition: all 0.2s ease;
-	}
-
-	.video-card:hover {
-		border-color: var(--color-primary);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-	}
-
-	.video-wrapper {
-		position: relative;
-		padding-bottom: 56.25%;
-		height: 0;
-		overflow: hidden;
-		background: #000;
-	}
-
-	.video-wrapper iframe {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-	}
-
-	.video-thumbnail {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		border: none;
-		padding: 0;
-		background: transparent;
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		transition: opacity 0.2s ease;
-	}
-
-	.video-thumbnail:hover {
-		opacity: 0.9;
-	}
-
-	.video-thumbnail img {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
-
-	.play-button {
-		position: relative;
-		z-index: 1;
-		width: 68px;
-		height: 48px;
-		transition: transform 0.2s ease;
-		filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
-	}
-
-	.video-thumbnail:hover .play-button {
-		transform: scale(1.1);
-	}
-
-	.video-info {
-		padding: 1rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
-	}
-
-	.video-name {
-		color: var(--color-primary);
-		font-size: 0.95rem;
-	}
-
-	.video-institution {
-		color: var(--color-text-light);
-		font-size: 0.85rem;
-	}
-
-	.video-topic {
-		color: var(--color-text);
-		font-size: 0.8rem;
-		font-style: italic;
-		margin-top: 0.25rem;
-	}
-
-	.sidebar {
-		position: sticky;
-		top: 100px;
-		align-self: start;
-	}
-
-	.sidebar-widget {
-		background: var(--color-bg-alt);
-		border-radius: 0.5rem;
-		padding: 1.5rem;
-		text-align: center;
-	}
-
-	.sidebar-widget p {
-		margin-bottom: 1rem;
-		font-size: 0.95rem;
-		line-height: 1.6;
-	}
-
-	.sidebar-widget strong {
-		color: var(--color-primary);
-		display: block;
-		margin-bottom: 0.5rem;
-	}
-
-	.platform-link {
-		display: inline-block;
-		margin: 1rem 0;
-		transition: opacity 0.2s ease;
-	}
-
-	.platform-link:hover {
-		opacity: 0.8;
-	}
-
-	.learn-logo {
-		max-width: 180px;
-		width: 100%;
-		height: auto;
-	}
-
-	.platform-tagline {
-		margin-top: 1rem;
-		margin-bottom: 0;
-		font-size: 0.9rem;
-		color: var(--color-text-light);
-		line-height: 1.5;
-	}
-
-	@media (max-width: 1024px) {
-		.main-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.sidebar {
-			position: static;
-		}
-	}
-
-	@media (max-width: 600px) {
-		.videos-grid {
-			grid-template-columns: 1fr;
-		}
-	}
-</style>

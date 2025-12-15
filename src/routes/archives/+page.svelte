@@ -40,7 +40,7 @@
 									src={photo ? `/images/photos/${year}/${photo}` : '/images/placeholder-year.jpg'}
 									alt="IOEA {year}"
 									class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-									onerror={(e) => { 
+									onerror={(e) => {
 										const img = e.currentTarget as HTMLImageElement;
 										img.src = '/images/placeholder-year.jpg';
 									}}

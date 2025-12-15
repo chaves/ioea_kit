@@ -51,59 +51,56 @@
 	}
 </script>
 
-<header class="header">
-	<div class="header-top">
+<header class="bg-white sticky top-0 z-[100] shadow-[0_1px_3px_rgba(61,58,66,0.06)]">
+	<div class="py-3.5">
 		<div class="container">
-			<div class="header-inner">
+			<div class="flex items-center justify-between">
 				<!-- Logo -->
-				<a href="/" class="logo" title="Home Page">
-					<img src="/site-logo.png" alt="IOEA Logo" class="logo-img" />
+				<a href="/" class="block" title="Home Page">
+					<img src="/site-logo.png" alt="IOEA Logo" class="h-[90px] w-auto max-w-none" />
 				</a>
 
 				<!-- Mobile menu button -->
 				<button
-					class="mobile-menu-btn"
+					class="block md:hidden bg-transparent border-0 cursor-pointer p-2"
 					onclick={toggleMobileMenu}
 					aria-label="Toggle menu"
 				>
-					<span class="hamburger" class:open={mobileMenuOpen}>
-						<span></span>
-						<span></span>
-						<span></span>
+					<span class="flex flex-col gap-[5px] w-6" class:open={mobileMenuOpen}>
+						<span class="block h-0.5 bg-primary transition-all duration-300 {mobileMenuOpen ? 'rotate-45 translate-x-[5px] translate-y-[5px]' : ''}"></span>
+						<span class="block h-0.5 bg-primary transition-all duration-300 {mobileMenuOpen ? 'opacity-0' : ''}"></span>
+						<span class="block h-0.5 bg-primary transition-all duration-300 {mobileMenuOpen ? '-rotate-45 translate-x-[5px] -translate-y-[5px]' : ''}"></span>
 					</span>
 				</button>
 
 				<!-- Desktop Navigation -->
-				<nav class="main-nav hidden-mobile">
-					<ul class="nav-list">
+				<nav class="flex-1 flex justify-end hidden md:flex">
+					<ul class="flex gap-0.5 list-none m-0 p-0">
 						{#each menus.main as item}
 							<li
-								class="nav-item"
-								class:has-dropdown={hasSubmenu(item.href)}
+								class="relative"
 								onmouseenter={() => hasSubmenu(item.href) && (activeDropdown = item.href)}
 								onmouseleave={() => hasSubmenu(item.href) && (activeDropdown = null)}
 							>
 								<a
 									href={item.href}
-									class="nav-link"
-									class:active={isActive(item.href)}
+									class="flex items-center gap-1.5 px-3.5 py-2.5 font-medium text-[0.9375rem] text-text rounded-md transition-all duration-200 no-underline {isActive(item.href) ? 'bg-primary text-white' : 'hover:bg-primary-faded hover:text-primary'}"
 									title={item.title}
 								>
 									{item.label}
 									{#if hasSubmenu(item.href)}
-										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dropdown-icon">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 opacity-60 transition-all duration-200 hover:opacity-100 {activeDropdown === item.href ? 'rotate-180' : ''}">
 											<polyline points="6 9 12 15 18 9"></polyline>
 										</svg>
 									{/if}
 								</a>
 								{#if hasSubmenu(item.href) && activeDropdown === item.href}
-									<ul class="dropdown-menu">
+									<ul class="absolute top-full left-0 bg-white border border-border-light rounded-lg shadow-[0_8px_24px_rgba(61,58,66,0.12),0_2px_6px_rgba(61,58,66,0.06)] min-w-[200px] max-w-[260px] p-1.5 pt-2.5 list-none z-[1000] whitespace-nowrap before:content-[''] before:absolute before:top-[-0.5rem] before:left-0 before:right-0 before:h-2 {item === menus.main[menus.main.length - 1] || item === menus.main[menus.main.length - 2] ? 'left-auto right-0' : ''}">
 										{#each getSubmenuForItem(item.href) as subItem}
 											<li>
 												<a
 													href={subItem.href}
-													class="dropdown-link"
-													class:active={isActive(subItem.href, true)}
+													class="block px-3.5 py-2.5 text-text text-sm rounded-md transition-all duration-150 no-underline {isActive(subItem.href, true) ? 'bg-primary text-white' : 'hover:bg-primary-faded hover:text-primary'}"
 													title={subItem.title}
 												>
 													{subItem.label}
@@ -122,15 +119,14 @@
 
 	<!-- Mobile Navigation -->
 	{#if mobileMenuOpen}
-		<nav class="mobile-nav hidden-desktop">
-			<ul class="mobile-nav-list">
+		<nav class="bg-white border-t border-border-light p-3 md:hidden">
+			<ul class="list-none m-0 p-0">
 				{#each menus.main as item}
-					<li class="mobile-nav-item" class:has-dropdown={hasSubmenu(item.href)}>
-						<div class="mobile-nav-header">
+					<li class="border-b border-border-light last:border-b-0">
+						<div class="flex items-center justify-between">
 							<a
 								href={item.href}
-								class="mobile-nav-link"
-								class:active={isActive(item.href)}
+								class="flex-1 block px-4 py-3.5 text-text font-medium rounded-md no-underline {isActive(item.href) ? 'bg-primary text-white' : 'hover:bg-primary-faded hover:text-primary'}"
 								onclick={() => {
 									if (!hasSubmenu(item.href)) {
 										mobileMenuOpen = false;
@@ -141,24 +137,23 @@
 							</a>
 							{#if hasSubmenu(item.href)}
 								<button
-									class="mobile-dropdown-toggle"
+									class="bg-transparent border-0 px-4 py-3.5 cursor-pointer text-text-light flex items-center justify-center rounded-md transition-all duration-200 hover:bg-primary-faded hover:text-primary"
 									onclick={() => toggleDropdown(item.href)}
 									aria-label="Toggle submenu"
 								>
-									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class:rotated={activeDropdown === item.href}>
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-200 {activeDropdown === item.href ? 'rotate-180' : ''}">
 										<polyline points="6 9 12 15 18 9"></polyline>
 									</svg>
 								</button>
 							{/if}
 						</div>
 						{#if hasSubmenu(item.href) && activeDropdown === item.href}
-							<ul class="mobile-submenu">
+							<ul class="list-none m-0 p-0 bg-bg-alt rounded-md my-1 overflow-hidden">
 								{#each getSubmenuForItem(item.href) as subItem}
-									<li>
+									<li class="border-b border-border-light last:border-b-0">
 										<a
 											href={subItem.href}
-											class="mobile-submenu-link"
-											class:active={isActive(subItem.href, true)}
+											class="block px-4 py-3 pl-8 text-text-light text-sm font-normal transition-all duration-150 no-underline {isActive(subItem.href, true) ? 'bg-primary text-white' : 'hover:bg-secondary-light hover:text-white'}"
 											onclick={() => (mobileMenuOpen = false)}
 										>
 											{subItem.label}
@@ -173,321 +168,7 @@
 		</nav>
 	{/if}
 
-	<div class="header-line"></div>
+	<div class="h-[9px] bg-gradient-to-r from-[#C85399] via-[#7A6294] via-[#70BABE] via-[#4FB161] to-[#D5D945]"></div>
 </header>
 
-<style>
-	.header {
-		background: white;
-		position: sticky;
-		top: 0;
-		z-index: 100;
-		box-shadow: 0 1px 3px rgba(61, 58, 66, 0.06);
-	}
-
-	.header-top {
-		padding: 0.875rem 0;
-	}
-
-	.header-inner {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-
-	.logo {
-		display: block;
-	}
-
-	.logo-img {
-		height: 90px;
-		width: auto;
-		max-width: none;
-	}
-
-	.main-nav {
-		flex: 1;
-		display: flex;
-		justify-content: flex-end;
-	}
-
-	.nav-list {
-		display: flex;
-		gap: 0.125rem;
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-
-	.nav-item {
-		position: relative;
-	}
-
-	.nav-item.has-dropdown {
-		position: relative;
-	}
-
-	.nav-link {
-		display: flex;
-		align-items: center;
-		gap: 0.375rem;
-		padding: 0.625rem 0.875rem;
-		font-weight: 500;
-		font-size: 0.9375rem;
-		color: var(--color-text);
-		border-radius: 0.375rem;
-		transition: all 0.2s ease;
-	}
-
-	.nav-link:hover {
-		background-color: var(--color-primary-faded);
-		color: var(--color-primary);
-	}
-
-	.nav-link.active {
-		background-color: var(--color-primary);
-		color: white;
-	}
-
-	.dropdown-icon {
-		width: 14px;
-		height: 14px;
-		opacity: 0.6;
-		transition: transform 0.2s ease, opacity 0.2s ease;
-	}
-
-	.nav-link:hover .dropdown-icon {
-		opacity: 1;
-	}
-
-	.nav-item.has-dropdown:hover .dropdown-icon {
-		transform: rotate(180deg);
-	}
-
-	.dropdown-menu {
-		position: absolute;
-		top: 100%;
-		left: 0;
-		background: white;
-		border: 1px solid var(--color-border-light);
-		border-radius: 0.5rem;
-		box-shadow: 0 8px 24px rgba(61, 58, 66, 0.12), 0 2px 6px rgba(61, 58, 66, 0.06);
-		min-width: 200px;
-		max-width: 260px;
-		padding: 0.375rem;
-		padding-top: 0.625rem;
-		list-style: none;
-		z-index: 1000;
-		white-space: nowrap;
-	}
-
-	/* Bridge the gap between nav-link and dropdown to prevent closing */
-	.dropdown-menu::before {
-		content: '';
-		position: absolute;
-		top: -0.5rem;
-		left: 0;
-		right: 0;
-		height: 0.5rem;
-	}
-
-	/* Adjust dropdown position for rightmost items to prevent overflow */
-	.nav-item:last-child .dropdown-menu,
-	.nav-item:nth-last-child(2) .dropdown-menu {
-		left: auto;
-		right: 0;
-	}
-
-	.dropdown-link {
-		display: block;
-		padding: 0.625rem 0.875rem;
-		color: var(--color-text);
-		font-size: 0.875rem;
-		border-radius: 0.375rem;
-		transition: all 0.15s ease;
-	}
-
-	.dropdown-link:hover {
-		background-color: var(--color-primary-faded);
-		color: var(--color-primary);
-	}
-
-	.dropdown-link.active {
-		background-color: var(--color-primary);
-		color: white;
-	}
-
-	/* Colorful header line using logo colors */
-	.header-line {
-		height: 9px;
-		background: linear-gradient(
-			90deg,
-			#C85399 0%,
-			#7A6294 25%,
-			#70BABE 50%,
-			#4FB161 75%,
-			#D5D945 100%
-		);
-	}
-
-	/* Mobile menu button */
-	.mobile-menu-btn {
-		display: none;
-		background: none;
-		border: none;
-		cursor: pointer;
-		padding: 0.5rem;
-	}
-
-	.hamburger {
-		display: flex;
-		flex-direction: column;
-		gap: 5px;
-		width: 24px;
-	}
-
-	.hamburger span {
-		display: block;
-		height: 2px;
-		background-color: var(--color-primary);
-		transition: all 0.3s ease;
-	}
-
-	.hamburger.open span:nth-child(1) {
-		transform: rotate(45deg) translate(5px, 5px);
-	}
-
-	.hamburger.open span:nth-child(2) {
-		opacity: 0;
-	}
-
-	.hamburger.open span:nth-child(3) {
-		transform: rotate(-45deg) translate(5px, -5px);
-	}
-
-	/* Mobile Navigation */
-	.mobile-nav {
-		background: white;
-		border-top: 1px solid var(--color-border-light);
-		padding: 0.75rem;
-	}
-
-	.mobile-nav-list {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-
-	.mobile-nav-item {
-		border-bottom: 1px solid var(--color-border-light);
-	}
-
-	.mobile-nav-item:last-child {
-		border-bottom: none;
-	}
-
-	.mobile-nav-header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-
-	.mobile-nav-link {
-		flex: 1;
-		display: block;
-		padding: 0.875rem 1rem;
-		color: var(--color-text);
-		font-weight: 500;
-		border-radius: 0.375rem;
-	}
-
-	.mobile-nav-link:hover {
-		background-color: var(--color-primary-faded);
-		color: var(--color-primary);
-	}
-
-	.mobile-nav-link.active {
-		background-color: var(--color-primary);
-		color: white;
-	}
-
-	.mobile-dropdown-toggle {
-		background: none;
-		border: none;
-		padding: 0.875rem 1rem;
-		cursor: pointer;
-		color: var(--color-text-light);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-radius: 0.375rem;
-		transition: all 0.2s ease;
-	}
-
-	.mobile-dropdown-toggle:hover {
-		background-color: var(--color-primary-faded);
-		color: var(--color-primary);
-	}
-
-	.mobile-dropdown-toggle svg {
-		transition: transform 0.2s ease;
-	}
-
-	.mobile-dropdown-toggle svg.rotated {
-		transform: rotate(180deg);
-	}
-
-	.mobile-submenu {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		background: var(--color-bg-alt);
-		border-radius: 0.375rem;
-		margin: 0.25rem 0;
-		overflow: hidden;
-	}
-
-	.mobile-submenu li {
-		border-bottom: 1px solid var(--color-border-light);
-	}
-
-	.mobile-submenu li:last-child {
-		border-bottom: none;
-	}
-
-	.mobile-submenu-link {
-		display: block;
-		padding: 0.75rem 1rem 0.75rem 2rem;
-		color: var(--color-text-light);
-		font-size: 0.9rem;
-		font-weight: 400;
-		transition: all 0.15s ease;
-	}
-
-	.mobile-submenu-link:hover {
-		background-color: var(--color-secondary-light);
-		color: white;
-	}
-
-	.mobile-submenu-link.active {
-		background-color: var(--color-primary);
-		color: white;
-	}
-
-	@media (max-width: 767px) {
-		.mobile-menu-btn {
-			display: block;
-		}
-
-		.hidden-mobile {
-			display: none !important;
-		}
-	}
-
-	@media (min-width: 768px) {
-		.hidden-desktop {
-			display: none !important;
-		}
-	}
-</style>
 

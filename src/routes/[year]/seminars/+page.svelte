@@ -42,16 +42,16 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="main-grid">
+		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-				<p class="lead">
+				<p class="text-lg text-text-light mb-8">
 					The seminar sessions at IOEA {data.year} provide participants with the opportunity
 					to present their research and receive feedback from faculty and peers.
 				</p>
 
-				<div class="seminar-info">
-					<h2>About the Seminars</h2>
-					<p>
+				<div class="bg-bg-alt p-6 rounded-lg mb-8">
+					<h2 class="mb-4">About the Seminars</h2>
+					<p class="m-0 leading-relaxed">
 						Participants are organized into small groups, each led by experienced seminar chairs.
 						In these sessions, participants present their work-in-progress and receive
 						constructive feedback to help advance their research.
@@ -59,28 +59,29 @@
 				</div>
 
 				{#if data.chairs.length > 0}
-					<div class="chairs-section">
-						<h2>Seminar Chairs</h2>
-						<div class="chairs-grid">
+					<div>
+						<h2 class="mb-6">Seminar Chairs</h2>
+						<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
 							{#each data.chairs as chair}
-								<div class="chair-card">
-									<div class="chair-photo">
+								<div class="bg-white rounded-lg border border-border overflow-hidden">
+									<div class="aspect-square overflow-hidden bg-bg-alt">
 										{#if chair.photo}
-										<img
-											src={`/images/semchairs/${chair.photo}`}
-											alt="{chair.firstName} {chair.lastName}"
-											onerror={(e) => e.currentTarget.src = '/images/placeholder-person.jpg'}
-										/>
+											<img
+												src={`/images/semchairs/${chair.photo}`}
+												alt="{chair.firstName} {chair.lastName}"
+												class="w-full h-full object-cover"
+												onerror={(e) => e.currentTarget.src = '/images/placeholder-person.jpg'}
+											/>
 										{:else}
-											<div class="photo-placeholder">
+											<div class="w-full h-full flex items-center justify-center bg-primary text-white text-3xl font-semibold">
 												{chair.firstName[0]}{chair.lastName[0]}
 											</div>
 										{/if}
 									</div>
-									<div class="chair-info">
-										<h3>
+									<div class="p-4">
+										<h3 class="text-base mb-1 m-0">
 											{#if chair.website}
-												<a href={chair.website} target="_blank" rel="noopener">
+												<a href={chair.website} target="_blank" rel="noopener" class="text-primary no-underline hover:text-secondary">
 													{chair.firstName} {chair.lastName}
 												</a>
 											{:else}
@@ -88,10 +89,10 @@
 											{/if}
 										</h3>
 										{#if chair.university}
-											<p class="university">{chair.university}</p>
+											<p class="text-sm text-text-light m-0 mb-2">{chair.university}</p>
 										{/if}
 										{#if chair.groupId}
-											<span class="group-badge">Group {chair.groupId}</span>
+											<span class="inline-block px-3 py-1 bg-secondary text-white text-xs font-semibold rounded-full">Group {chair.groupId}</span>
 										{/if}
 									</div>
 								</div>
@@ -99,157 +100,17 @@
 						</div>
 					</div>
 				{:else}
-					<div class="no-data">
+					<div class="text-center py-12 bg-bg-alt rounded-lg text-text-light">
 						<p>Seminar chair information will be available soon.</p>
 					</div>
 				{/if}
 			</div>
 
-			<aside class="sidebar">
+			<aside class="sticky top-[100px] self-start hidden lg:block">
 				<Sidebar />
 			</aside>
 		</div>
 	</div>
 </section>
 
-<style>
-	.main-grid {
-		display: grid;
-		grid-template-columns: 1fr 320px;
-		gap: 3rem;
-	}
-
-	.lead {
-		font-size: 1.1rem;
-		color: var(--color-text-light);
-		margin-bottom: 2rem;
-	}
-
-	.seminar-info {
-		background: var(--color-bg-alt);
-		padding: 1.5rem;
-		border-radius: 0.5rem;
-		margin-bottom: 2rem;
-	}
-
-	.seminar-info h2 {
-		margin-bottom: 1rem;
-	}
-
-	.seminar-info p {
-		margin: 0;
-		line-height: 1.7;
-	}
-
-	.chairs-section h2 {
-		margin-bottom: 1.5rem;
-	}
-
-	.chairs-grid {
-		display: grid;
-		grid-template-columns: repeat(5, 1fr);
-		gap: 1.5rem;
-	}
-
-	@media (max-width: 1200px) {
-		.chairs-grid {
-			grid-template-columns: repeat(4, 1fr);
-		}
-	}
-
-	@media (max-width: 900px) {
-		.chairs-grid {
-			grid-template-columns: repeat(3, 1fr);
-		}
-	}
-
-	@media (max-width: 600px) {
-		.chairs-grid {
-			grid-template-columns: repeat(2, 1fr);
-		}
-	}
-
-	.chair-card {
-		background: white;
-		border-radius: 0.5rem;
-		border: 1px solid var(--color-border);
-		overflow: hidden;
-	}
-
-	.chair-photo {
-		aspect-ratio: 1;
-		overflow: hidden;
-		background: var(--color-bg-alt);
-	}
-
-	.chair-photo img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
-
-	.photo-placeholder {
-		width: 100%;
-		height: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background: var(--color-primary);
-		color: white;
-		font-size: 2rem;
-		font-weight: 600;
-	}
-
-	.chair-info {
-		padding: 1rem;
-	}
-
-	.chair-info h3 {
-		font-size: 1rem;
-		margin-bottom: 0.25rem;
-	}
-
-	.chair-info h3 a {
-		color: var(--color-primary);
-	}
-
-	.university {
-		font-size: 0.85rem;
-		color: var(--color-text-light);
-		margin: 0 0 0.5rem 0;
-	}
-
-	.group-badge {
-		display: inline-block;
-		padding: 0.25rem 0.75rem;
-		background: var(--color-secondary);
-		color: white;
-		font-size: 0.75rem;
-		font-weight: 600;
-		border-radius: 1rem;
-	}
-
-	.no-data {
-		text-align: center;
-		padding: 3rem;
-		background: var(--color-bg-alt);
-		border-radius: 0.5rem;
-	}
-
-	.sidebar {
-		position: sticky;
-		top: 100px;
-		align-self: start;
-	}
-
-	@media (max-width: 1024px) {
-		.main-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.sidebar {
-			position: static;
-		}
-	}
-</style>
 
