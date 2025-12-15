@@ -28,21 +28,21 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="main-grid">
+		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
 				<!-- Progress Steps -->
-				<div class="steps">
-					<div class="step active">
-						<span class="step-number">1</span>
-						<span class="step-label">{config.callSteps[1]}</span>
+				<div class="flex justify-between mb-8 p-6 bg-bg-alt rounded-lg flex-col gap-4 sm:flex-row">
+					<div class="flex flex-col items-center gap-2 flex-1 text-center opacity-100 sm:flex-row sm:justify-start">
+						<span class="flex items-center justify-center w-9 h-9 bg-secondary text-white rounded-full font-semibold">1</span>
+						<span class="text-sm text-text-light">{config.callSteps[1]}</span>
 					</div>
-					<div class="step">
-						<span class="step-number">2</span>
-						<span class="step-label">{config.callSteps[2]}</span>
+					<div class="flex flex-col items-center gap-2 flex-1 text-center opacity-50 sm:flex-row sm:justify-start">
+						<span class="flex items-center justify-center w-9 h-9 bg-primary text-white rounded-full font-semibold">2</span>
+						<span class="text-sm text-text-light">{config.callSteps[2]}</span>
 					</div>
-					<div class="step">
-						<span class="step-number">3</span>
-						<span class="step-label">{config.callSteps[3]}</span>
+					<div class="flex flex-col items-center gap-2 flex-1 text-center opacity-50 sm:flex-row sm:justify-start">
+						<span class="flex items-center justify-center w-9 h-9 bg-primary text-white rounded-full font-semibold">3</span>
+						<span class="text-sm text-text-light">{config.callSteps[3]}</span>
 					</div>
 				</div>
 
@@ -65,50 +65,50 @@
 							}
 						};
 					}}
-					class="application-form"
+					class="bg-white p-8 rounded-lg border border-border"
 				>
-					<h2>Personal Information</h2>
+					<h2 class="mb-6 pb-3 border-b-2 border-border">Personal Information</h2>
 
-					<div class="form-row">
-						<div class="form-group">
-							<label for="first_name" class="form-label">First Name *</label>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+						<div class="mb-6">
+							<label for="first_name" class="block mb-2 font-medium text-text">First Name *</label>
 							<input
 								type="text"
 								id="first_name"
 								name="first_name"
-								class="form-input"
+								class="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
 								required
 								value={form?.values?.first_name ?? ''}
 							/>
 						</div>
-						<div class="form-group">
-							<label for="last_name" class="form-label">Last Name *</label>
+						<div class="mb-6">
+							<label for="last_name" class="block mb-2 font-medium text-text">Last Name *</label>
 							<input
 								type="text"
 								id="last_name"
 								name="last_name"
-								class="form-input"
+								class="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
 								required
 								value={form?.values?.last_name ?? ''}
 							/>
 						</div>
 					</div>
 
-					<div class="form-row">
-						<div class="form-group">
-							<label for="email" class="form-label">Email Address *</label>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+						<div class="mb-6">
+							<label for="email" class="block mb-2 font-medium text-text">Email Address *</label>
 							<input
 								type="email"
 								id="email"
 								name="email"
-								class="form-input"
+								class="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
 								required
 								value={form?.values?.email ?? ''}
 							/>
 						</div>
-						<div class="form-group">
-							<label for="nationality" class="form-label">Nationality *</label>
-							<select id="nationality" name="nationality" class="form-input" required>
+						<div class="mb-6">
+							<label for="nationality" class="block mb-2 font-medium text-text">Nationality *</label>
+							<select id="nationality" name="nationality" class="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required>
 								<option value="">-----------------</option>
 								{#each data.countries as country}
 									<option value={country.id} selected={form?.values?.nationality === String(country.id)}>
@@ -119,22 +119,22 @@
 						</div>
 					</div>
 
-					<div class="form-row">
-						<div class="form-group">
-							<label for="gender" class="form-label">Gender *</label>
-							<select id="gender" name="gender" class="form-input" required>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+						<div class="mb-6">
+							<label for="gender" class="block mb-2 font-medium text-text">Gender *</label>
+							<select id="gender" name="gender" class="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required>
 								<option value="">-----------------</option>
 								<option value="F" selected={form?.values?.gender === 'F'}>Female</option>
 								<option value="M" selected={form?.values?.gender === 'M'}>Male</option>
 							</select>
 						</div>
-						<div class="form-group">
-							<label for="age" class="form-label">Age *</label>
+						<div class="mb-6">
+							<label for="age" class="block mb-2 font-medium text-text">Age *</label>
 							<input
 								type="number"
 								id="age"
 								name="age"
-								class="form-input"
+								class="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
 								required
 								min="18"
 								max="100"
@@ -143,10 +143,10 @@
 						</div>
 					</div>
 
-					<div class="form-row">
-						<div class="form-group">
-							<label for="status" class="form-label">Current Status *</label>
-							<select id="status" name="status" class="form-input" required>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+						<div class="mb-6">
+							<label for="status" class="block mb-2 font-medium text-text">Current Status *</label>
+							<select id="status" name="status" class="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required>
 								<option value="">-----------------</option>
 								{#each Object.entries(config.statusOptions) as [value, label]}
 									<option value={value} selected={form?.values?.status === value}>
@@ -155,13 +155,13 @@
 								{/each}
 							</select>
 						</div>
-						<div class="form-group">
-							<label for="domain" class="form-label">Research Domain *</label>
+						<div class="mb-6">
+							<label for="domain" class="block mb-2 font-medium text-text">Research Domain *</label>
 							<input
 								type="text"
 								id="domain"
 								name="domain"
-								class="form-input"
+								class="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
 								required
 								placeholder="e.g., Economics, Management, Law"
 								value={form?.values?.domain ?? ''}
@@ -169,23 +169,23 @@
 						</div>
 					</div>
 
-					<div class="form-group">
-						<label for="diploma" class="form-label">Highest Diploma Obtained *</label>
+					<div class="mb-6">
+						<label for="diploma" class="block mb-2 font-medium text-text">Highest Diploma Obtained *</label>
 						<input
 							type="text"
 							id="diploma"
 							name="diploma"
-							class="form-input"
+							class="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
 							required
 							placeholder="e.g., Master in Economics"
 							value={form?.values?.diploma ?? ''}
 						/>
 					</div>
 
-					<div class="form-actions">
+					<div class="mt-8 pt-6 border-t border-border text-right">
 						<button type="submit" class="btn btn-primary" disabled={loading}>
 							{#if loading}
-								<span class="spinner-small"></span>
+								<span class="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></span>
 								Processing...
 							{:else}
 								Continue to Step 2 →
@@ -195,17 +195,17 @@
 				</form>
 			</div>
 
-			<aside class="sidebar">
+			<aside class="sticky top-[100px] self-start hidden lg:block">
 				<Sidebar showBrochure={true} showPhotos={false} />
 
-				<div class="sidebar-widget">
-					<h3>Important Dates</h3>
-					<ul class="dates-list">
-						<li>
+				<div class="sidebar-widget bg-bg-alt rounded-lg p-6 mt-6">
+					<h3 class="mb-4 text-lg font-semibold text-primary">Important Dates</h3>
+					<ul class="list-none p-0 m-0">
+						<li class="py-3 border-b border-border last:border-b-0">
 							<strong>Deadline:</strong><br />
 							{config.deadlines.application}
 						</li>
-						<li>
+						<li class="py-3 border-b border-border last:border-b-0">
 							<strong>Notification:</strong><br />
 							{config.deadlines.notification}
 						</li>
@@ -216,149 +216,4 @@
 	</div>
 </section>
 
-<style>
-	.main-grid {
-		display: grid;
-		grid-template-columns: 1fr 320px;
-		gap: 3rem;
-	}
-
-	.steps {
-		display: flex;
-		justify-content: space-between;
-		margin-bottom: 2rem;
-		padding: 1.5rem;
-		background: var(--color-bg-alt);
-		border-radius: 0.5rem;
-	}
-
-	.step {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.5rem;
-		flex: 1;
-		text-align: center;
-		opacity: 0.5;
-	}
-
-	.step.active {
-		opacity: 1;
-	}
-
-	.step-number {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 36px;
-		height: 36px;
-		background: var(--color-primary);
-		color: white;
-		border-radius: 50%;
-		font-weight: 600;
-	}
-
-	.step.active .step-number {
-		background: var(--color-secondary);
-	}
-
-	.step-label {
-		font-size: 0.85rem;
-		color: var(--color-text-light);
-	}
-
-	.application-form {
-		background: white;
-		padding: 2rem;
-		border-radius: 0.5rem;
-		border: 1px solid var(--color-border);
-	}
-
-	.application-form h2 {
-		margin-bottom: 1.5rem;
-		padding-bottom: 0.75rem;
-		border-bottom: 2px solid var(--color-border);
-	}
-
-	.form-row {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1rem;
-	}
-
-	.form-group {
-		margin-bottom: 1.5rem;
-	}
-
-	.form-actions {
-		margin-top: 2rem;
-		padding-top: 1.5rem;
-		border-top: 1px solid var(--color-border);
-		text-align: right;
-	}
-
-	.spinner-small {
-		display: inline-block;
-		width: 1rem;
-		height: 1rem;
-		border: 2px solid rgba(255, 255, 255, 0.3);
-		border-top-color: white;
-		border-radius: 50%;
-		animation: spin 0.8s linear infinite;
-		margin-right: 0.5rem;
-	}
-
-	@keyframes spin {
-		to {
-			transform: rotate(360deg);
-		}
-	}
-
-	.sidebar {
-		position: sticky;
-		top: 100px;
-		align-self: start;
-	}
-
-	.dates-list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-	}
-
-	.dates-list li {
-		padding: 0.75rem 0;
-		border-bottom: 1px solid var(--color-border);
-	}
-
-	.dates-list li:last-child {
-		border-bottom: none;
-	}
-
-	@media (max-width: 1024px) {
-		.main-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.sidebar {
-			position: static;
-		}
-	}
-
-	@media (max-width: 600px) {
-		.form-row {
-			grid-template-columns: 1fr;
-		}
-
-		.steps {
-			flex-direction: column;
-			gap: 1rem;
-		}
-
-		.step {
-			flex-direction: row;
-			justify-content: flex-start;
-		}
-	}
-</style>
 

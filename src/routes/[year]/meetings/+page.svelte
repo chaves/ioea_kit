@@ -19,47 +19,17 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="main-grid">
+		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-				<p>
+				<p class="text-[1.05rem] leading-relaxed mb-4">
 					Having world-class researchers and young scientists for a week in the same place allows multiple informal and bilateral meetings. IOEA allows networking and provide participants and lecturers with multiple occasions to launch co-operative projects.
 				</p>
 			</div>
 
-			<aside class="sidebar">
+			<aside class="sticky top-[100px] self-start hidden lg:block">
 				<Sidebar />
 			</aside>
 		</div>
 	</div>
 </section>
-
-<style>
-	.main-grid {
-		display: grid;
-		grid-template-columns: 1fr 320px;
-		gap: 3rem;
-	}
-
-	.main-content p {
-		font-size: 1.05rem;
-		line-height: 1.7;
-		margin-bottom: 1rem;
-	}
-
-	.sidebar {
-		position: sticky;
-		top: 100px;
-		align-self: start;
-	}
-
-	@media (max-width: 1024px) {
-		.main-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.sidebar {
-			position: static;
-		}
-	}
-</style>
 
