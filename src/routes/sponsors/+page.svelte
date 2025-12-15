@@ -13,9 +13,9 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="main-grid">
+		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-				<p class="lead">
+				<p class="text-xl text-text-light mb-12 leading-relaxed">
 					The Institutional and Organizational Economics Academy is made possible thanks to
 					the generous support of our sponsors and partner institutions. Their commitment to
 					advancing research and education in our field is invaluable.
@@ -28,15 +28,16 @@
 					const yearB = parseInt(b.split('-')[0]);
 					return yearB - yearA;
 				}) as [year, sponsors]}
-					<div class="sponsor-section">
-						<h2>{year}</h2>
-						<div class="sponsors-row">
+					<div class="mb-12">
+						<h2 class="text-xl mb-6 pb-3 border-b-2 border-border">{year}</h2>
+						<div class="flex flex-wrap justify-center items-center gap-12 p-8 bg-white rounded-lg border border-border">
 							{#each sponsors as sponsor}
 								{#if sponsor.url && sponsor.url.trim() !== ''}
-									<a href={sponsor.url} target="_blank" rel="noopener" class="sponsor-item" title={sponsor.name}>
+									<a href={sponsor.url} target="_blank" rel="noopener" class="flex items-center justify-center no-underline text-text font-semibold text-center cursor-pointer" title={sponsor.name}>
 										<img
 											src={sponsor.logo}
 											alt={sponsor.name}
+											class="max-h-20 max-w-[200px] w-auto grayscale-[20%] transition-all duration-300 hover:grayscale-0 hover:scale-105 sm:max-h-[60px] sm:max-w-[150px]"
 											onerror={(e) => {
 												const img = e.currentTarget as HTMLImageElement;
 												img.style.display = 'none';
@@ -46,10 +47,11 @@
 										/>
 									</a>
 								{:else}
-									<div class="sponsor-item" title={sponsor.name}>
+									<div class="flex items-center justify-center text-text font-semibold text-center cursor-default" title={sponsor.name}>
 										<img
 											src={sponsor.logo}
 											alt={sponsor.name}
+											class="max-h-20 max-w-[200px] w-auto grayscale-[20%] transition-all duration-300 hover:grayscale-0 hover:scale-105 sm:max-h-[60px] sm:max-w-[150px]"
 											onerror={(e) => {
 												const img = e.currentTarget as HTMLImageElement;
 												img.style.display = 'none';
@@ -65,103 +67,10 @@
 				{/each}
 			</div>
 
-			<aside class="sidebar">
+			<aside class="sticky top-[100px] self-start hidden lg:block">
 				<Sidebar showBrochure={true} showPhotos={false} />
 			</aside>
 		</div>
 	</div>
 </section>
-
-<style>
-	.main-grid {
-		display: grid;
-		grid-template-columns: 1fr 320px;
-		gap: 3rem;
-	}
-
-	.lead {
-		font-size: 1.2rem;
-		color: var(--color-text-light);
-		margin-bottom: 3rem;
-		line-height: 1.7;
-	}
-
-	.sponsor-section {
-		margin-bottom: 3rem;
-	}
-
-	.sponsor-section h2 {
-		font-size: 1.25rem;
-		margin-bottom: 1.5rem;
-		padding-bottom: 0.75rem;
-		border-bottom: 2px solid var(--color-border);
-	}
-
-	.sponsors-row {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		align-items: center;
-		gap: 3rem;
-		padding: 2rem;
-		background: white;
-		border-radius: 0.5rem;
-		border: 1px solid var(--color-border);
-	}
-
-	.sponsor-item {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		text-decoration: none;
-		color: var(--color-text);
-		font-weight: 600;
-		text-align: center;
-		cursor: default;
-	}
-
-	a.sponsor-item {
-		cursor: pointer;
-	}
-
-	.sponsor-item img {
-		max-height: 80px;
-		max-width: 200px;
-		width: auto;
-		filter: grayscale(20%);
-		transition: all 0.3s ease;
-	}
-
-	.sponsor-item:hover img {
-		filter: grayscale(0%);
-		transform: scale(1.05);
-	}
-
-	.sidebar {
-		position: sticky;
-		top: 100px;
-		align-self: start;
-	}
-
-	@media (max-width: 1024px) {
-		.main-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.sidebar {
-			position: static;
-		}
-	}
-
-	@media (max-width: 767px) {
-		.sponsors-row {
-			gap: 2rem;
-		}
-
-		.sponsor-item img {
-			max-height: 60px;
-			max-width: 150px;
-		}
-	}
-</style>
 

@@ -23,29 +23,30 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="main-grid">
+		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-				<p class="intro">
+				<p class="text-lg leading-relaxed mb-6 text-text-light">
 					Browse photos from IOEA sessions by year, or view photos of our lecturers and organizers.
 				</p>
 
-				<div class="quick-links">
-					<a href="/community/photos/lecturers" class="quick-link">
+				<div class="mb-8">
+					<a href="/community/photos/lecturers" class="inline-block px-6 py-3 bg-primary text-white rounded-md font-medium no-underline transition-all duration-200 hover:bg-secondary hover:-translate-y-0.5 hover:shadow-md">
 						View Lecturers & Organizers →
 					</a>
 				</div>
 
-				<div class="years-grid">
+				<div class="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-6">
 					{#each data.yearsWithPhotos as { year, photo }}
-						<a href="/photos/{year}" class="year-card">
-							<div class="year-image">
+						<a href="/photos/{year}" class="bg-white rounded-lg overflow-hidden border border-border transition-all duration-200 hover:-translate-y-1 hover:shadow-xl block">
+							<div class="aspect-[4/3] overflow-hidden bg-bg-alt">
 								<img
 									src={photo ? `/images/photos/${year}/${photo}` : '/images/placeholder-year.jpg'}
 									alt="IOEA {year}"
+									class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
 									onerror={(e) => { e.currentTarget.src = '/images/placeholder-year.jpg'; }}
 								/>
 							</div>
-							<div class="year-label">
+							<div class="p-3 text-center font-semibold text-primary">
 								IOEA {year}
 							</div>
 						</a>
@@ -53,105 +54,10 @@
 				</div>
 			</div>
 
-			<aside class="sidebar">
+			<aside class="sticky top-[100px] self-start hidden lg:block">
 				<Sidebar showPhotos={false} />
 			</aside>
 		</div>
 	</div>
 </section>
-
-<style>
-	.main-grid {
-		display: grid;
-		grid-template-columns: 1fr 320px;
-		gap: 3rem;
-	}
-
-	.intro {
-		font-size: 1.1rem;
-		line-height: 1.7;
-		margin-bottom: 1.5rem;
-		color: var(--color-text-light);
-	}
-
-	.quick-links {
-		margin-bottom: 2rem;
-	}
-
-	.quick-link {
-		display: inline-block;
-		padding: 0.75rem 1.5rem;
-		background: var(--color-primary);
-		color: white;
-		border-radius: 0.375rem;
-		text-decoration: none;
-		font-weight: 500;
-		transition: all 0.2s ease;
-	}
-
-	.quick-link:hover {
-		background: var(--color-secondary);
-		transform: translateY(-1px);
-		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	}
-
-	.years-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-		gap: 1.5rem;
-	}
-
-	.year-card {
-		background: white;
-		border-radius: 0.5rem;
-		overflow: hidden;
-		border: 1px solid var(--color-border);
-		transition: all 0.2s ease;
-	}
-
-	.year-card:hover {
-		transform: translateY(-4px);
-		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-	}
-
-	.year-image {
-		aspect-ratio: 4/3;
-		overflow: hidden;
-		background: var(--color-bg-alt);
-	}
-
-	.year-image img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		transition: transform 0.3s ease;
-	}
-
-	.year-card:hover .year-image img {
-		transform: scale(1.05);
-	}
-
-	.year-label {
-		padding: 0.75rem;
-		text-align: center;
-		font-weight: 600;
-		color: var(--color-primary);
-	}
-
-	.sidebar {
-		position: sticky;
-		top: 100px;
-		align-self: start;
-	}
-
-	@media (max-width: 1024px) {
-		.main-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.sidebar {
-			position: static;
-		}
-	}
-</style>
 

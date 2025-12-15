@@ -24,141 +24,45 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="main-grid">
+		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-				<p class="lead">
+				<p class="text-xl text-text-light mb-8 leading-relaxed">
 					The IOEA has been providing world-class training in institutional and organizational
 					economics since {config.archiveFromYear}. Explore our past editions to learn about the
 					program and faculty from each year.
 				</p>
 
-				<div class="years-grid">
+				<div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-6">
 					{#each data.yearsWithPhotos as { year, photo }}
-						<div class="year-card">
-							<a href="/{year}" class="year-image">
+						<div class="bg-white rounded-lg overflow-hidden border border-border transition-all duration-200 hover:-translate-y-1 hover:shadow-xl">
+							<a href="/{year}" class="relative block aspect-[16/10] overflow-hidden bg-bg-alt group">
 								<img
 									src={photo ? `/images/photos/${year}/${photo}` : '/images/placeholder-year.jpg'}
 									alt="IOEA {year}"
-									onerror={(e) => { e.currentTarget.src = '/images/placeholder-year.jpg'; }}
+									class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+									onerror={(e) => { 
+										const img = e.currentTarget as HTMLImageElement;
+										img.src = '/images/placeholder-year.jpg';
+									}}
 								/>
-								<div class="year-overlay">
-									<span>View Lectures & Workshops</span>
+								<div class="absolute inset-0 bg-[rgba(26,54,93,0.8)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+									<span class="text-white font-semibold px-4 py-2 border-2 border-white rounded">View Lectures & Workshops</span>
 								</div>
 							</a>
-							<div class="year-info">
-								<h3><a href="/{year}">IOEA {year}</a></h3>
+							<div class="p-4">
+								<h3 class="text-xl m-0 text-primary">
+									<a href="/{year}">IOEA {year}</a>
+								</h3>
 							</div>
 						</div>
 					{/each}
 				</div>
 			</div>
 
-			<aside class="sidebar">
+			<aside class="sticky top-[100px] self-start hidden lg:block">
 				<Sidebar showPhotos={true} />
 			</aside>
 		</div>
 	</div>
 </section>
-
-<style>
-	.main-grid {
-		display: grid;
-		grid-template-columns: 1fr 320px;
-		gap: 3rem;
-	}
-
-	.lead {
-		font-size: 1.2rem;
-		color: var(--color-text-light);
-		margin-bottom: 2rem;
-		line-height: 1.7;
-	}
-
-	.years-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-		gap: 1.5rem;
-	}
-
-	.year-card {
-		background: white;
-		border-radius: 0.5rem;
-		overflow: hidden;
-		border: 1px solid var(--color-border);
-		transition: all 0.2s ease;
-	}
-
-	.year-card:hover {
-		transform: translateY(-4px);
-		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-	}
-
-	.year-image {
-		position: relative;
-		display: block;
-		aspect-ratio: 16/10;
-		overflow: hidden;
-		background-color: var(--color-bg-alt);
-	}
-
-	.year-image img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		transition: transform 0.3s ease;
-	}
-
-	.year-card:hover .year-image img {
-		transform: scale(1.05);
-	}
-
-	.year-overlay {
-		position: absolute;
-		inset: 0;
-		background: rgba(26, 54, 93, 0.8);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		opacity: 0;
-		transition: opacity 0.2s ease;
-	}
-
-	.year-card:hover .year-overlay {
-		opacity: 1;
-	}
-
-	.year-overlay span {
-		color: white;
-		font-weight: 600;
-		padding: 0.5rem 1rem;
-		border: 2px solid white;
-		border-radius: 0.25rem;
-	}
-
-	.year-info {
-		padding: 1rem;
-	}
-
-	.year-info h3 {
-		font-size: 1.25rem;
-		margin: 0;
-		color: var(--color-primary);
-	}
-
-	.sidebar {
-		position: sticky;
-		top: 100px;
-		align-self: start;
-	}
-
-	@media (max-width: 1024px) {
-		.main-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.sidebar {
-			position: static;
-		}
-	}
-</style>
 

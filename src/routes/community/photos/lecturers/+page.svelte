@@ -27,33 +27,34 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="main-grid">
+		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-				<p class="intro">
+				<p class="text-lg leading-relaxed mb-8 text-text-light">
 					Meet the distinguished lecturers and workshop organizers who have contributed to the IOEA over the years.
 				</p>
 
 				{#if data.lecturers.length > 0}
-					<div class="lecturers-grid">
+					<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
 						{#each data.lecturers as lecturer}
-							<div class="lecturer-card">
-								<div class="lecturer-photo">
+							<div class="bg-white rounded-lg overflow-hidden border border-border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
+								<div class="aspect-square overflow-hidden bg-bg-alt">
 									{#if lecturer.photo}
 										<img
 											src={`/images/lec/${lecturer.photo}`}
 											alt="{lecturer.firstName} {lecturer.lastName}"
+											class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
 											onerror={(e) => { e.currentTarget.src = '/images/placeholder-person.jpg'; }}
 										/>
 									{:else}
-										<div class="photo-placeholder">
+										<div class="w-full h-full flex items-center justify-center bg-primary text-white text-3xl font-semibold">
 											{lecturer.firstName[0]}{lecturer.lastName[0]}
 										</div>
 									{/if}
 								</div>
-								<div class="lecturer-info">
-									<h3>
+								<div class="p-4">
+									<h3 class="text-base mb-1 m-0">
 										{#if lecturer.website}
-											<a href={lecturer.website} target="_blank" rel="noopener">
+											<a href={lecturer.website} target="_blank" rel="noopener" class="text-primary no-underline transition-colors duration-200 hover:text-secondary">
 												{lecturer.firstName} {lecturer.lastName}
 											</a>
 										{:else}
@@ -61,151 +62,21 @@
 										{/if}
 									</h3>
 									{#if lecturer.institution}
-										<p class="institution">{lecturer.institution}</p>
+										<p class="text-sm text-text-light m-0">{lecturer.institution}</p>
 									{/if}
 								</div>
 							</div>
 						{/each}
 					</div>
 				{:else}
-					<p class="no-data">No lecturer photos available.</p>
+					<p class="text-center py-12 bg-bg-alt rounded-lg text-text-light">No lecturer photos available.</p>
 				{/if}
 			</div>
 
-			<aside class="sidebar">
+			<aside class="sticky top-[100px] self-start hidden lg:block">
 				<Sidebar showPhotos={false} />
 			</aside>
 		</div>
 	</div>
 </section>
-
-<style>
-	.main-grid {
-		display: grid;
-		grid-template-columns: 1fr 320px;
-		gap: 3rem;
-	}
-
-	.intro {
-		font-size: 1.1rem;
-		line-height: 1.7;
-		margin-bottom: 2rem;
-		color: var(--color-text-light);
-	}
-
-	.lecturers-grid {
-		display: grid;
-		grid-template-columns: repeat(5, 1fr);
-		gap: 1.5rem;
-	}
-
-	@media (max-width: 1200px) {
-		.lecturers-grid {
-			grid-template-columns: repeat(4, 1fr);
-		}
-	}
-
-	@media (max-width: 900px) {
-		.lecturers-grid {
-			grid-template-columns: repeat(3, 1fr);
-		}
-	}
-
-	@media (max-width: 600px) {
-		.lecturers-grid {
-			grid-template-columns: repeat(2, 1fr);
-		}
-	}
-
-	.lecturer-card {
-		background: white;
-		border-radius: 0.5rem;
-		overflow: hidden;
-		border: 1px solid var(--color-border);
-		transition: all 0.2s ease;
-	}
-
-	.lecturer-card:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-	}
-
-	.lecturer-photo {
-		aspect-ratio: 1;
-		overflow: hidden;
-		background: var(--color-bg-alt);
-	}
-
-	.lecturer-photo img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		transition: transform 0.3s ease;
-	}
-
-	.lecturer-card:hover .lecturer-photo img {
-		transform: scale(1.05);
-	}
-
-	.photo-placeholder {
-		width: 100%;
-		height: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background: var(--color-primary);
-		color: white;
-		font-size: 2rem;
-		font-weight: 600;
-	}
-
-	.lecturer-info {
-		padding: 1rem;
-	}
-
-	.lecturer-info h3 {
-		font-size: 1rem;
-		margin-bottom: 0.25rem;
-	}
-
-	.lecturer-info h3 a {
-		color: var(--color-primary);
-		text-decoration: none;
-		transition: color 0.2s ease;
-	}
-
-	.lecturer-info h3 a:hover {
-		color: var(--color-secondary);
-	}
-
-	.institution {
-		font-size: 0.85rem;
-		color: var(--color-text-light);
-		margin: 0;
-	}
-
-	.no-data {
-		text-align: center;
-		padding: 3rem;
-		background: var(--color-bg-alt);
-		border-radius: 0.5rem;
-		color: var(--color-text-light);
-	}
-
-	.sidebar {
-		position: sticky;
-		top: 100px;
-		align-self: start;
-	}
-
-	@media (max-width: 1024px) {
-		.main-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.sidebar {
-			position: static;
-		}
-	}
-</style>
 
