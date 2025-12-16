@@ -27,3 +27,10 @@ vite.config.ts.timestamp-*
 # AlwaysData
 *.log
 logs/
+
+static/images
+static/pdf
+uploads
+releases
+shared
+logs
