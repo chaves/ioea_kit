@@ -67,7 +67,12 @@
 
 	.success-icon {
 		color: var(--color-accent);
-		margin-bottom: 2rem;
+		margin: 0 auto 2rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 80px;
+		height: 80px;
 	}
 
 	h2 {

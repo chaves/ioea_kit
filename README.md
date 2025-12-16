@@ -30,11 +30,28 @@ npm install
 cp .env.example .env
 ```
 
-Edit `.env` with your database credentials:
+Edit `.env` with your database credentials and email configuration:
 
 ```env
 DATABASE_URL="mysql://username:password@localhost:3306/ioea"
+
+# Email Configuration (required for production)
+SMTP_HOST="smtp.gmail.com"
+SMTP_PORT="587"
+SMTP_SECURE="false"
+SMTP_USER="your-email@gmail.com"
+SMTP_PASSWORD="your-app-password"
+SMTP_FROM_EMAIL="ioea.coordinator@gmail.com"
+SMTP_FROM_NAME="IOEA Team"
+SMTP_REJECT_UNAUTHORIZED="true"
 ```
+
+**Note**: For Gmail, you'll need to:
+1. Enable 2-factor authentication
+2. Generate an [App Password](https://support.google.com/accounts/answer/185833)
+3. Use the app password (not your regular password) in `SMTP_PASSWORD`
+
+For other email providers, adjust the SMTP settings accordingly.
 
 3. Generate Prisma client:
 

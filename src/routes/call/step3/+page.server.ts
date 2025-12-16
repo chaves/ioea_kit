@@ -1,121 +1,145 @@
-import { fail, redirect } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
-import { prisma } from '$lib/server/db';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-import { sendEmail, applicationReceiptEmail } from '$lib/server/email';
-import { config } from '$lib/config';
+import { fail, redirect } from "@sveltejs/kit";
+import type { Actions, PageServerLoad } from "./$types";
+import { prisma } from "$lib/server/db";
+import { writeFile, mkdir } from "fs/promises";
+import { join } from "path";
+import { sendEmail, applicationReceiptEmail } from "$lib/server/email";
+import { config } from "$lib/config";
 
 const UPLOAD_DIR = `uploads/IOEA${config.currentYear}_call`;
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export const load: PageServerLoad = async ({ cookies }) => {
-	const step1Data = cookies.get('call_step1');
-	const step2Data = cookies.get('call_step2');
+  const step1Data = cookies.get("call_step1");
+  const step2Data = cookies.get("call_step2");
 
-	if (!step1Data || !step2Data) {
-		throw redirect(303, '/call');
-	}
+  if (!step1Data || !step2Data) {
+    throw redirect(303, "/call");
+  }
 
-	return {};
+  return {};
 };
 
 export const actions: Actions = {
-	default: async ({ request, cookies }) => {
-		const step1Raw = cookies.get('call_step1');
-		const step2Raw = cookies.get('call_step2');
+  default: async ({ request, cookies }) => {
+    const step1Raw = cookies.get("call_step1");
+    const step2Raw = cookies.get("call_step2");
 
-		if (!step1Raw || !step2Raw) {
-			throw redirect(303, '/call');
-		}
+    if (!step1Raw || !step2Raw) {
+      throw redirect(303, "/call");
+    }
 
-		const step1 = JSON.parse(step1Raw);
-		const step2 = JSON.parse(step2Raw);
+    const step1 = JSON.parse(step1Raw);
+    const step2 = JSON.parse(step2Raw);
 
-		const data = await request.formData();
-		const cvFile = data.get('cv') as File;
-		const paperFile = data.get('paper') as File;
+    const data = await request.formData();
+    const cvFile = data.get("cv") as File;
+    const paperFile = data.get("paper") as File;
 
-		// Validation
-		if (!cvFile || cvFile.size === 0) {
-			return fail(400, { error: 'Please upload your CV.' });
-		}
+    // Validation
+    if (!cvFile || cvFile.size === 0) {
+      return fail(400, { error: "Please upload your CV." });
+    }
 
-		if (!paperFile || paperFile.size === 0) {
-			return fail(400, { error: 'Please upload your research paper.' });
-		}
+    if (!paperFile || paperFile.size === 0) {
+      return fail(400, { error: "Please upload your research paper." });
+    }
 
-		if (cvFile.size > MAX_FILE_SIZE || paperFile.size > MAX_FILE_SIZE) {
-			return fail(400, { error: 'File size must be less than 5MB.' });
-		}
+    if (cvFile.size > MAX_FILE_SIZE || paperFile.size > MAX_FILE_SIZE) {
+      return fail(400, { error: "File size must be less than 5MB." });
+    }
 
-		if (!cvFile.name.endsWith('.pdf') || !paperFile.name.endsWith('.pdf')) {
-			return fail(400, { error: 'Only PDF files are accepted.' });
-		}
+    if (!cvFile.name.endsWith(".pdf") || !paperFile.name.endsWith(".pdf")) {
+      return fail(400, { error: "Only PDF files are accepted." });
+    }
 
-		try {
-			// Create upload directory if it doesn't exist
-			await mkdir(UPLOAD_DIR, { recursive: true });
+    try {
+      // Create upload directory if it doesn't exist
+      await mkdir(UPLOAD_DIR, { recursive: true });
 
-			// Generate unique filenames
-			const timestamp = Date.now();
-			const sanitizedName = `${step1.last_name}_${step1.first_name}`.replace(/[^a-zA-Z0-9]/g, '_');
-			const cvFilename = `${sanitizedName}_CV_${timestamp}.pdf`;
-			const paperFilename = `${sanitizedName}_PAPER_${timestamp}.pdf`;
+      // Generate unique filenames
+      const timestamp = Date.now();
+      const sanitizedName = `${step1.last_name}_${step1.first_name}`.replace(
+        /[^a-zA-Z0-9]/g,
+        "_"
+      );
+      const cvFilename = `${sanitizedName}_CV_${timestamp}.pdf`;
+      const paperFilename = `${sanitizedName}_PAPER_${timestamp}.pdf`;
 
-			// Save files
-			const cvBuffer = Buffer.from(await cvFile.arrayBuffer());
-			const paperBuffer = Buffer.from(await paperFile.arrayBuffer());
+      // Save files
+      const cvBuffer = Buffer.from(await cvFile.arrayBuffer());
+      const paperBuffer = Buffer.from(await paperFile.arrayBuffer());
 
-			await writeFile(join(UPLOAD_DIR, cvFilename), cvBuffer);
-			await writeFile(join(UPLOAD_DIR, paperFilename), paperBuffer);
+      await writeFile(join(UPLOAD_DIR, cvFilename), cvBuffer);
+      await writeFile(join(UPLOAD_DIR, paperFilename), paperBuffer);
 
-			// Create database entry
-			await prisma.call_proposals.create({
-				data: {
-					first_name: step1.first_name,
-					last_name: step1.last_name,
-					email: step1.email,
-					nationality: step1.nationality,
-					gender: step1.gender,
-					age: step1.age,
-					status: step1.status,
-					domain: step1.domain,
-					diploma: step1.diploma,
-					university: step2.university,
-					department: step2.department,
-					country: step2.country,
-					phd_title: step2.phd_title,
-					phd_ad_name: step2.phd_ad_name,
-					phd_ad_mail: step2.phd_ad_mail,
-					phd_year: step2.phd_year ? String(step2.phd_year) : null,
-					phd_summary: step2.phd_summary,
-					cv: cvFilename,
-					paper: paperFilename
-				}
-			});
+      // Create database entry
+      await prisma.call_proposals.create({
+        data: {
+          first_name: step1.first_name,
+          last_name: step1.last_name,
+          email: step1.email,
+          nationality: step1.nationality,
+          gender: step1.gender,
+          age: step1.age,
+          status: step1.status,
+          domain: step1.domain,
+          diploma: step1.diploma,
+          university: step2.university,
+          department: step2.department,
+          country: step2.country,
+          phd_title: step2.phd_title,
+          phd_ad_name: step2.phd_ad_name,
+          phd_ad_mail: step2.phd_ad_mail,
+          phd_year: step2.phd_year ? String(step2.phd_year) : null,
+          phd_summary: step2.phd_summary,
+          cv: cvFilename,
+          paper: paperFilename,
+        },
+      });
 
-			// Send confirmation email
-			await sendEmail(
-				applicationReceiptEmail({
-					firstName: step1.first_name,
-					lastName: step1.last_name,
-					email: step1.email
-				})
-			);
+      // Send confirmation email (don't fail if email fails)
+      try {
+        const emailSent = await sendEmail(
+          applicationReceiptEmail({
+            firstName: step1.first_name,
+            lastName: step1.last_name,
+            email: step1.email,
+          })
+        );
+        if (!emailSent) {
+          console.warn(
+            `Failed to send confirmation email to ${step1.email}, but application was saved`
+          );
+        }
+      } catch (emailError) {
+        // Log email error but don't fail the submission
+        console.error("Email sending error (non-fatal):", emailError);
+      }
 
-			// Clear cookies
-			cookies.delete('call_step1', { path: '/call' });
-			cookies.delete('call_step2', { path: '/call' });
+      // Clear cookies
+      cookies.delete("call_step1", { path: "/call" });
+      cookies.delete("call_step2", { path: "/call" });
 
-			throw redirect(303, '/call/success');
-		} catch (error) {
-			if (error instanceof Response) {
-				throw error; // Re-throw redirects
-			}
-			console.error('Application submission error:', error);
-			return fail(500, { error: 'An error occurred while submitting your application. Please try again.' });
-		}
-	}
+      throw redirect(303, "/call/success");
+    } catch (error) {
+      // Check if it's a redirect (SvelteKit redirects have status and location properties)
+      if (
+        error &&
+        typeof error === "object" &&
+        "status" in error &&
+        "location" in error
+      ) {
+        const redirectError = error as { status: number; location: string };
+        if (redirectError.status >= 300 && redirectError.status < 400) {
+          throw error; // Re-throw redirects
+        }
+      }
+      console.error("Application submission error:", error);
+      return fail(500, {
+        error:
+          "An error occurred while submitting your application. Please try again.",
+      });
+    }
+  },
 };
-
