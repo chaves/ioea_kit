@@ -1,32 +1,32 @@
-import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
-import { prisma } from '$lib/server/db';
+import { error } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types";
+import { prisma } from "$lib/server/db";
 
 export const load: PageServerLoad = async ({ params }) => {
-	const year = parseInt(params.year);
-	const presentationId = parseInt(params.id);
+  const year = parseInt(params.year);
+  const presentationId = parseInt(params.id);
 
-	if (isNaN(presentationId)) {
-		throw error(404, 'Presentation not found');
-	}
+  if (isNaN(presentationId)) {
+    throw error(404, "Presentation not found");
+  }
 
-	// Get presentation details
-	const presentation = await prisma.$queryRaw<
-		Array<{
-			id: number;
-			titre: string | null;
-			resume: string | null;
-			lien: string | null;
-			lecwp: string | null;
-			date_new: Date | null;
-			theme: string | null;
-			prenom: string | null;
-			nom: string | null;
-			instit: string | null;
-			home: string | null;
-			photo: string | null;
-		}>
-	>`
+  // Get presentation details
+  const presentation = await prisma.$queryRaw<
+    Array<{
+      id: number;
+      titre: string | null;
+      resume: string | null;
+      lien: string | null;
+      lecwp: string | null;
+      date_new: Date | null;
+      theme: string | null;
+      prenom: string | null;
+      nom: string | null;
+      instit: string | null;
+      home: string | null;
+      photo: string | null;
+    }>
+  >`
 		SELECT
 			e_presentation.id,
 			e_presentation.titre,
@@ -47,50 +47,53 @@ export const load: PageServerLoad = async ({ params }) => {
 		LIMIT 1
 	`;
 
-	if (!presentation || presentation.length === 0) {
-		throw error(404, 'Presentation not found');
-	}
+  if (!presentation || presentation.length === 0) {
+    throw error(404, "Presentation not found");
+  }
 
-	const p = presentation[0];
+  const p = presentation[0];
 
-	// Verify it's for the correct year
-	if (p.date_new && new Date(p.date_new).getFullYear() !== year) {
-		throw error(404, 'Presentation not found for this year');
-	}
+  // Verify it's for the correct year
+  if (p.date_new && new Date(p.date_new).getFullYear() !== year) {
+    throw error(404, "Presentation not found for this year");
+  }
 
-	// Convert link to local path if it's a filename
-	let presentationLink: string | null = p.lien;
-	if (p.lien && !p.lien.startsWith('http') && !p.lien.startsWith('/')) {
-		// It's just a filename, construct the full path
-		// Assume it's in pdf/textes_{year}/ directory
-		presentationLink = `/pdf/textes_${year}/${p.lien}`;
-	} else if (p.lien && !p.lien.startsWith('http') && !p.lien.startsWith('/pdf/')) {
-		// It's a relative path, ensure it starts with /pdf/
-		presentationLink = `/pdf/${p.lien}`;
-	}
+  // Convert link to local path if it's a filename
+  let presentationLink: string | null = p.lien;
+  if (p.lien && !p.lien.startsWith("http") && !p.lien.startsWith("/")) {
+    // It's just a filename, construct the full path
+    // Assume it's in pdf/textes_{year}/ directory
+    presentationLink = `/pdf/textes_${year}/${p.lien}`;
+  } else if (
+    p.lien &&
+    !p.lien.startsWith("http") &&
+    !p.lien.startsWith("/pdf/")
+  ) {
+    // It's a relative path, ensure it starts with /pdf/
+    presentationLink = `/pdf/${p.lien}`;
+  }
 
-	// File size calculation removed since files are now external
-	let fileSize: string | null = null;
+  // File size calculation removed since files are now external
+  let fileSize: string | null = null;
 
-	return {
-		year,
-		presentation: {
-			id: p.id,
-			title: p.titre,
-			abstract: p.resume,
-			link: presentationLink,
-			fileSize,
-			type: p.lecwp,
-			date: p.date_new,
-			theme: p.theme,
-			author: {
-				firstName: p.prenom ?? '',
-				lastName: p.nom ?? '',
-				institution: p.instit,
-				website: p.home,
-				photo: p.photo
-			}
-		}
-	};
+  return {
+    year,
+    presentation: {
+      id: p.id,
+      title: p.titre,
+      abstract: p.resume,
+      link: presentationLink,
+      fileSize,
+      type: p.lecwp,
+      date: p.date_new,
+      theme: p.theme,
+      author: {
+        firstName: p.prenom ?? "",
+        lastName: p.nom ?? "",
+        institution: p.instit,
+        website: p.home,
+        photo: p.photo,
+      },
+    },
+  };
 };
-
