@@ -1,8 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { prisma } from '$lib/server/db';
-import { stat } from 'fs/promises';
-import { join } from 'path';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const year = parseInt(params.year);

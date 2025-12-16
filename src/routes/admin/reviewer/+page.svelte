@@ -37,6 +37,13 @@
 	function toggleExpand(id: number) {
 		expandedId = expandedId === id ? null : id;
 	}
+
+	function handleKeyDown(event: KeyboardEvent, id: number) {
+		if (event.key === 'Enter' || event.key === ' ') {
+			event.preventDefault();
+			toggleExpand(id);
+		}
+	}
 </script>
 
 <svelte:head>
@@ -82,7 +89,13 @@
 	<div class="proposals-list">
 		{#each data.proposals as proposal}
 			<div class="proposal-card" class:rated={proposal.isRated}>
-				<div class="proposal-header" onclick={() => toggleExpand(proposal.id)}>
+				<div
+					class="proposal-header"
+					role="button"
+					tabindex="0"
+					onclick={() => toggleExpand(proposal.id)}
+					onkeydown={(e) => handleKeyDown(e, proposal.id)}
+				>
 					<div class="proposal-info">
 						<h3>{proposal.lastName}, {proposal.firstName}</h3>
 						<p class="proposal-meta">
