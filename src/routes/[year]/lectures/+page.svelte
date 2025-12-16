@@ -21,7 +21,7 @@
 				{#if data.themeGroups.length > 0}
 					<div class="flex flex-col gap-0">
 						{#each data.themeGroups as theme, index}
-							<section class="mb-12 relative {index < data.themeGroups.length - 1 ? 'after:content-[\'\'] after:absolute after:bottom-[-1.5rem] after:left-0 after:right-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-border after:to-transparent'}">
+							<section class="mb-12 relative {index < data.themeGroups.length - 1 ? `after:content-[''] after:absolute after:bottom-[-1.5rem] after:left-0 after:right-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-border after:to-transparent` : ''}">
 								<header class="bg-gradient-to-br from-primary-light via-primary to-secondary text-white px-8 py-6 rounded-[0.875rem] mb-6 shadow-[0_6px_20px_rgba(93,74,120,0.25),0_2px_8px_rgba(112,186,190,0.15)] flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 relative overflow-hidden border-2 border-white/20 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-br before:from-accent-pink/15 before:via-secondary-light/10 before:to-accent-lime/8 before:pointer-events-none after:content-[''] after:absolute after:top-[-50%] after:right-[-10%] after:w-[200px] after:h-[200px] after:bg-radial-gradient after:bg-[radial-gradient(circle,rgba(255,255,255,0.1)_0%,transparent_70%)] after:rounded-full after:pointer-events-none">
 									<h2 class="m-0 text-[1.35rem] font-bold text-white relative z-10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] tracking-[0.02em] sm:text-xl">{theme.name}</h2>
 									{#if theme.dateFormatted}
