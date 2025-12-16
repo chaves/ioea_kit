@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { menus } from '$lib/config';
+	import { menus, config } from '$lib/config';
 
 	let mobileMenuOpen = $state(false);
 	let activeDropdown = $state<string | null>(null);
@@ -13,10 +13,15 @@
 		// Check if "Past editions" (/archives) should be active for year routes
 		if (href === '/archives') {
 			// Match /archives or /YYYY (4-digit year) or /photos/YYYY
+			// BUT exclude the current year (current year should show "IOEA 2025" as active, not "Past editions")
+			const yearMatch = currentPath.match(/^\/(\d{4})(\/|$)/);
+			const photosYearMatch = currentPath.match(/^\/photos\/(\d{4})(\/|$)/);
+			const year = yearMatch ? parseInt(yearMatch[1]) : photosYearMatch ? parseInt(photosYearMatch[1]) : null;
+
 			return currentPath === '/archives' ||
 				   currentPath.startsWith('/archives/') ||
-				   /^\/\d{4}(\/|$)/.test(currentPath) ||
-				   /^\/photos\/\d{4}(\/|$)/.test(currentPath);
+				   (year !== null && year !== config.currentYear && /^\/\d{4}(\/|$)/.test(currentPath)) ||
+				   (year !== null && year !== config.currentYear && /^\/photos\/\d{4}(\/|$)/.test(currentPath));
 		}
 		if (exact) {
 			return currentPath === href;
@@ -84,7 +89,7 @@
 							>
 								<a
 									href={item.href}
-									class="flex items-center gap-1.5 px-3.5 py-2.5 font-medium text-[0.9375rem] text-text rounded-md transition-all duration-200 no-underline {isActive(item.href) ? 'bg-primary text-white' : 'hover:bg-primary-faded hover:text-primary'}"
+									class="flex items-center gap-1.5 px-3.5 py-2.5 font-medium text-[0.9375rem] rounded-md transition-all duration-200 no-underline {isActive(item.href) ? 'bg-primary text-white' : 'text-text hover:bg-primary-faded hover:text-primary-dark'}"
 									title={item.title}
 								>
 									{item.label}
@@ -100,7 +105,7 @@
 											<li>
 												<a
 													href={subItem.href}
-													class="block px-3.5 py-2.5 text-text text-sm rounded-md transition-all duration-150 no-underline {isActive(subItem.href, true) ? 'bg-primary text-white' : 'hover:bg-primary-faded hover:text-primary'}"
+													class="block px-3.5 py-2.5 text-sm rounded-md transition-all duration-150 no-underline {isActive(subItem.href, true) ? 'bg-primary text-white' : 'text-text hover:bg-primary-faded hover:text-primary-dark'}"
 													title={subItem.title}
 												>
 													{subItem.label}
@@ -126,7 +131,7 @@
 						<div class="flex items-center justify-between">
 							<a
 								href={item.href}
-								class="flex-1 block px-4 py-3.5 text-text font-medium rounded-md no-underline {isActive(item.href) ? 'bg-primary text-white' : 'hover:bg-primary-faded hover:text-primary'}"
+								class="flex-1 block px-4 py-3.5 font-medium rounded-md no-underline {isActive(item.href) ? 'bg-primary text-white' : 'text-text hover:bg-primary-faded hover:text-primary-dark'}"
 								onclick={() => {
 									if (!hasSubmenu(item.href)) {
 										mobileMenuOpen = false;
@@ -137,7 +142,7 @@
 							</a>
 							{#if hasSubmenu(item.href)}
 								<button
-									class="bg-transparent border-0 px-4 py-3.5 cursor-pointer text-text-light flex items-center justify-center rounded-md transition-all duration-200 hover:bg-primary-faded hover:text-primary"
+									class="bg-transparent border-0 px-4 py-3.5 cursor-pointer flex items-center justify-center rounded-md transition-all duration-200 text-text-light hover:bg-primary-faded hover:text-primary-dark"
 									onclick={() => toggleDropdown(item.href)}
 									aria-label="Toggle submenu"
 								>
