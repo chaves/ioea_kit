@@ -19,7 +19,7 @@ const sessions = new Map<
 	string,
 	{
 		userId: number;
-		userType: 'admin' | 'reviewer' | 'student';
+		userType: 'admin' | 'reviewer' | 'student' | 'program-admin';
 		email: string;
 		name: string;
 		reviewerGroup?: number;
@@ -33,7 +33,7 @@ export async function createSession(
 	cookies: Cookies,
 	userData: {
 		userId: number;
-		userType: 'admin' | 'reviewer' | 'student';
+		userType: 'admin' | 'reviewer' | 'student' | 'program-admin';
 		email: string;
 		name: string;
 		reviewerGroup?: number;
@@ -138,4 +138,14 @@ export async function validateStudentCredentials(
 		userId: student.id,
 		name: `${student.first_name} ${student.last_name}`
 	};
+}
+
+// Validate program admin password
+export async function validateProgramAdminPassword(password: string): Promise<boolean> {
+	const adminPassword = process.env.PROGRAM_ADMIN_PASSWORD;
+	if (!adminPassword) {
+		console.error('PROGRAM_ADMIN_PASSWORD not set in environment');
+		return false;
+	}
+	return password === adminPassword;
 }
