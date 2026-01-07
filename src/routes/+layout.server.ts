@@ -1,5 +1,6 @@
 import type { LayoutServerLoad } from './$types';
 import { getPhotoYears } from '$lib/config';
+import { loadDynamicConfig } from '$lib/server/config';
 import { readdir } from 'fs/promises';
 import { join } from 'path';
 
@@ -35,10 +36,12 @@ async function getRandomPhoto() {
 
 export const load: LayoutServerLoad = async ({ locals }) => {
 	const randomPhoto = await getRandomPhoto();
+	const dynamicConfig = await loadDynamicConfig();
 
 	return {
 		session: locals.session,
-		randomPhoto
+		randomPhoto,
+		dynamicConfig
 	};
 };
 

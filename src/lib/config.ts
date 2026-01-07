@@ -1,14 +1,18 @@
 // IOEA Configuration - migrated from config_perso.php
 
-export const config = {
-  currentYear: 2025,
+// Static configuration (compile-time constants)
+export const staticConfig = {
+  currentYear: 2026,
   archiveFromYear: 2002,
   archiveToYear: 2025,
 
   // Bad sessions (cancelled years)
   badSessions: [2013, 2020, 2021] as number[],
   badPhotos: [2020, 2021] as number[],
+} as const;
 
+// Default configuration (fallback for dynamic values)
+const defaultDynamicConfig = {
   // Emails
   emails: {
     general: "ioea.coordinator@gmail.com",
@@ -18,159 +22,164 @@ export const config = {
 
   // Deadlines
   deadlines: {
-    application: "March 17th 2025",
-    notification: "from March 21st 2025",
-    registration: "April 27th 2025",
-    students: "April 27th 2025",
+    application: "TBD",
+    notification: "TBD",
+    registration: "TBD",
+    students: "TBD",
   },
 
   // Application deadlines with status flags
   applicationDeadlines: {
     first: {
-      date: "March 31",
-      notificationDate: "April 4",
-      active: true,
+      date: "TBD",
+      notificationDate: "TBD",
+      active: false,
     },
     second: {
-      date: "April 14",
-      notificationDate: "April 18",
-      active: true,
+      date: "TBD",
+      notificationDate: "TBD",
+      active: false,
     },
   },
   registrationDeadline: {
-    date: "April 27",
-    active: true,
-  },
-
-  // Status options for call applications
-  statusOptions: {
-    1: "Ph.D. student",
-    2: "Post-doc",
-    3: "Academic",
-    4: "Other",
-  } as Record<number, string>,
-
-  // Call steps
-  callSteps: {
-    1: "Information about you",
-    2: "Affiliation and project",
-    3: "Upload your files",
-  } as Record<number, string>,
-
-  // Travel options
-  travel: {
-    transport: ["", "Plane", "Boat"],
-    locations: {
-      1: "Ajaccio",
-      2: "Bastia",
-      3: "Calvi",
-      4: "Ile Rousse",
-      5: "Propriano",
-    } as Record<number, string>,
-  },
-
-  // Transfer options
-  transfer: {
-    arrival: {
-      1: "Collective bus (from Ajaccio airport)",
-      2: "Car rental",
-      3: "Public bus",
-      4: "Taxi",
-      5: "Personal car",
-      6: "Unknown",
-    } as Record<number, string>,
-    departure: {
-      1: "Collective bus (to Ajaccio airport)",
-      2: "Car rental",
-      3: "Public bus",
-      4: "Taxi",
-      5: "Personal car",
-      6: "Unknown",
-    } as Record<number, string>,
-  },
-
-  // Students group open
-  studentsGroupOpen: true,
-
-  // Program visibility - show program card in sidebar only when program is done
-  programIsDone: false,
-
-  // Call for applications status - controls whether applications are open
-  callIsOpen: false,
-
-  // Brochure configuration
-  brochure: {
-    name: "IOEABrochure2024.pdf",
-    imageName: "graphiques/IOEABrochure2024.jpg",
-  },
-
-  // Financial information (prices in euros)
-  prices: {
-    travel: {
-      flightMin: 200,
-      flightMax: 400,
-      busTransfer: 50,
-    },
-    accommodation: {
-      roomPerWeek: 320,
-      hotelPerNight: 80,
-    },
-    meals: {
-      weeklyRate: 180,
-    },
-    registration: {
-      fee: 550,
-    },
+    date: "TBD",
+    active: false,
   },
 } as const;
+
+/**
+ * Merge static config with dynamic config loaded from database
+ * @param dynamicConfig - Optional dynamic config from layout data
+ */
+export function getConfig(dynamicConfig?: typeof defaultDynamicConfig) {
+  return {
+    ...staticConfig,
+    ...(dynamicConfig || defaultDynamicConfig),
+    // Status options for call applications
+    statusOptions: {
+      1: "Ph.D. student",
+      2: "Post-doc",
+      3: "Academic",
+      4: "Other",
+    } as Record<number, string>,
+    // Call steps
+    callSteps: {
+      1: "Information about you",
+      2: "Affiliation and project",
+      3: "Upload your files",
+    } as Record<number, string>,
+    // Travel options
+    travel: {
+      transport: ["", "Plane", "Boat"],
+      locations: {
+        1: "Ajaccio",
+        2: "Bastia",
+        3: "Calvi",
+        4: "Ile Rousse",
+        5: "Propriano",
+      } as Record<number, string>,
+    },
+    // Transfer options
+    transfer: {
+      arrival: {
+        1: "Collective bus (from Ajaccio airport)",
+        2: "Car rental",
+        3: "Public bus",
+        4: "Taxi",
+        5: "Personal car",
+        6: "Unknown",
+      } as Record<number, string>,
+      departure: {
+        1: "Collective bus (to Ajaccio airport)",
+        2: "Car rental",
+        3: "Public bus",
+        4: "Taxi",
+        5: "Personal car",
+        6: "Unknown",
+      } as Record<number, string>,
+    },
+    // Students group open
+    studentsGroupOpen: false,
+    // Program visibility - show program card in sidebar only when program is done
+    programIsDone: false,
+    // Call for applications status - controls whether applications are open
+    callIsOpen: true,
+    // Brochure configuration
+    brochure: {
+      name: "IOEABrochure2024.pdf",
+      imageName: "graphiques/IOEABrochure2024.jpg",
+    },
+    // Financial information (prices in euros)
+    prices: {
+      travel: {
+        flightMin: 200,
+        flightMax: 400,
+        busTransfer: 50,
+      },
+      accommodation: {
+        roomPerWeek: 320,
+        hotelPerNight: 80,
+      },
+      meals: {
+        weeklyRate: 180,
+      },
+      registration: {
+        fee: 550,
+      },
+    },
+  };
+}
+
+// Export default config for backward compatibility
+export const config = getConfig();
 
 // Menu configuration
 export const menus = {
   main: [
     { href: "/", label: "Home", title: "Home" },
-    { href: "/2025", label: "IOEA 2025", title: "IOEA 2025" },
+    { href: "/2026", label: "IOEA 2026", title: "IOEA 2026" },
     { href: "/project", label: "The project", title: "The project" },
     { href: "/community", label: "The community", title: "The community" },
     { href: "/archives", label: "Past editions", title: "Past editions" },
     { href: "/videos", label: "Videos", title: "Videos" },
     { href: "/sponsors", label: "Sponsors", title: "Sponsors" },
   ],
-  ioea2025: [
+  ioea2026: [
     {
-      href: "/2025",
+      href: "/2026",
       label: "Call for papers",
-      title: "Call for papers - IOEA 2025",
+      title: "Call for papers - IOEA 2026",
     },
     {
-      href: "/2025/lectures",
+      href: "/2026/lectures",
       label: "Lectures",
-      title: "Lectures - IOEA 2025",
+      title: "Lectures - IOEA 2026",
     },
     {
-      href: "/2025/workshops",
+      href: "/2026/workshops",
       label: "Workshops",
-      title: "Workshops - IOEA 2025",
+      title: "Workshops - IOEA 2026",
     },
     {
-      href: "/2025/seminars",
+      href: "/2026/seminars",
       label: "Seminars",
-      title: "Seminars - IOEA 2025",
+      title: "Seminars - IOEA 2026",
     },
     {
-      href: "/2025/lunch-sessions",
+      href: "/2026/lunch-sessions",
       label: "Lunch Sessions",
-      title: "Lunch Sessions - IOEA 2025",
+      title: "Lunch Sessions - IOEA 2026",
     },
     {
-      href: "/2025/students",
+      href: "/2026/students",
       label: "Participants",
-      title: "Participants - IOEA 2025",
+      title: "Participants - IOEA 2026",
     },
-    { href: "/2025/meetings", label: "Meetings", title: "Meetings" },
+    { href: "/2026/meetings", label: "Meetings", title: "Meetings" },
     {
-      href: "/2025/informations",
+      href: "/2026/informations",
       label: "Practical Info",
-      title: "Practical Informations - IOEA 2025",
+      title: "Practical Informations - IOEA 2026",
     },
   ],
   project: [
@@ -222,8 +231,8 @@ export const menus = {
 // Generate archive years
 export function getArchiveYears(): number[] {
   const years: number[] = [];
-  for (let i = config.archiveToYear; i >= config.archiveFromYear; i--) {
-    if (!config.badSessions.includes(i)) {
+  for (let i = staticConfig.archiveToYear; i >= staticConfig.archiveFromYear; i--) {
+    if (!staticConfig.badSessions.includes(i)) {
       years.push(i);
     }
   }
@@ -233,8 +242,8 @@ export function getArchiveYears(): number[] {
 // Generate photo years
 export function getPhotoYears(): number[] {
   const years: number[] = [];
-  for (let i = config.archiveToYear; i >= config.archiveFromYear; i--) {
-    if (!config.badPhotos.includes(i)) {
+  for (let i = staticConfig.archiveToYear; i >= staticConfig.archiveFromYear; i--) {
+    if (!staticConfig.badPhotos.includes(i)) {
       years.push(i);
     }
   }

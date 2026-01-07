@@ -46,7 +46,7 @@
 		}
 		// Check if it's a year route (starts with /YYYY)
 		if (href.match(/^\/\d{4}$/)) {
-			return menus.ioea2025;
+			return menus.ioea2026;
 		}
 		return null;
 	}

@@ -1,12 +1,13 @@
 <script lang="ts">
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
-	import { config } from '$lib/config';
+	import { getConfig } from '$lib/config';
 
 	interface Props {
 		data: {
 			year: number;
 			isCurrent: boolean;
+			dynamicConfig?: any;
 			lecturers: Array<{
 				id: number;
 				firstName: string;
@@ -23,6 +24,7 @@
 	}
 
 	let { data }: Props = $props();
+	const config = getConfig(data.dynamicConfig);
 
 	const sessionNumber = data.year - 2002 + 1;
 	const sessionOrdinal = sessionNumber === 22 ? 'nd' : sessionNumber === 21 ? 'st' : sessionNumber === 23 ? 'rd' : 'th';
@@ -43,8 +45,45 @@
 					{sessionNumber}<sup class="text-[0.7em] align-super">{sessionOrdinal}</sup> session of the Institutional and Organizational Economics Academy 12-16 May {data.year} in Corsica (France)
 				</h3>
 
-				{#if !config.callIsOpen}
-					<p class="text-lg font-medium text-text mb-6 p-4 bg-bg-alt rounded-lg">The call for applications is closed.</p>
+				{#if config.callIsOpen}
+					<div class="bg-gradient-to-br from-primary to-secondary rounded-2xl p-8 mb-8 shadow-[0_8px_24px_rgba(0,0,0,0.12)] border border-primary/20">
+						<div class="text-center">
+							<h4 class="text-2xl font-bold text-white mb-3">
+								Applications Now Open for IOEA {data.year}!
+							</h4>
+							<p class="text-white/90 text-lg mb-6 max-w-2xl mx-auto">
+								Join us for an intensive week of lectures, workshops, and seminars with leading scholars in Institutional and Organizational Economics.
+							</p>
+							<a
+								href="/call"
+								class="inline-flex items-center gap-2 bg-white text-primary px-8 py-4 rounded-xl font-bold text-lg shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.2)] hover:scale-105 transition-all duration-200 no-underline"
+							>
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
+									<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+									<polyline points="14 2 14 8 20 8"></polyline>
+									<line x1="16" y1="13" x2="8" y2="13"></line>
+									<line x1="16" y1="17" x2="8" y2="17"></line>
+									<polyline points="10 9 9 9 8 9"></polyline>
+								</svg>
+								Submit Your Application
+							</a>
+							{#if config.applicationDeadlines.first.active || config.applicationDeadlines.second.active}
+								<p class="text-white/80 text-sm mt-4">
+									{#if config.applicationDeadlines.first.active}
+										Next deadline: <strong class="text-white">{config.applicationDeadlines.first.date}</strong>
+									{:else if config.applicationDeadlines.second.active}
+										Final deadline: <strong class="text-white">{config.applicationDeadlines.second.date}</strong>
+									{/if}
+								</p>
+							{/if}
+						</div>
+					</div>
+				{:else}
+					<div class="bg-gray-100 border-l-4 border-gray-400 p-6 mb-8 rounded-lg">
+						<p class="text-lg font-medium text-gray-700">
+							The call for applications is currently closed.
+						</p>
+					</div>
 				{/if}
 
 				<p class="text-[1.05rem] leading-relaxed mb-6">
