@@ -114,17 +114,17 @@ export function getConfig(dynamicConfig?: typeof defaultDynamicConfig) {
       travel: {
         flightMin: 200,
         flightMax: 400,
-        busTransfer: 50,
+        busTransfer: 60,
       },
       accommodation: {
-        roomPerWeek: 320,
+        roomPerWeek: 340,
         hotelPerNight: 80,
       },
       meals: {
-        weeklyRate: 180,
+        weeklyRate: 200,
       },
       registration: {
-        fee: 550,
+        fee: 600,
       },
     },
   };
