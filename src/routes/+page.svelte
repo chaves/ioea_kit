@@ -219,7 +219,7 @@
 									/>
 								</div>
 								<div class="flex-1">
-									<blockquote class="italic text-text leading-relaxed mb-2 m-0 p-0 text-[0.9rem] leading-normal">
+									<blockquote class="italic text-text mb-2 m-0 p-0 text-[0.9rem] leading-relaxed">
 										"{getTruncatedQuote(item.quote, index)}"
 									</blockquote>
 									{#if item.quote.length > maxQuoteLength}
