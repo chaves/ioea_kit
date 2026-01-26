@@ -24,32 +24,34 @@
 	}
 
 	let { data }: Props = $props();
-	const config = getConfig(data.dynamicConfig);
+	const year = $derived(data.year);
+	const dynamicConfig = $derived(data.dynamicConfig);
+	const config = $derived(getConfig(dynamicConfig));
 
-	const sessionNumber = data.year - 2002 + 1;
-	const sessionOrdinal = sessionNumber === 22 ? 'nd' : sessionNumber === 21 ? 'st' : sessionNumber === 23 ? 'rd' : 'th';
+	const sessionNumber = $derived(year - 2002 + 1);
+	const sessionOrdinal = $derived(sessionNumber === 22 ? 'nd' : sessionNumber === 21 ? 'st' : sessionNumber === 23 ? 'rd' : 'th');
 </script>
 
 <svelte:head>
-	<title>IOEA {data.year} - the {sessionNumber}{sessionOrdinal} session of the Institutional and Organizational Economics Academy</title>
-	<meta name="description" content="IOEA {data.year}, the {sessionNumber}{sessionOrdinal} session of the Institutional and Organizational Economics Academy, 12-16 May {data.year} in Corsica, France." />
+	<title>IOEA {year} - the {sessionNumber}{sessionOrdinal} session of the Institutional and Organizational Economics Academy</title>
+	<meta name="description" content="IOEA {year}, the {sessionNumber}{sessionOrdinal} session of the Institutional and Organizational Economics Academy, 12-16 May {year} in Corsica, France." />
 </svelte:head>
 
-<PageHeader title="IOEA {data.year}" />
+<PageHeader title="IOEA {year}" />
 
 <section class="section-space">
 	<div class="container">
 		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
 				<h3 class="text-2xl font-semibold mb-6 text-primary leading-relaxed">
-					{sessionNumber}<sup class="text-[0.7em] align-super">{sessionOrdinal}</sup> session of the Institutional and Organizational Economics Academy 12-16 May {data.year} in Corsica (France)
+					{sessionNumber}<sup class="text-[0.7em] align-super">{sessionOrdinal}</sup> session of the Institutional and Organizational Economics Academy 12-16 May {year} in Corsica (France)
 				</h3>
 
 				{#if config.callIsOpen}
 					<div class="bg-gradient-to-br from-primary to-secondary rounded-2xl p-8 mb-8 shadow-[0_8px_24px_rgba(0,0,0,0.12)] border border-primary/20">
 						<div class="text-center">
 							<h4 class="text-2xl font-bold text-white mb-3">
-								Applications Now Open for IOEA {data.year}!
+								Applications Now Open for IOEA {year}!
 							</h4>
 							<p class="text-white/90 text-lg mb-6 max-w-2xl mx-auto">
 								Join us for an intensive week of lectures, workshops, and seminars with leading scholars in Institutional and Organizational Economics.
@@ -107,7 +109,7 @@
 				<p class="text-[1.05rem] leading-relaxed mb-6">
 					{#each data.lecturers as lecturer, index}
 						<strong>
-							<a href="/{data.year}/presentation/{lecturer.id}" class="text-primary font-semibold no-underline transition-colors duration-200 hover:text-secondary hover:underline">
+							<a href="/{year}/presentation/{lecturer.id}" class="text-primary font-semibold no-underline transition-colors duration-200 hover:text-secondary hover:underline">
 								{lecturer.firstName} {lecturer.lastName}
 							</a>
 						</strong>
@@ -124,7 +126,7 @@
 				<p class="text-[1.05rem] leading-relaxed mb-6">
 					{#each data.workshopOrganizers as organizer, index}
 						<strong>
-							<a href="/{data.year}/presentation/{organizer.id}" class="text-primary font-semibold no-underline transition-colors duration-200 hover:text-secondary hover:underline">
+							<a href="/{year}/presentation/{organizer.id}" class="text-primary font-semibold no-underline transition-colors duration-200 hover:text-secondary hover:underline">
 								{organizer.firstName} {organizer.lastName}
 							</a>
 						</strong>

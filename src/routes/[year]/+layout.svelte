@@ -3,17 +3,19 @@
 
 	let { children, data } = $props();
 
-	const tabs = [
-		{ href: `/${data.year}/lectures`, label: 'Lectures' },
-		{ href: `/${data.year}/workshops`, label: 'Workshops' }
-	];
+	const year = $derived(data.year);
+	const isCurrent = $derived(data.isCurrent);
+	const tabs = $derived([
+		{ href: `/${year}/lectures`, label: 'Lectures' },
+		{ href: `/${year}/workshops`, label: 'Workshops' }
+	]);
 
 	function isTabActive(tabHref: string): boolean {
 		return $page.url.pathname === tabHref || $page.url.pathname.startsWith(tabHref + '/');
 	}
 </script>
 
-{#if !data.isCurrent}
+{#if !isCurrent}
 	<div class="year-tabs-container">
 		<div class="container">
 			<nav class="year-tabs" aria-label="Year program navigation">

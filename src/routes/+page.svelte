@@ -9,10 +9,10 @@
 
 	let { data }: { data: PageData } = $props();
 
-	const currentYear = data.currentYear;
-	const randomTestimonials = data.testimonials;
-	const randomVideoTestimonials = data.videoTestimonials;
-	const combinedTestimonials: TestimonialCard[] = [
+	const currentYear = $derived(data.currentYear);
+	const randomTestimonials = $derived(data.testimonials);
+	const randomVideoTestimonials = $derived(data.videoTestimonials);
+	const combinedTestimonials = $derived<TestimonialCard[]>([
 		...randomTestimonials.map<TestimonialCard>((t) => ({
 			type: 'text' as const,
 			name: t.name,
@@ -28,7 +28,7 @@
 			institution: v.institution,
 			videoId: v.id
 		}))
-	];
+	]);
 
 	// Track which videos have been loaded (iframe shown)
 	let loadedVideos = $state(new Set<string>());
