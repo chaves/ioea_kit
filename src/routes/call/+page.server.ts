@@ -162,12 +162,16 @@ export const actions: Actions = {
 
 			throw redirect(303, '/call/step2');
 		} catch (error) {
-			// Handle unexpected errors
-			if (error instanceof Error && error.message.includes('redirect')) {
-				throw error; // Re-throw redirect errors
+			// Re-throw redirect errors (SvelteKit uses a special Redirect class)
+			if (error && typeof error === 'object' && 'status' in error && 'location' in error) {
+				throw error;
 			}
 
+			// Log the actual error for debugging
 			console.error('Form submission error:', error);
+			console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
+
+			// Return user-friendly error
 			return fail(500, {
 				error:
 					'An unexpected error occurred while processing your application. Please try again or contact support if the problem persists.',
