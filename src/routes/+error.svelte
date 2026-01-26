@@ -58,7 +58,7 @@
 
 				<div class="flex gap-4 justify-center mt-8">
 					<a href="/" class="btn btn-primary"> Go to Homepage </a>
-					<button onclick="window.location.reload()" class="btn btn-secondary">
+					<button onclick={() => window.location.reload()} class="btn btn-secondary">
 						Try Again
 					</button>
 				</div>
