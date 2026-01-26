@@ -9,6 +9,14 @@ export const load: PageServerLoad = async ({ cookies }) => {
 		throw redirect(303, '/call');
 	}
 
+	// Parse step1 data to get user status
+	let step1 = null;
+	try {
+		step1 = JSON.parse(step1Data);
+	} catch (e) {
+		throw redirect(303, '/call');
+	}
+
 	const countries = await prisma.countries.findMany({
 		orderBy: { name: 'asc' }
 	});
@@ -17,7 +25,8 @@ export const load: PageServerLoad = async ({ cookies }) => {
 		countries: countries.map((c) => ({
 			id: c.id,
 			name: c.name
-		}))
+		})),
+		status: step1.status // Pass status to determine if PhD student (1) or not
 	};
 };
 
@@ -27,6 +36,16 @@ export const actions: Actions = {
 		if (!step1Data) {
 			throw redirect(303, '/call');
 		}
+
+		// Parse step1 to get user status
+		let step1 = null;
+		try {
+			step1 = JSON.parse(step1Data);
+		} catch (e) {
+			throw redirect(303, '/call');
+		}
+
+		const isPhDStudent = step1.status === 1; // Status 1 = PhD student
 
 		const data = await request.formData();
 
@@ -50,9 +69,19 @@ export const actions: Actions = {
 			phd_summary: phdSummary ?? ''
 		};
 
-		// Validation
-		if (!university || !department || !country || !phdTitle || !phdAdName || !phdAdMail || !phdYear || !phdSummary) {
+		// Basic validation (required for all)
+		if (!university || !department || !country || !phdTitle || !phdSummary) {
 			return fail(400, { error: 'Please fill in all required fields.', values });
+		}
+
+		// Additional validation for PhD students only
+		if (isPhDStudent) {
+			if (!phdAdName || !phdAdMail || !phdYear) {
+				return fail(400, {
+					error: 'PhD students must provide supervisor name, email, and expected year of completion.',
+					values
+				});
+			}
 		}
 
 		// Store step 2 data
@@ -61,9 +90,9 @@ export const actions: Actions = {
 			department,
 			country: parseInt(country),
 			phd_title: phdTitle,
-			phd_ad_name: phdAdName,
-			phd_ad_mail: phdAdMail,
-			phd_year: parseInt(phdYear),
+			phd_ad_name: phdAdName || null,
+			phd_ad_mail: phdAdMail || null,
+			phd_year: phdYear ? parseInt(phdYear) : null,
 			phd_summary: phdSummary
 		});
 

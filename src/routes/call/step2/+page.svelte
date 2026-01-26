@@ -8,6 +8,7 @@
 	interface Props {
 		data: {
 			countries: Array<{ id: number; name: string }>;
+			status: number;
 		};
 		form?: {
 			error?: string;
@@ -17,6 +18,10 @@
 
 	let { data, form }: Props = $props();
 	let loading = $state(false);
+
+	// Check if user is a PhD student (status = 1)
+	const isPhDStudent = $derived(data.status === 1);
+	const titleLabel = $derived(isPhDStudent ? 'Title of PhD' : 'Title of Research Project');
 </script>
 
 <svelte:head>
@@ -105,10 +110,12 @@
 						</select>
 					</div>
 
-					<h2 class="mt-8 mb-6 pb-3 border-b-2 border-border">PhD Project / Current Research</h2>
+					<h2 class="mt-8 mb-6 pb-3 border-b-2 border-border">
+						{isPhDStudent ? 'PhD Project' : 'Research Project'}
+					</h2>
 
 					<div class="mb-6">
-						<label for="phd_title" class="form-label">Title of PhD / Research Project *</label>
+						<label for="phd_title" class="form-label">{titleLabel} *</label>
 						<input
 							type="text"
 							id="phd_title"
@@ -119,48 +126,50 @@
 						/>
 					</div>
 
-					<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-						<div class="mb-6">
-							<label for="phd_ad_name" class="form-label">Supervisor Name *</label>
-							<input
-								type="text"
-								id="phd_ad_name"
-								name="phd_ad_name"
-								class="form-input"
-								required
-								value={form?.values?.phd_ad_name ?? ''}
-							/>
+					{#if isPhDStudent}
+						<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+							<div class="mb-6">
+								<label for="phd_ad_name" class="form-label">Supervisor Name *</label>
+								<input
+									type="text"
+									id="phd_ad_name"
+									name="phd_ad_name"
+									class="form-input"
+									required
+									value={form?.values?.phd_ad_name ?? ''}
+								/>
+							</div>
+							<div class="mb-6">
+								<label for="phd_ad_mail" class="form-label">Supervisor Email *</label>
+								<input
+									type="email"
+									id="phd_ad_mail"
+									name="phd_ad_mail"
+									class="form-input"
+									required
+									value={form?.values?.phd_ad_mail ?? ''}
+								/>
+							</div>
 						</div>
-						<div class="mb-6">
-							<label for="phd_ad_mail" class="form-label">Supervisor Email *</label>
-							<input
-								type="email"
-								id="phd_ad_mail"
-								name="phd_ad_mail"
-								class="form-input"
-								required
-								value={form?.values?.phd_ad_mail ?? ''}
-							/>
-						</div>
-					</div>
 
-					<div class="mb-6">
-						<label for="phd_year" class="form-label">Expected Year of Completion *</label>
-						<input
-							type="number"
-							id="phd_year"
-							name="phd_year"
-							class="form-input"
-							required
-							min="2024"
-							max="2035"
-							value={form?.values?.phd_year ?? ''}
-						/>
-					</div>
+						<div class="mb-6">
+							<label for="phd_year" class="form-label">Expected Year of Completion *</label>
+							<input
+								type="number"
+								id="phd_year"
+								name="phd_year"
+								class="form-input"
+								required
+								min="2024"
+								max="2035"
+								value={form?.values?.phd_year ?? ''}
+							/>
+						</div>
+					{/if}
 
 					<div class="mb-6">
 						<label for="phd_summary" class="form-label">
-							Summary of Research (max 500 words) *
+							{isPhDStudent ? 'PhD Research Summary' : 'Research Summary'} (max 500 words) *
 						</label>
 						<textarea
 							id="phd_summary"
@@ -168,7 +177,9 @@
 							class="form-input resize-y min-h-[150px]"
 							rows="8"
 							required
-							placeholder="Describe your research project, methodology, and expected contributions..."
+							placeholder={isPhDStudent
+								? 'Describe your PhD research, methodology, and expected contributions...'
+								: 'Describe your research interests, current projects, and contributions...'}
 						>{form?.values?.phd_summary ?? ''}</textarea>
 					</div>
 
