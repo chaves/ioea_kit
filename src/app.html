@@ -4,12 +4,29 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content="Institutional and Organizational Economics Academy - Annual summer school in Corsica, France" />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+		<!-- DNS Prefetch and Preconnect for external resources -->
+		<link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+		<!-- Google Fonts with display=swap for better performance -->
+		<link
+			href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet"
+			media="print"
+			onload="this.media='all'"
+		/>
+		<noscript>
+			<link
+				href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap"
+				rel="stylesheet"
+			/>
+		</noscript>
+
 		%sveltekit.head%
 	</head>
-	<body data-sveltekit-preload-data="hover">
+	<body data-sveltekit-preload-data="tap">
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
 </html>
