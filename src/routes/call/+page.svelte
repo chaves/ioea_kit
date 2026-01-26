@@ -18,6 +18,16 @@
 
 	let { data, form }: Props = $props();
 	let loading = $state(false);
+	let errorDiv: HTMLDivElement | undefined = $state();
+
+	// Scroll to error message when form changes
+	$effect(() => {
+		if (form?.error && errorDiv) {
+			setTimeout(() => {
+				errorDiv?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}, 100);
+		}
+	});
 </script>
 
 <svelte:head>
@@ -47,8 +57,26 @@
 				</div>
 
 				{#if form?.error}
-					<div class="alert alert-error">
-						{form.error}
+					<div bind:this={errorDiv} class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg">
+						<div class="flex items-start">
+							<svg
+								class="w-6 h-6 text-red-500 mr-3 flex-shrink-0"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+								></path>
+							</svg>
+							<div class="flex-1">
+								<p class="text-sm font-semibold text-red-800 mb-1">Error</p>
+								<p class="text-sm text-red-700">{form.error}</p>
+							</div>
+						</div>
 					</div>
 				{/if}
 
@@ -59,13 +87,14 @@
 						return async ({ result, update }) => {
 							loading = false;
 							if (result.type === 'redirect') {
-								goto(result.location);
+								await goto(result.location);
 							} else {
 								await update();
 							}
 						};
 					}}
 					class="bg-white p-8 rounded-lg border border-border"
+					novalidate
 				>
 					<h2 class="mb-6 pb-3 border-b-2 border-border">Personal Information</h2>
 
@@ -78,7 +107,10 @@
 								name="first_name"
 								class="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
 								required
+								minlength="2"
+								maxlength="255"
 								value={form?.values?.first_name ?? ''}
+								autocomplete="given-name"
 							/>
 						</div>
 						<div class="mb-6">
@@ -89,7 +121,10 @@
 								name="last_name"
 								class="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
 								required
+								minlength="2"
+								maxlength="255"
 								value={form?.values?.last_name ?? ''}
+								autocomplete="family-name"
 							/>
 						</div>
 					</div>
@@ -103,7 +138,10 @@
 								name="email"
 								class="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
 								required
+								maxlength="255"
 								value={form?.values?.email ?? ''}
+								autocomplete="email"
+								placeholder="name@example.com"
 							/>
 						</div>
 						<div class="mb-6">
@@ -163,6 +201,8 @@
 								name="domain"
 								class="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
 								required
+								minlength="3"
+								maxlength="255"
 								placeholder="e.g., Economics, Management, Law"
 								value={form?.values?.domain ?? ''}
 							/>
@@ -177,6 +217,8 @@
 							name="diploma"
 							class="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
 							required
+							minlength="3"
+							maxlength="255"
 							placeholder="e.g., Master in Economics"
 							value={form?.values?.diploma ?? ''}
 						/>
