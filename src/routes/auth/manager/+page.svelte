@@ -35,7 +35,7 @@
 	let { data }: Props = $props();
 
 	function setFilter(filter: string) {
-		goto(`/admin/manager?filter=${filter}`);
+		goto(`/auth/manager?filter=${filter}`);
 	}
 
 	function getStatusLabel(status: number | null): string {
@@ -124,7 +124,7 @@
 				{#each data.proposals as proposal}
 					<tr>
 						<td>
-							<a href="/admin/manager/{proposal.id}">
+							<a href="/auth/manager/{proposal.id}">
 								{proposal.lastName}, {proposal.firstName}
 							</a>
 						</td>

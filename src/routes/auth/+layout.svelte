@@ -3,8 +3,8 @@
 
 	let { children, data } = $props();
 
-	// Don't show admin layout on login page
-	const isLoginPage = $derived($page.url.pathname === '/admin/login');
+	// Don't show auth layout on login page
+	const isLoginPage = $derived($page.url.pathname === '/auth/login');
 </script>
 
 {#if isLoginPage}
@@ -16,12 +16,12 @@
 				<a href="/" class="no-underline">
 					<img src="/site-logo.png" alt="IOEA" class="h-10 brightness-0 invert" onerror={(e) => e.currentTarget.outerHTML = 'IOEA'} />
 				</a>
-				<span class="bg-secondary px-3 py-1 rounded-full text-xs font-semibold uppercase">Admin</span>
+				<span class="bg-secondary px-3 py-1 rounded-full text-xs font-semibold uppercase">Auth</span>
 			</div>
 
 			<nav class="flex-1 py-6">
-				{#if data.session?.userType === 'admin'}
-					<a href="/admin/manager" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/admin/manager' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+				{#if data.session?.roles?.includes('admin')}
+					<a href="/auth/manager" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/manager' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 							<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
 							<circle cx="9" cy="7" r="4"></circle>
@@ -31,7 +31,7 @@
 						Applications
 					</a>
 				{/if}
-				<a href="/admin/reviewer" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/admin/reviewer' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+				<a href="/auth/reviewer" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/reviewer' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
 						<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
@@ -45,7 +45,7 @@
 					<span class="block font-semibold">{data.session?.name ?? 'User'}</span>
 					<span class="text-sm opacity-70 capitalize">{data.session?.reviewerType ?? 'Reviewer'}</span>
 				</div>
-				<form method="POST" action="/admin/logout">
+				<form method="POST" action="/auth/logout">
 					<button type="submit" class="flex items-center gap-2 bg-white/10 border-none text-white px-4 py-2 rounded-md cursor-pointer text-sm transition-colors duration-200 hover:bg-white/20">
 						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 							<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>

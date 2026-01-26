@@ -1,13 +1,13 @@
 import { redirect, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { prisma } from '$lib/server/db';
-import { getSession } from '$lib/server/auth';
+import { getSession, hasAnyRole } from '$lib/server/auth';
 
 export const load: PageServerLoad = async ({ cookies }) => {
 	const session = await getSession(cookies);
 
-	if (!session || session.userType !== 'reviewer') {
-		throw redirect(302, '/admin/login');
+	if (!session || !hasAnyRole(session, ['admin', 'reviewer'])) {
+		throw redirect(302, '/auth/login');
 	}
 
 	const reviewerGroup = session.reviewerGroup ?? 0;
@@ -55,8 +55,8 @@ export const actions: Actions = {
 	rate: async ({ cookies, request }) => {
 		const session = await getSession(cookies);
 
-		if (!session || session.userType !== 'reviewer') {
-			throw redirect(302, '/admin/login');
+		if (!session || !hasAnyRole(session, ['admin', 'reviewer'])) {
+			throw redirect(302, '/auth/login');
 		}
 
 		const formData = await request.formData();

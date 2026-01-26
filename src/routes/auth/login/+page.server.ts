@@ -1,15 +1,15 @@
 import { redirect, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
-import { validateAdminCredentials, createSession, getSession } from '$lib/server/auth';
+import { validateUserCredentials, createSession, getSession, hasAnyRole } from '$lib/server/auth';
 
 export const load: PageServerLoad = async ({ cookies }) => {
 	const session = await getSession(cookies);
 
-	if (session && (session.userType === 'admin' || session.userType === 'reviewer')) {
-		if (session.reviewerType === 'manager') {
-			throw redirect(302, '/admin/manager');
+	if (session && hasAnyRole(session, ['admin', 'reviewer'])) {
+		if (hasAnyRole(session, ['admin'])) {
+			throw redirect(302, '/auth/manager');
 		}
-		throw redirect(302, '/admin/reviewer');
+		throw redirect(302, '/auth/reviewer');
 	}
 
 	return {};
@@ -25,24 +25,29 @@ export const actions: Actions = {
 			return fail(400, { error: 'Email and password are required', email });
 		}
 
-		const user = await validateAdminCredentials(email, password);
+		const user = await validateUserCredentials(email, password);
 
 		if (!user) {
 			return fail(401, { error: 'Invalid credentials', email });
 		}
 
+		// Check if user has admin or reviewer role
+		if (!hasAnyRole({ roles: user.roles } as any, ['admin', 'reviewer'])) {
+			return fail(403, { error: 'Access denied. Admin or reviewer role required.', email });
+		}
+
 		await createSession(cookies, {
 			userId: user.userId,
-			userType: user.reviewerType === 'manager' ? 'admin' : 'reviewer',
-			email,
+			email: user.email,
 			name: user.name,
-			reviewerGroup: user.reviewerGroup ?? undefined,
+			roles: user.roles,
+			reviewerGroup: user.reviewerGroup,
 			reviewerType: user.reviewerType
 		});
 
-		if (user.reviewerType === 'manager') {
-			throw redirect(302, '/admin/manager');
+		if (user.roles.includes('admin')) {
+			throw redirect(302, '/auth/manager');
 		}
-		throw redirect(302, '/admin/reviewer');
+		throw redirect(302, '/auth/reviewer');
 	}
 };

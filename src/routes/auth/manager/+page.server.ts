@@ -1,13 +1,13 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { prisma } from '$lib/server/db';
-import { getSession } from '$lib/server/auth';
+import { getSession, hasRole } from '$lib/server/auth';
 
 export const load: PageServerLoad = async ({ cookies }) => {
 	const session = await getSession(cookies);
 
-	if (!session || (session.userType !== 'admin' && session.reviewerType !== 'manager')) {
-		throw redirect(302, '/admin/login');
+	if (!session || !hasRole(session, 'admin')) {
+		throw redirect(302, '/auth/login');
 	}
 
 	// Get all proposals with their notes

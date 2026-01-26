@@ -5,7 +5,7 @@ import { destroySession } from '$lib/server/auth';
 export const actions: Actions = {
 	default: async ({ cookies }) => {
 		await destroySession(cookies);
-		throw redirect(303, '/admin/login');
+		throw redirect(303, '/auth/login');
 	}
 };
 

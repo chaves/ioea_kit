@@ -1,13 +1,13 @@
 import { redirect, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { prisma } from '$lib/server/db';
-import { getSession } from '$lib/server/auth';
+import { getSession, hasRole } from '$lib/server/auth';
 import { config } from '$lib/config';
 
 export const load: PageServerLoad = async ({ cookies }) => {
 	const session = await getSession(cookies);
 
-	if (!session || session.userType !== 'student') {
+	if (!session || !hasRole(session, 'student')) {
 		throw redirect(302, '/students/login');
 	}
 
@@ -42,7 +42,7 @@ export const actions: Actions = {
 	default: async ({ cookies, request }) => {
 		const session = await getSession(cookies);
 
-		if (!session || session.userType !== 'student') {
+		if (!session || !hasRole(session, 'student')) {
 			throw redirect(302, '/students/login');
 		}
 

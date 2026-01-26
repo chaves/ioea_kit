@@ -31,7 +31,7 @@
 	let expandedId = $state<number | null>(null);
 
 	function setFilter(filter: string) {
-		goto(`/admin/reviewer?filter=${filter}`);
+		goto(`/auth/reviewer?filter=${filter}`);
 	}
 
 	function toggleExpand(id: number) {
