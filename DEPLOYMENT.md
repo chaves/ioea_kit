@@ -25,6 +25,8 @@ DATABASE_URL=mysql://user:password@host:port/database
 HOST=0.0.0.0
 ```
 
+**Note**: Additional environment variables are set in `server.js` (see below).
+
 ### 3. Build et déploiement
 
 Après avoir poussé le code sur le serveur:
@@ -139,6 +141,74 @@ ioea_kit/
 └── svelte.config.js      # Configuration adapter-node
 ```
 
+## Critical Production Configuration (server.js)
+
+The `server.js` file sets several critical environment variables that **must be configured before** the SvelteKit handler is imported. This is done using dynamic import:
+
+### BODY_SIZE_LIMIT
+
+```javascript
+process.env.BODY_SIZE_LIMIT = '12582912'; // 12MB
+```
+
+**Purpose**: Allows file uploads up to 12MB (default is 512KB).
+
+**Symptoms if missing**: Form submissions with file uploads fail with:
+```
+Error: Content-length of XXXXX exceeds limit of 524288 bytes.
+```
+
+### ORIGIN (CSRF Protection)
+
+```javascript
+process.env.ORIGIN = 'https://www.ioea.eu';
+```
+
+**Purpose**: SvelteKit validates that form submissions come from the correct origin for CSRF protection.
+
+**CRITICAL**: This **must match exactly** the domain users access the site from:
+- ✅ `https://www.ioea.eu` (correct)
+- ❌ `https://ioea.eu` (wrong - missing www)
+- ❌ `https://ioea.org` (wrong - different domain)
+
+**Symptoms if wrong**: All form submissions are blocked silently or return 403 errors.
+
+### Reverse Proxy Headers
+
+```javascript
+process.env.PROTOCOL_HEADER = 'x-forwarded-proto';
+process.env.HOST_HEADER = 'x-forwarded-host';
+```
+
+**Purpose**: Trust forwarded headers from AlwaysData's reverse proxy for correct protocol/host detection.
+
+### Why Dynamic Import?
+
+ES module imports are hoisted, meaning they execute before any other code. To ensure environment variables are set before the handler reads them, we use dynamic import:
+
+```javascript
+// Set env vars FIRST
+process.env.BODY_SIZE_LIMIT = '12582912';
+process.env.ORIGIN = 'https://www.ioea.eu';
+
+// THEN import handler
+const { handler } = await import('./build/handler.js');
+```
+
+## Form Upload Configuration (step3)
+
+### File Validation
+
+- **Max file size**: 5MB per file (CV + paper)
+- **Accepted format**: PDF only (case-insensitive: `.pdf`, `.PDF`, `.Pdf`)
+- **Upload directory**: `uploads/IOEA{year}_call/`
+
+### Common Issues
+
+1. **"Only PDF files are accepted"** - File extension check is case-insensitive
+2. **"Content-length exceeds limit"** - BODY_SIZE_LIMIT not set correctly
+3. **Form blocked at step 1** - ORIGIN doesn't match the actual domain
+
 ## Notes importantes
 
 1. **Ne jamais utiliser `--no-verify`** lors des commits - les hooks pre-commit sont importants
@@ -148,3 +218,7 @@ ioea_kit/
    NODE_ENV=production pnpm start
    ```
 3. **Surveiller les logs** après chaque déploiement pour détecter les problèmes rapidement
+4. **Vérifier les variables d'environnement** dans les logs de démarrage:
+   ```
+   Body size limit: 12582912 bytes
+   ```
