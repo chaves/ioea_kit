@@ -49,7 +49,7 @@ export const actions: Actions = {
       return fail(400, { error: "File size must be less than 5MB." });
     }
 
-    if (!cvFile.name.endsWith(".pdf") || !paperFile.name.endsWith(".pdf")) {
+    if (!cvFile.name.toLowerCase().endsWith(".pdf") || !paperFile.name.toLowerCase().endsWith(".pdf")) {
       return fail(400, { error: "Only PDF files are accepted." });
     }
 
