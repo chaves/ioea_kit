@@ -9,6 +9,7 @@ import { staticConfig } from '../config';
 interface DynamicConfig {
 	session: {
 		year: number;
+		sessionNumber: number;
 		startDate: number;
 		endDate: number;
 		month: string;
@@ -107,9 +108,16 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 
 		// Build the config object
 		// NOTE: Session dates should come from database - fallbacks are generic/placeholder values
+		const sessionYear = parseInt(configMap.get('session.year') || String(staticConfig.currentYear), 10);
+		const sessionNumberFromDB = configMap.get('session.sessionNumber');
+		const sessionNumber = sessionNumberFromDB 
+			? parseInt(sessionNumberFromDB, 10)
+			: sessionYear - staticConfig.archiveFromYear + 1; // Fallback calculation
+		
 		const dynamicConfig: DynamicConfig = {
 			session: {
-				year: parseInt(configMap.get('session.year') || String(staticConfig.currentYear), 10),
+				year: sessionYear,
+				sessionNumber: sessionNumber,
 				startDate: parseInt(configMap.get('session.startDate') || '0', 10),
 				endDate: parseInt(configMap.get('session.endDate') || '0', 10),
 				month: configMap.get('session.month') || 'TBD',
@@ -159,6 +167,7 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 		return {
 			session: {
 				year: staticConfig.currentYear,
+				sessionNumber: staticConfig.currentYear - staticConfig.archiveFromYear + 1,
 				startDate: 0,
 				endDate: 0,
 				month: 'TBD',

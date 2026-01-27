@@ -18,6 +18,7 @@ const defaultDynamicConfig = {
   // Session dates (PRIMARY SOURCE: database site_config table)
   session: {
     year: staticConfig.currentYear,
+    sessionNumber: staticConfig.currentYear - staticConfig.archiveFromYear + 1,
     startDate: 0,
     endDate: 0,
     month: "TBD",

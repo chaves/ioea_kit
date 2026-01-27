@@ -15,6 +15,31 @@
 
 	// Get session dates from dynamic config (via layout)
 	const sessionDates = $derived(data.dynamicConfig?.session?.fullDateRange || '6-10 May 2026');
+	
+	// Get session number from config (database) or calculate it
+	const sessionNumber = $derived(
+		data.dynamicConfig?.session?.sessionNumber || (currentYear - 2002 + 1)
+	);
+	
+	// Calculate ordinal suffix (1st, 2nd, 3rd, 4th, etc.)
+	function getOrdinal(num: number): string {
+		const lastDigit = num % 10;
+		const lastTwoDigits = num % 100;
+		
+		// Handle special cases: 11th, 12th, 13th (not 11st, 12nd, 13rd)
+		if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {
+			return 'th';
+		}
+		
+		// Handle regular cases
+		if (lastDigit === 1) return 'st';
+		if (lastDigit === 2) return 'nd';
+		if (lastDigit === 3) return 'rd';
+		return 'th';
+	}
+	
+	const sessionOrdinal = $derived(getOrdinal(sessionNumber));
+	
 	const combinedTestimonials = $derived<TestimonialCard[]>([
 		...randomTestimonials.map<TestimonialCard>((t) => ({
 			type: 'text' as const,
@@ -83,7 +108,7 @@
 		<div class="relative z-10">
 			<h1 class="text-white text-4xl leading-tight mb-4 sm:text-3xl">Institutional and Organizational Economics<br />Academy</h1>
 			<p class="text-xl opacity-95 mb-6 leading-relaxed font-medium sm:text-lg">
-				<strong>The 22nd session of the Institutional and Organizational Economics Academy</strong>
+				<strong>The {sessionNumber}{sessionOrdinal} session of the Institutional and Organizational Economics Academy</strong>
 				<strong>will be held in Cargèse (Corsica - France) on {sessionDates}.</strong>
 			</p>
 			<div class="flex gap-4 flex-wrap">

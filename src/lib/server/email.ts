@@ -1,10 +1,28 @@
-import { config } from "$lib/config";
+import { config, getConfig, staticConfig } from "$lib/config";
+import { loadDynamicConfig } from "./config";
 
 interface EmailOptions {
   to: string;
   subject: string;
   html: string;
   from?: string;
+}
+
+// Helper function to get ordinal suffix
+function getOrdinal(num: number): string {
+	const lastDigit = num % 10;
+	const lastTwoDigits = num % 100;
+	
+	// Handle special cases: 11th, 12th, 13th (not 11st, 12nd, 13rd)
+	if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {
+		return 'th';
+	}
+	
+	// Handle regular cases
+	if (lastDigit === 1) return 'st';
+	if (lastDigit === 2) return 'nd';
+	if (lastDigit === 3) return 'rd';
+	return 'th';
 }
 
 // Simple email sending utility
@@ -65,12 +83,17 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
 }
 
 // Application receipt email template
-export function applicationReceiptEmail(applicant: {
+export async function applicationReceiptEmail(applicant: {
   firstName: string;
   lastName: string;
   email: string;
-}): EmailOptions {
-  const year = config.currentYear;
+}): Promise<EmailOptions> {
+  // Load dynamic config to get session number
+  const dynamicConfig = await loadDynamicConfig();
+  const fullConfig = getConfig(dynamicConfig);
+  const year = fullConfig.session.year;
+  const sessionNumber = fullConfig.session.sessionNumber || (year - staticConfig.archiveFromYear + 1);
+  const sessionOrdinal = getOrdinal(sessionNumber);
 
   return {
     to: applicant.email,
@@ -81,11 +104,11 @@ export function applicationReceiptEmail(applicant: {
 
 				<p>Dear ${applicant.firstName} ${applicant.lastName},</p>
 
-				<p>We have successfully received your application for the Institutional and Organizational Economics Academy ${year}.</p>
+				<p>We have successfully received your application for the ${sessionNumber}${sessionOrdinal} session of the Institutional and Organizational Economics Academy ${year}.</p>
 
-				<p>Your application will be reviewed by our selection committee. You will be notified about the outcome ${config.deadlines.notification}.</p>
+				<p>Your application will be reviewed by our selection committee. You will be notified about the outcome ${fullConfig.deadlines.notification}.</p>
 
-				<p>If you have any questions, please don't hesitate to contact us at <a href="mailto:${config.emails.coordination}">${config.emails.coordination}</a>.</p>
+				<p>If you have any questions, please don't hesitate to contact us at <a href="mailto:${fullConfig.emails.coordination}">${fullConfig.emails.coordination}</a>.</p>
 
 				<p>Best regards,<br>
 				The IOEA Team</p>

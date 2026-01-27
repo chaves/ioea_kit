@@ -104,7 +104,7 @@ export const actions: Actions = {
       // Send confirmation email (don't fail if email fails)
       try {
         const emailSent = await sendEmail(
-          applicationReceiptEmail({
+          await applicationReceiptEmail({
             firstName: step1.first_name,
             lastName: step1.last_name,
             email: step1.email,

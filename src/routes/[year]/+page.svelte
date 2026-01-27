@@ -1,7 +1,7 @@
 <script lang="ts">
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
-	import { getConfig } from '$lib/config';
+	import { getConfig, staticConfig } from '$lib/config';
 
 	interface Props {
 		data: {
@@ -28,8 +28,29 @@
 	const dynamicConfig = $derived(data.dynamicConfig);
 	const config = $derived(getConfig(dynamicConfig));
 
-	const sessionNumber = $derived(year - 2002 + 1);
-	const sessionOrdinal = $derived(sessionNumber === 22 ? 'nd' : sessionNumber === 21 ? 'st' : sessionNumber === 23 ? 'rd' : 'th');
+	// Use session number from config (database) if available, otherwise calculate it
+	const sessionNumber = $derived(
+		config.session.sessionNumber || (year - staticConfig.archiveFromYear + 1)
+	);
+	
+	// Calculate ordinal suffix (1st, 2nd, 3rd, 4th, etc.)
+	function getOrdinal(num: number): string {
+		const lastDigit = num % 10;
+		const lastTwoDigits = num % 100;
+		
+		// Handle special cases: 11th, 12th, 13th (not 11st, 12nd, 13rd)
+		if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {
+			return 'th';
+		}
+		
+		// Handle regular cases
+		if (lastDigit === 1) return 'st';
+		if (lastDigit === 2) return 'nd';
+		if (lastDigit === 3) return 'rd';
+		return 'th';
+	}
+	
+	const sessionOrdinal = $derived(getOrdinal(sessionNumber));
 </script>
 
 <svelte:head>
