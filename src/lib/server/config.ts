@@ -120,10 +120,10 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 				webmaster: configMap.get('email.webmaster') || 'webmaster@ioea.eu'
 			},
 			deadlines: {
-				application: configMap.get('deadline.application') || 'TBD',
-				notification: configMap.get('deadline.notification') || 'TBD',
-				registration: configMap.get('deadline.registration') || 'TBD',
-				students: configMap.get('deadline.students') || 'TBD'
+				application: configMap.get('deadline.application') || 'March 15th',
+				notification: configMap.get('deadline.notification') || 'by March 15th',
+				registration: configMap.get('deadline.registration') || 'March 27th',
+				students: configMap.get('deadline.students') || 'March 27th'
 			},
 		};
 
@@ -153,10 +153,10 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 				webmaster: 'webmaster@ioea.eu'
 			},
 			deadlines: {
-				application: 'TBD',
-				notification: 'TBD',
-				registration: 'TBD',
-				students: 'TBD'
+				application: 'March 15th',
+				notification: 'by March 15th',
+				registration: 'March 27th',
+				students: 'March 27th'
 			},
 		};
 	}
