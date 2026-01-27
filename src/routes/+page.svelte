@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { config, staticConfig } from '$lib/config';
+	import { config, staticConfig, getConfig } from '$lib/config';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import type { PageData } from './$types';
 
