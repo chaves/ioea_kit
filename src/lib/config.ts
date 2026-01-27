@@ -12,11 +12,9 @@ export const staticConfig = {
   badPhotos: [2020, 2021] as number[],
 } as const;
 
-// Default configuration (fallback for dynamic values)
-// NOTE: Session dates should be loaded from database (site_config table)
-// These are fallback values only, used if database is unavailable
+// Default configuration values
 const defaultDynamicConfig = {
-  // Session dates (PRIMARY SOURCE: database site_config table)
+  // Session dates
   session: {
     year: staticConfig.currentYear,
     sessionNumber: staticConfig.sessionNumber,
