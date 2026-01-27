@@ -35,20 +35,20 @@
 		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
 				<div class="mb-6">
-					<a href={backUrl} class="text-primary font-medium inline-flex items-center gap-2 transition-colors duration-200 hover:text-secondary no-underline">
+					<a href={backUrl} class="inline-flex gap-2 items-center font-medium no-underline transition-colors duration-200 text-primary hover:text-secondary">
 						← Back to {data.presentation.type === 'lectures' ? 'Lectures' : 'Workshops'}
 					</a>
 				</div>
 
 				<article class="bg-white rounded-xl border border-border p-8 shadow-[0_2px_8px_rgba(0,0,0,0.06)] sm:p-6">
-					<header class="flex gap-4 flex-wrap mb-8 pb-6 border-b border-border">
+					<header class="flex flex-wrap gap-4 pb-6 mb-8 border-b border-border">
 						{#if data.presentation.theme}
-							<div class="bg-gradient-to-br from-primary to-primary-dark text-white px-4 py-2 rounded-lg font-semibold text-sm">
+							<div class="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-br rounded-lg from-primary to-primary-dark">
 								{data.presentation.theme}
 							</div>
 						{/if}
 						{#if data.presentation.date}
-							<div class="bg-bg-alt text-text px-4 py-2 rounded-lg font-medium text-sm">
+							<div class="px-4 py-2 text-sm font-medium rounded-lg bg-bg-alt text-text">
 								{new Date(data.presentation.date).toLocaleDateString('en-US', {
 									weekday: 'long',
 									year: 'numeric',
@@ -59,11 +59,11 @@
 						{/if}
 					</header>
 
-					<div class="flex gap-6 items-start justify-between mb-8 pb-6 border-b border-border flex-col-reverse sm:flex-row sm:items-start sm:text-left items-center text-center">
+					<div class="flex flex-col-reverse gap-6 justify-between items-start items-center pb-6 mb-8 text-center border-b border-border sm:flex-row sm:items-start sm:text-left">
 						<div class="flex-1 w-full sm:w-auto">
 							<h2 class="mb-2 text-2xl">
 								{#if data.presentation.author.website}
-									<a href={data.presentation.author.website} target="_blank" rel="noopener" class="text-primary no-underline hover:text-secondary">
+									<a href={data.presentation.author.website} target="_blank" rel="noopener" class="no-underline text-primary hover:text-secondary">
 										{data.presentation.author.firstName} {data.presentation.author.lastName}
 									</a>
 								{:else}
@@ -71,14 +71,14 @@
 								{/if}
 							</h2>
 							{#if data.presentation.author.institution}
-								<p class="text-text-light text-base m-0">{data.presentation.author.institution}</p>
+								<p class="m-0 text-base text-text-light">{data.presentation.author.institution}</p>
 							{/if}
 						</div>
 						{#if data.presentation.author.photo}
 							<img
 								src={`/images/lec/${data.presentation.author.photo}`}
 								alt="{data.presentation.author.firstName} {data.presentation.author.lastName}"
-								class="max-w-[250px] w-auto h-auto rounded-full object-cover border-4 border-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] flex-shrink-0"
+								class="max-w-[200px] w-auto h-auto rounded-full object-cover border-4 border-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] flex-shrink-0"
 								onerror={(e) => {
 									const img = e.currentTarget as HTMLImageElement;
 									img.style.display = 'none';
@@ -93,7 +93,7 @@
 
 					{#if data.presentation.abstract}
 						<div class="mb-8">
-							<h3 class="text-xl mb-4 text-primary">Abstract</h3>
+							<h3 class="mb-4 text-xl text-primary">Abstract</h3>
 							<div class="text-text leading-relaxed text-[1.05rem]">{@html data.presentation.abstract}</div>
 						</div>
 					{/if}
