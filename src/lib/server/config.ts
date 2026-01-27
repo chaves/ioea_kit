@@ -73,6 +73,20 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 	try {
 		// Load all config from database
 		const configs = await prisma.site_config.findMany();
+		
+		// Debug: Log raw database results
+		console.log(`[Config] Total configs loaded from DB: ${configs.length}`);
+		const sessionConfigs = configs.filter(c => c.key.startsWith('session.'));
+		console.log(`[Config] Session-related configs from DB:`, sessionConfigs.map(c => ({ key: c.key, value: c.value })));
+		
+		// Check specifically for session.sessionNumber
+		const sessionNumberRecord = configs.find(c => c.key === 'session.sessionNumber');
+		if (sessionNumberRecord) {
+			console.log(`[Config] ✅ Found session.sessionNumber in DB: key="${sessionNumberRecord.key}", value="${sessionNumberRecord.value}", type=${typeof sessionNumberRecord.value}`);
+		} else {
+			console.error(`[Config] ❌ session.sessionNumber NOT FOUND in database!`);
+			console.error(`[Config] Available keys:`, configs.map(c => c.key));
+		}
 
 		// Convert to a Map for easy lookup
 		const configMap = new Map<string, string>(
@@ -81,8 +95,8 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 		
 		// Debug: Log all session-related config keys
 		const sessionKeys = Array.from(configMap.keys()).filter(k => k.startsWith('session.'));
-		console.log(`[Config] Found session config keys:`, sessionKeys);
-		console.log(`[Config] All config keys:`, Array.from(configMap.keys()));
+		console.log(`[Config] Session keys in Map:`, sessionKeys);
+		console.log(`[Config] session.sessionNumber in Map:`, configMap.get('session.sessionNumber'));
 
 		// Load status options from call_statuses table
 		const statuses = await prisma.call_statuses.findMany({
