@@ -3,7 +3,7 @@
  * Returns static config values (no longer loads from database)
  */
 
-import { staticConfig, defaultDynamicConfig } from '../config';
+import { config } from '../config';
 
 /**
  * Load configuration - now just returns static config
@@ -11,8 +11,12 @@ import { staticConfig, defaultDynamicConfig } from '../config';
  * @deprecated Use getConfig() from $lib/config instead
  */
 export async function loadDynamicConfig() {
-	// Return static config values directly
-	return defaultDynamicConfig;
+	// Return config values directly
+	return {
+		session: config.session,
+		emails: config.emails,
+		deadlines: config.deadlines,
+	};
 }
 
 /**
