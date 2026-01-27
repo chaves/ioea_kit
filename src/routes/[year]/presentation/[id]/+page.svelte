@@ -78,7 +78,7 @@
 							<img
 								src={`/images/lec/${data.presentation.author.photo}`}
 								alt="{data.presentation.author.firstName} {data.presentation.author.lastName}"
-								class="max-w-[250px] w-[120px] h-[120px] rounded-full object-cover border-4 border-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] flex-shrink-0 sm:w-[100px] sm:h-[100px]"
+								class="max-w-[250px] w-auto h-auto rounded-full object-cover border-4 border-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] flex-shrink-0"
 								onerror={(e) => {
 									const img = e.currentTarget as HTMLImageElement;
 									img.style.display = 'none';
