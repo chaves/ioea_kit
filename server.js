@@ -14,7 +14,7 @@ process.env.BODY_SIZE_LIMIT = process.env.BODY_SIZE_LIMIT || '12582912';
 // Set ORIGIN for CSRF protection (required for form submissions in production)
 // This must match the actual domain users access the site from
 if (!process.env.ORIGIN) {
-	process.env.ORIGIN = 'https://ioea.org';
+	process.env.ORIGIN = 'https://www.ioea.eu';
 }
 
 // For reverse proxy setups (AlwaysData), trust forwarded headers
