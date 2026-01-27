@@ -176,14 +176,7 @@ export const actions: Actions = {
 				sameSite: 'lax',
 				maxAge: 60 * 60 // 1 hour
 			});
-
-			throw redirect(303, '/call/step2');
 		} catch (error) {
-			// Re-throw redirect errors (SvelteKit uses a special Redirect class)
-			if (error && typeof error === 'object' && 'status' in error && 'location' in error) {
-				throw error;
-			}
-
 			// Log the actual error for debugging
 			console.error('Form submission error:', error);
 			console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
@@ -195,5 +188,8 @@ export const actions: Actions = {
 				values
 			});
 		}
+
+		// Redirect outside try-catch to avoid catching SvelteKit's redirect exception
+		redirect(303, '/call/step2');
 	}
 };

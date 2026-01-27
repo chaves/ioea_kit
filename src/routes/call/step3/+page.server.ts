@@ -123,26 +123,15 @@ export const actions: Actions = {
       // Clear cookies
       cookies.delete("call_step1", { path: "/call" });
       cookies.delete("call_step2", { path: "/call" });
-
-      throw redirect(303, "/call/success");
     } catch (error) {
-      // Check if it's a redirect (SvelteKit redirects have status and location properties)
-      if (
-        error &&
-        typeof error === "object" &&
-        "status" in error &&
-        "location" in error
-      ) {
-        const redirectError = error as { status: number; location: string };
-        if (redirectError.status >= 300 && redirectError.status < 400) {
-          throw error; // Re-throw redirects
-        }
-      }
       console.error("Application submission error:", error);
       return fail(500, {
         error:
           "An error occurred while submitting your application. Please try again.",
       });
     }
+
+    // Redirect outside try-catch to avoid catching SvelteKit's redirect exception
+    redirect(303, "/call/success");
   },
 };
