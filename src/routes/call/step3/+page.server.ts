@@ -54,8 +54,12 @@ export const actions: Actions = {
     }
 
     try {
+      console.log("[Step3] Starting submission process...");
+      console.log("[Step3] UPLOAD_DIR:", UPLOAD_DIR);
+      
       // Create upload directory if it doesn't exist
       await mkdir(UPLOAD_DIR, { recursive: true });
+      console.log("[Step3] Directory created/verified");
 
       // Generate unique filenames
       const timestamp = Date.now();
@@ -65,15 +69,19 @@ export const actions: Actions = {
       );
       const cvFilename = `${sanitizedName}_CV_${timestamp}.pdf`;
       const paperFilename = `${sanitizedName}_PAPER_${timestamp}.pdf`;
+      console.log("[Step3] Filenames:", { cvFilename, paperFilename });
 
       // Save files
       const cvBuffer = Buffer.from(await cvFile.arrayBuffer());
       const paperBuffer = Buffer.from(await paperFile.arrayBuffer());
+      console.log("[Step3] Buffers created, sizes:", { cv: cvBuffer.length, paper: paperBuffer.length });
 
       await writeFile(join(UPLOAD_DIR, cvFilename), cvBuffer);
       await writeFile(join(UPLOAD_DIR, paperFilename), paperBuffer);
+      console.log("[Step3] Files saved successfully");
 
       // Create database entry
+      console.log("[Step3] Creating database entry...");
       await prisma.call_submissions.create({
         data: {
           call_year: new Date().getFullYear(),
@@ -100,6 +108,7 @@ export const actions: Actions = {
           updated_at: new Date(),
         },
       });
+      console.log("[Step3] Database entry created successfully");
 
       // Send confirmation email (don't fail if email fails)
       try {
