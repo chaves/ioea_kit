@@ -160,70 +160,8 @@ export async function loadDynamicConfig(forceRefresh: boolean = false): Promise<
 		// NOTE: Session dates should come from database - fallbacks are generic/placeholder values
 		const sessionYear = parseInt(configMap.get('session.year') || String(staticConfig.currentYear), 10);
 		
-		// Try multiple ways to get the session number (handle potential key issues)
-		let sessionNumberFromDB = configMap.get('session.sessionNumber');
-		if (!sessionNumberFromDB) {
-			// Try with trimmed key
-			const trimmedEntry = Array.from(configMap.entries()).find(([k]) => k.trim() === 'session.sessionNumber');
-			if (trimmedEntry) {
-				sessionNumberFromDB = trimmedEntry[1];
-				console.log(`[Config] Found sessionNumber using trimmed key lookup: ${sessionNumberFromDB}`);
-			}
-		}
-		
-		// If still not found, try direct database query as last resort
-		if (!sessionNumberFromDB) {
-			console.warn(`[Config] ⚠️ sessionNumber not in Map, trying direct DB query...`);
-			try {
-				const directQuery = await prisma.site_config.findUnique({
-					where: { key: 'session.sessionNumber' }
-				});
-				if (directQuery) {
-					sessionNumberFromDB = directQuery.value;
-					console.log(`[Config] ✅ Found via direct DB query: ${sessionNumberFromDB}`);
-				} else {
-					console.error(`[Config] ❌ Direct DB query also returned null for session.sessionNumber`);
-				}
-			} catch (error) {
-				console.error(`[Config] ❌ Error in direct DB query:`, error);
-			}
-		}
-		
-		// Final check - if we still don't have it, log all available keys for debugging
-		if (!sessionNumberFromDB) {
-			console.error(`[Config] ❌ CRITICAL: sessionNumber still not found after all attempts!`);
-			console.error(`[Config] All config keys in database:`, configs.map(c => c.key));
-			console.error(`[Config] All session keys in Map:`, Array.from(configMap.keys()).filter(k => k.includes('session')));
-		}
-		
-		// Log for debugging - always log to help diagnose production issues
-		console.log(`[Config] Loading session config for year ${sessionYear}`);
-		console.log(`[Config] Raw sessionNumberFromDB value:`, sessionNumberFromDB, `(type: ${typeof sessionNumberFromDB})`);
-		
-		if (sessionNumberFromDB) {
-			const parsed = parseInt(sessionNumberFromDB, 10);
-			if (isNaN(parsed)) {
-				console.error(`[Config] ERROR: session.sessionNumber value "${sessionNumberFromDB}" is not a valid number!`);
-			} else {
-				console.log(`[Config] ✅ Loaded session number from DB: ${parsed} (parsed from "${sessionNumberFromDB}")`);
-			}
-		} else {
-			const fallback = sessionYear - staticConfig.archiveFromYear + 1;
-			console.warn(`[Config] ⚠️  session.sessionNumber not found in database, using fallback calculation: ${fallback}`);
-			console.warn(`[Config] Available session keys:`, Array.from(configMap.keys()).filter(k => k.startsWith('session.')));
-		}
-		
-		const sessionNumber = sessionNumberFromDB 
-			? parseInt(sessionNumberFromDB, 10)
-			: sessionYear - staticConfig.archiveFromYear + 1; // Fallback calculation
-		
-		// Final validation log - be very explicit
-		if (sessionNumberFromDB) {
-			console.log(`[Config] ✅ Using sessionNumber from database: ${sessionNumber} (from "${sessionNumberFromDB}")`);
-		} else {
-			console.error(`[Config] ❌ Using FALLBACK sessionNumber: ${sessionNumber} (calculated, NOT from database!)`);
-			console.error(`[Config] This means sessionNumberFromDB was:`, sessionNumberFromDB);
-		}
+		// Session number is now a static config value, not from database
+		const sessionNumber = staticConfig.sessionNumber;
 		
 		const dynamicConfig: DynamicConfig = {
 			session: {
@@ -278,7 +216,7 @@ export async function loadDynamicConfig(forceRefresh: boolean = false): Promise<
 		return {
 			session: {
 				year: staticConfig.currentYear,
-				sessionNumber: staticConfig.currentYear - staticConfig.archiveFromYear + 1,
+				sessionNumber: staticConfig.sessionNumber,
 				startDate: 0,
 				endDate: 0,
 				month: 'TBD',

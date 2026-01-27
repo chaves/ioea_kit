@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { config } from '$lib/config';
+	import { config, staticConfig } from '$lib/config';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import type { PageData } from './$types';
 
@@ -16,23 +16,10 @@
 	// Get session dates from dynamic config (via layout)
 	const sessionDates = $derived(data.dynamicConfig?.session?.fullDateRange || '6-10 May 2026');
 	
-	// Get session number from config (database) or calculate it
-	const sessionNumber = $derived(() => {
-		// Debug: Log what we're receiving
-		console.log('[Homepage] dynamicConfig:', data.dynamicConfig);
-		console.log('[Homepage] session:', data.dynamicConfig?.session);
-		console.log('[Homepage] sessionNumber from DB:', data.dynamicConfig?.session?.sessionNumber);
-		
-		const dbValue = data.dynamicConfig?.session?.sessionNumber;
-		if (dbValue !== undefined && dbValue !== null) {
-			console.log(`[Homepage] ✅ Using session number from database: ${dbValue}`);
-			return dbValue;
-		}
-		// Fallback calculation
-		const calculated = currentYear - 2002 + 1;
-		console.warn(`[Homepage] ⚠️  sessionNumber not found in dynamicConfig (value: ${dbValue}), using fallback: ${calculated}`);
-		return calculated;
-	});
+	// Get session number from config (now static, not from database)
+	const sessionNumber = $derived(
+		data.dynamicConfig?.session?.sessionNumber || staticConfig.sessionNumber
+	);
 	
 	// Calculate ordinal suffix (1st, 2nd, 3rd, 4th, etc.)
 	function getOrdinal(num: number): string {

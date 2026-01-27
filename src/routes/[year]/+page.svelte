@@ -30,7 +30,7 @@
 
 	// Use session number from config (database) if available, otherwise calculate it
 	const sessionNumber = $derived(
-		config.session.sessionNumber || (year - staticConfig.archiveFromYear + 1)
+		config.session.sessionNumber || staticConfig.sessionNumber
 	);
 	
 	// Calculate ordinal suffix (1st, 2nd, 3rd, 4th, etc.)

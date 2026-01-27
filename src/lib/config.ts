@@ -5,6 +5,7 @@ export const staticConfig = {
   currentYear: 2026,
   archiveFromYear: 2002,
   archiveToYear: 2025,
+  sessionNumber: 23, // Current session number (2026 = 23rd session)
 
   // Bad sessions (cancelled years)
   badSessions: [2013, 2020, 2021] as number[],
@@ -18,7 +19,7 @@ const defaultDynamicConfig = {
   // Session dates (PRIMARY SOURCE: database site_config table)
   session: {
     year: staticConfig.currentYear,
-    sessionNumber: staticConfig.currentYear - staticConfig.archiveFromYear + 1,
+    sessionNumber: staticConfig.sessionNumber,
     startDate: 0,
     endDate: 0,
     month: "TBD",
