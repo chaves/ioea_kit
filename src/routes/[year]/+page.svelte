@@ -90,7 +90,7 @@
 								</svg>
 								Submit Your Application
 							</a>
-							{#if config.deadlines.application && config.deadlines.application !== 'TBD'}
+							{#if config.deadlines.application}
 								<p class="text-white/80 text-sm mt-4">
 									Application deadline: <strong class="text-white">{config.deadlines.application}</strong>
 								</p>
@@ -169,11 +169,11 @@
 				<ul class="text-[1.05rem] leading-relaxed mb-6 pl-6">
 					<li class="mb-2">
 						Closing date for application: <strong>{config.deadlines.application}</strong>
-						{#if config.deadlines.notification && config.deadlines.notification !== 'TBD'}
+						{#if config.deadlines.notification}
 							<br />Notification of acceptance: {config.deadlines.notification}
 						{/if}
 					</li>
-					{#if config.deadlines.registration && config.deadlines.registration !== 'TBD'}
+					{#if config.deadlines.registration}
 						<li class="mb-2">
 							Closing date for registration: <strong>{config.deadlines.registration}</strong>
 						</li>
