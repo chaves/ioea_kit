@@ -30,24 +30,24 @@
 	const sessionNumber = $derived(
 		config.session.sessionNumber || staticConfig.sessionNumber
 	);
-	
+
 	// Calculate ordinal suffix (1st, 2nd, 3rd, 4th, etc.)
 	function getOrdinal(num: number): string {
 		const lastDigit = num % 10;
 		const lastTwoDigits = num % 100;
-		
+
 		// Handle special cases: 11th, 12th, 13th (not 11st, 12nd, 13rd)
 		if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {
 			return 'th';
 		}
-		
+
 		// Handle regular cases
 		if (lastDigit === 1) return 'st';
 		if (lastDigit === 2) return 'nd';
 		if (lastDigit === 3) return 'rd';
 		return 'th';
 	}
-	
+
 	const sessionOrdinal = $derived(getOrdinal(sessionNumber));
 </script>
 
@@ -62,17 +62,17 @@
 	<div class="container">
 		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-				<h3 class="text-2xl font-semibold mb-6 text-primary leading-relaxed">
+				<h3 class="mb-6 text-2xl font-semibold leading-relaxed text-primary">
 					{sessionNumber}<sup class="text-[0.7em] align-super">{sessionOrdinal}</sup> session of the Institutional and Organizational Economics Academy {config.session.dateRange} {year} in Corsica (France)
 				</h3>
 
 				{#if config.callIsOpen}
 					<div class="bg-gradient-to-br from-primary to-secondary rounded-2xl p-8 mb-8 shadow-[0_8px_24px_rgba(0,0,0,0.12)] border border-primary/20">
 						<div class="text-center">
-							<h4 class="text-2xl font-bold text-white mb-3">
+							<h4 class="mb-3 text-2xl font-bold text-white">
 								Applications Now Open for IOEA {year}!
 							</h4>
-							<p class="text-white/90 text-lg mb-6 max-w-2xl mx-auto">
+							<p class="mx-auto mb-6 max-w-2xl text-lg text-white/90">
 								Join us for an intensive week of lectures, workshops, and seminars with leading scholars in Institutional and Organizational Economics.
 							</p>
 							<a
@@ -89,14 +89,14 @@
 								Submit Your Application
 							</a>
 							{#if config.deadlines.application}
-								<p class="text-white/80 text-sm mt-4">
+								<p class="mt-4 text-sm text-white/80">
 									Application deadline: <strong class="text-white">{config.deadlines.application}</strong>
 								</p>
 							{/if}
 						</div>
 					</div>
 				{:else}
-					<div class="bg-gray-100 border-l-4 border-gray-400 p-6 mb-8 rounded-lg">
+					<div class="p-6 mb-8 bg-gray-100 rounded-lg border-l-4 border-gray-400">
 						<p class="text-lg font-medium text-gray-700">
 							The call for applications is currently closed.
 						</p>
@@ -107,24 +107,24 @@
 					Using rigorous methodologies, Institutional and Organizational Economics focuses on the theoretical and empirical analysis of institutions, organizations and contracts, as well as on the conditions under which these arrangements emerge and evolve.
 				</p>
 
-				<h4 class="text-xl font-semibold mt-8 mb-4 text-primary">Objectives</h4>
+				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Objectives</h4>
 				<ul class="text-[1.05rem] leading-relaxed mb-6 pl-6">
 					<li class="mb-2">To promote the use of appropriate methods to analyze governance, structures and dynamics of collectives and communities.</li>
 					<li class="mb-2">To provide researchers with up to date synthesis on the evolutions of the research program.</li>
 					<li class="mb-2">To develop networking and cooperation among researchers and among their institutions.</li>
 				</ul>
 
-				<h4 class="text-xl font-semibold mt-8 mb-4 text-primary">Public</h4>
+				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Public</h4>
 				<p class="text-[1.05rem] leading-relaxed mb-6">Ph.D. students, Post-docs and researchers, in Economics, Management, Political Science, Sociology, Law and other social sciences.</p>
 
-				<h4 class="text-xl font-semibold mt-8 mb-4 text-primary">Program</h4>
+				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Program</h4>
 				<p class="text-[1.05rem] leading-relaxed mb-6">Formal lectures will be given every morning. Each lecture is dedicated to the extensive presentation of the state of the art of the discipline on a specific applied or theoretical topic. Afternoons will be dedicated to workshops devoted either to research questions or methodologies. Seminars, held in the second part of the afternoon, allow the participants to have their work discussed by recognized scholars in the field.</p>
 
-				<h4 class="text-xl font-semibold mt-8 mb-4 text-primary">Lecturers</h4>
+				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Lecturers</h4>
 				<p class="text-[1.05rem] leading-relaxed mb-6">
 					{#each data.lecturers as lecturer, index}
 						<strong>
-							<a href="/{year}/presentation/{lecturer.id}" class="text-primary font-semibold no-underline transition-colors duration-200 hover:text-secondary hover:underline">
+							<a href="/{year}/presentation/{lecturer.id}" class="font-semibold no-underline transition-colors duration-200 text-primary hover:text-secondary hover:underline">
 								{lecturer.firstName} {lecturer.lastName}
 							</a>
 						</strong>
@@ -137,11 +137,11 @@
 					{/each}
 				</p>
 
-				<h4 class="text-xl font-semibold mt-8 mb-4 text-primary">Workshop organizers</h4>
+				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Workshop organizers</h4>
 				<p class="text-[1.05rem] leading-relaxed mb-6">
 					{#each data.workshopOrganizers as organizer, index}
 						<strong>
-							<a href="/{year}/presentation/{organizer.id}" class="text-primary font-semibold no-underline transition-colors duration-200 hover:text-secondary hover:underline">
+							<a href="/{year}/presentation/{organizer.id}" class="font-semibold no-underline transition-colors duration-200 text-primary hover:text-secondary hover:underline">
 								{organizer.firstName} {organizer.lastName}
 							</a>
 						</strong>
@@ -154,15 +154,15 @@
 					{/each}
 				</p>
 
-				<h4 class="text-xl font-semibold mt-8 mb-4 text-primary">Director</h4>
+				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Director</h4>
 				<p class="text-[1.05rem] leading-relaxed mb-6">
 					<strong>Eric Brousseau</strong> (University Paris-Dauphine - PSL)
 				</p>
 
-				<h4 class="text-xl font-semibold mt-8 mb-4 text-primary">Registrations</h4>
+				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Registrations</h4>
 				<p class="text-[1.05rem] leading-relaxed mb-6">Attendants will be selected on the basis of their resume, and of a paper or of a presentation of their research program.</p>
 
-				<h4 class="text-xl font-semibold mt-8 mb-4 text-primary">Calendar</h4>
+				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Calendar</h4>
 				<p class="text-[1.05rem] leading-relaxed mb-6">As capacity is limited, we recommend that you apply early to have the best chance of being accepted.</p>
 				<ul class="text-[1.05rem] leading-relaxed mb-6 pl-6">
 					<li class="mb-2">
@@ -173,7 +173,7 @@
 					</li>
 					{#if config.deadlines.registration}
 						<li class="mb-2">
-							Closing date for registration: <strong>{config.deadlines.registration}</strong>
+							Closing date for registration: <strong>{config.deadlines.registration}</strong> - [Earlier application is recommended] – notification of acceptance from Mid-February
 						</li>
 					{/if}
 				</ul>

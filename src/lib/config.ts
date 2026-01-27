@@ -35,11 +35,10 @@ const defaultDynamicConfig = {
   // Deadlines
   deadlines: {
     application: "March 15th",
-    notification: "by March 15th",
+    notification: false,
     registration: "March 27th",
     students: "March 27th",
   },
-
 } as const;
 
 /**
