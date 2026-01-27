@@ -99,7 +99,7 @@ const config = getConfig(data.dynamicConfig);
 
 // Use config values
 console.log(config.emails.general);
-console.log(config.applicationDeadlines.first.active);
+console.log(config.deadlines.application);
 ```
 
 **In server-side code:**
