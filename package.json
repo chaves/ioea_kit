@@ -5,13 +5,15 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
+		"prebuild": "tsx scripts/generate-program-image.ts all || echo 'PDF conversion skipped (tools not available)'",
 		"build": "vite build",
 		"preview": "vite preview",
 		"start": "node server.js",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"generate-placeholders": "node scripts/generate-placeholders.js"
+		"generate-placeholders": "node scripts/generate-placeholders.js",
+		"generate-images": "tsx scripts/generate-program-image.ts all"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^7.0.0",

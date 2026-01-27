@@ -8,13 +8,19 @@
 		showProgram?: boolean;
 	}
 
-	let { showBrochure = true, showPhotos = true, showProgram = config.programIsDone }: Props = $props();
+	let { showBrochure = true, showPhotos = true, showProgram }: Props = $props();
 
 	// Get random photo from layout data (server-loaded)
 	const randomPhoto = $page.data.randomPhoto as { year: number; filename: string } | null;
+	const programPDFExists = $page.data.programPDFExists as boolean | undefined;
 
 	const randomPhotoYear = randomPhoto?.year ?? null;
 	const randomPhotoFilename = randomPhoto?.filename ?? null;
+
+	// Show program if PDF exists (unless explicitly disabled via prop)
+	const shouldShowProgram = $derived(
+		showProgram !== undefined ? showProgram : (programPDFExists ?? false)
+	);
 
 	// Use the actual photo from server, or fallback to placeholder
 	const imageSrc = $derived(
@@ -24,18 +30,14 @@
 	);
 </script>
 
-	{#if showProgram}
+	{#if shouldShowProgram}
 		<div class="sidebar-widget">
 			<h3>Program</h3>
 			<a href="/{config.currentYear}" class="program-preview">
 				<img
-					src={`/images/graphiques/Programme_IOEA_${config.currentYear}.jpg`}
+					src={`/images/${config.program.imageName}`}
 					alt="IOEA {config.currentYear} Program"
 					class="program-image"
-					onerror={(e) => {
-						const img = e.currentTarget as HTMLImageElement;
-						img.src = '/images/graphiques/Programme_IOEA_2024.jpg';
-					}}
 				/>
 			</a>
 		</div>
@@ -109,6 +111,8 @@
 		border-radius: 0.375rem;
 		overflow: hidden;
 		transition: transform 0.3s ease;
+		width: 100%;
+		max-width: 100%;
 	}
 
 	.program-preview:hover {
@@ -119,7 +123,9 @@
 	.program-image {
 		width: 100%;
 		height: auto;
+		max-width: 100%;
 		display: block;
+		object-fit: contain;
 		transition: transform 0.3s ease;
 	}
 
@@ -171,6 +177,8 @@
 		border-radius: 0.375rem;
 		overflow: hidden;
 		transition: transform 0.3s ease;
+		width: 100%;
+		max-width: 100%;
 	}
 
 	.brochure-preview:hover {
@@ -181,7 +189,9 @@
 	.brochure-image {
 		width: 100%;
 		height: auto;
+		max-width: 100%;
 		display: block;
+		object-fit: contain;
 		transition: transform 0.3s ease;
 	}
 

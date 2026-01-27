@@ -112,14 +112,22 @@ export function getConfig(dynamicConfig?: typeof defaultDynamicConfig) {
     },
     // Students group open
     studentsGroupOpen: false,
-    // Program visibility - show program card in sidebar only when program is done
-    programIsDone: false,
     // Call for applications status - controls whether applications are open
     callIsOpen: true,
     // Brochure configuration
     brochure: {
+      // PDF source (optional - if provided, image will be generated from this)
+      pdfName: "IOEABrochure2024.pdf",
       name: "IOEABrochure2024.pdf",
+      // Image filename (generated from PDF or manually created)
       imageName: "graphiques/IOEABrochure2024.jpg",
+    },
+    // Program configuration
+    program: {
+      // PDF source (optional - if provided, image will be generated from this)
+      pdfName: `IOEAProgramme${staticConfig.currentYear}.pdf`,
+      // Image filename (generated from PDF or manually created)
+      imageName: `graphiques/IOEAProgramme${staticConfig.currentYear}.jpg`,
     },
     // Financial information (prices in euros)
     prices: {
@@ -243,7 +251,11 @@ export const menus = {
 // Generate archive years
 export function getArchiveYears(): number[] {
   const years: number[] = [];
-  for (let i = staticConfig.archiveToYear; i >= staticConfig.archiveFromYear; i--) {
+  for (
+    let i = staticConfig.archiveToYear;
+    i >= staticConfig.archiveFromYear;
+    i--
+  ) {
     if (!staticConfig.badSessions.includes(i)) {
       years.push(i);
     }
@@ -254,7 +266,11 @@ export function getArchiveYears(): number[] {
 // Generate photo years
 export function getPhotoYears(): number[] {
   const years: number[] = [];
-  for (let i = staticConfig.archiveToYear; i >= staticConfig.archiveFromYear; i--) {
+  for (
+    let i = staticConfig.archiveToYear;
+    i >= staticConfig.archiveFromYear;
+    i--
+  ) {
     if (!staticConfig.badPhotos.includes(i)) {
       years.push(i);
     }

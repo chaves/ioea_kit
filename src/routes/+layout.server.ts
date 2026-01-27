@@ -1,8 +1,9 @@
 import type { LayoutServerLoad } from './$types';
-import { getPhotoYears } from '$lib/config';
+import { getPhotoYears, staticConfig, getConfig } from '$lib/config';
 import { loadDynamicConfig } from '$lib/server/config';
-import { readdir } from 'fs/promises';
+import { readdir, access } from 'fs/promises';
 import { join } from 'path';
+import { constants } from 'fs';
 
 async function getRandomPhoto() {
 	const photoYears = getPhotoYears();
@@ -34,14 +35,27 @@ async function getRandomPhoto() {
 	}
 }
 
+async function checkProgramPDFExists(): Promise<boolean> {
+	try {
+		const config = getConfig();
+		const pdfPath = join(process.cwd(), 'static', 'pdf', config.program.pdfName);
+		await access(pdfPath, constants.F_OK);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
 export const load: LayoutServerLoad = async ({ locals }) => {
 	const randomPhoto = await getRandomPhoto();
 	const dynamicConfig = await loadDynamicConfig();
+	const programPDFExists = await checkProgramPDFExists();
 
 	return {
 		session: locals.session,
 		randomPhoto,
-		dynamicConfig
+		dynamicConfig,
+		programPDFExists
 	};
 };
 

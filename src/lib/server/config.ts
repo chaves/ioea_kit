@@ -42,6 +42,15 @@ interface DynamicConfig {
 		date: string;
 		active: boolean;
 	};
+	statusOptions: Record<number, string>;
+	travel: {
+		transport: string[];
+		locations: Record<number, string>;
+	};
+	transfer: {
+		arrival: Record<number, string>;
+		departure: Record<number, string>;
+	};
 }
 
 let cachedConfig: DynamicConfig | null = null;
@@ -68,6 +77,33 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 		const configMap = new Map<string, string>(
 			configs.map((c) => [c.key, c.value])
 		);
+
+		// Load status options from call_statuses table
+		const statuses = await prisma.call_statuses.findMany({
+			orderBy: { id: 'asc' }
+		});
+		const statusOptions: Record<number, string> = {};
+		statuses.forEach((status) => {
+			statusOptions[Number(status.id)] = status.name;
+		});
+
+		// Load travel locations from students_travels_locations table
+		const locations = await prisma.students_travels_locations.findMany({
+			orderBy: { id: 'asc' }
+		});
+		const travelLocations: Record<number, string> = {};
+		locations.forEach((location) => {
+			travelLocations[location.id] = location.location;
+		});
+
+		// Load transfer options from students_travels_transfer table
+		const transfers = await prisma.students_travels_transfer.findMany({
+			orderBy: { id: 'asc' }
+		});
+		const transferOptions: Record<number, string> = {};
+		transfers.forEach((transfer) => {
+			transferOptions[transfer.id] = transfer.transfer;
+		});
 
 		// Build the config object
 		// NOTE: Session dates should come from database - fallbacks are generic/placeholder values
