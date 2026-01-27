@@ -13,9 +13,14 @@
  */
 
 import { readFile, mkdir, stat } from 'fs/promises';
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import sharp from 'sharp';
 import { staticConfig, getConfig } from '../src/lib/config';
+
+// Get the directory of the current script
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Try to use pdf2pic if available, otherwise fall back to manual conversion
 async function convertPDFToImage(
@@ -24,15 +29,20 @@ async function convertPDFToImage(
 	width: number = 800,
 	quality: number = 90
 ): Promise<void> {
-	const staticDir = join(process.cwd(), 'static');
+	// Get the project root directory (where package.json is located)
+	// Script is in scripts/, so go up one level from script directory
+	const projectRoot = join(__dirname, '..');
+	const staticDir = join(projectRoot, 'static');
 	const fullPdfPath = join(staticDir, 'pdf', pdfPath);
 	const fullOutputPath = join(staticDir, 'images', outputPath);
 
 	// Check if PDF exists
 	try {
 		await stat(fullPdfPath);
-	} catch {
+		console.log(`   ✓ PDF file found`);
+	} catch (error) {
 		console.warn(`   ⚠️  PDF file not found: ${fullPdfPath}`);
+		console.warn(`   Expected location: static/pdf/${pdfPath}`);
 		console.warn('   Skipping conversion...');
 		return;
 	}
