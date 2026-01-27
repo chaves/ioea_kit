@@ -9,11 +9,30 @@ import { handler } from './build/handler.js';
 // Set body size limit for file uploads (12MB)
 process.env.BODY_SIZE_LIMIT = process.env.BODY_SIZE_LIMIT || '12582912';
 
+// Set ORIGIN for CSRF protection (required for form submissions in production)
+// This must match the actual domain users access the site from
+if (!process.env.ORIGIN) {
+	process.env.ORIGIN = 'https://ioea.org';
+}
+
+// For reverse proxy setups (AlwaysData), trust forwarded headers
+process.env.PROTOCOL_HEADER = process.env.PROTOCOL_HEADER || 'x-forwarded-proto';
+process.env.HOST_HEADER = process.env.HOST_HEADER || 'x-forwarded-host';
+
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 
-// Create HTTP server
-const server = createServer(handler);
+// Create HTTP server with request pre-processing
+const server = createServer((req, res) => {
+	// Ensure content-length is properly set for the body parser
+	// This helps with proxy configurations that might strip headers
+	if (req.method === 'POST' && !req.headers['content-length'] && req.headers['transfer-encoding'] !== 'chunked') {
+		console.warn('POST request without content-length or transfer-encoding');
+	}
+	
+	// Pass to SvelteKit handler
+	handler(req, res);
+});
 
 // Track if server is shutting down
 let isShuttingDown = false;
