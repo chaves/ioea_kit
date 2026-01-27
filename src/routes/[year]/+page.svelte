@@ -53,7 +53,7 @@
 
 <svelte:head>
 	<title>IOEA {year} - the {sessionNumber}{sessionOrdinal} session of the Institutional and Organizational Economics Academy</title>
-	<meta name="description" content="IOEA {year}, the {sessionNumber}{sessionOrdinal} session of the Institutional and Organizational Economics Academy, {config.session.dateRange} {year} in Corsica, France." />
+	<meta name="description" content="IOEA {year}, the {sessionNumber}{sessionOrdinal} session of the Institutional and Organizational Economics Academy, {appConfig.session.dateRange} {year} in Corsica, France." />
 </svelte:head>
 
 <PageHeader title="IOEA {year}" />
@@ -63,7 +63,7 @@
 		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
 				<h3 class="mb-6 text-2xl font-semibold leading-relaxed text-primary">
-					{sessionNumber}<sup class="text-[0.7em] align-super">{sessionOrdinal}</sup> session of the Institutional and Organizational Economics Academy {config.session.dateRange} {year} in Corsica (France)
+					{sessionNumber}<sup class="text-[0.7em] align-super">{sessionOrdinal}</sup> session of the Institutional and Organizational Economics Academy {appConfig.session.dateRange} {year} in Corsica (France)
 				</h3>
 
 				{#if appConfig.callIsOpen}
@@ -88,9 +88,9 @@
 								</svg>
 								Submit Your Application
 							</a>
-							{#if config.deadlines.application}
+							{#if appConfig.deadlines.application}
 								<p class="mt-4 text-sm text-white/80">
-									Application deadline: <strong class="text-white">{config.deadlines.application}</strong>
+									Application deadline: <strong class="text-white">{appConfig.deadlines.application}</strong>
 								</p>
 							{/if}
 						</div>
@@ -171,9 +171,9 @@
 							<br />Notification of acceptance: {config.deadlines.notification}
 						{/if}
 					</li>
-					{#if config.deadlines.registration}
+					{#if appConfig.deadlines.registration}
 						<li class="mb-2">
-							Closing date for registration: <strong>{config.deadlines.registration}</strong> - [Earlier application is recommended] – notification of acceptance from Mid-February
+							Closing date for registration: <strong>{appConfig.deadlines.registration}</strong> - [Earlier application is recommended] – notification of acceptance from Mid-February
 						</li>
 					{/if}
 				</ul>
