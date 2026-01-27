@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
-		"prebuild": "npx tsx scripts/generate-program-image.ts all || echo 'PDF conversion skipped (tools not available)'",
+		"prebuild": "prisma generate && (npx tsx scripts/generate-program-image.ts all || echo 'PDF conversion skipped (tools not available)')",
 		"build": "vite build",
 		"preview": "vite preview",
 		"start": "node server.js",
