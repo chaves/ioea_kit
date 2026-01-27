@@ -15,6 +15,14 @@
 	let loading = $state(false);
 	let cvFile = $state<File | null>(null);
 	let paperFile = $state<File | null>(null);
+	let errorDiv: HTMLDivElement | null = $state(null);
+
+	// Auto-scroll to error when it appears
+	$effect(() => {
+		if (form?.error && errorDiv) {
+			errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		}
+	});
 </script>
 
 <svelte:head>
@@ -44,8 +52,26 @@
 				</div>
 
 				{#if form?.error}
-					<div class="alert alert-error">
-						{form.error}
+					<div bind:this={errorDiv} class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg">
+						<div class="flex items-start">
+							<svg
+								class="w-6 h-6 text-red-500 mr-3 flex-shrink-0"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+								></path>
+							</svg>
+							<div class="flex-1">
+								<p class="text-sm font-semibold text-red-800 mb-1">Error</p>
+								<p class="text-sm text-red-700">{form.error}</p>
+							</div>
+						</div>
 					</div>
 				{/if}
 
