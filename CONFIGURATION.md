@@ -35,8 +35,6 @@ The IOEA site now uses a database-backed configuration system for emails, deadli
 - `applicationDeadline.second.active` - Enable/disable second deadline (true/false)
 
 ### Registration Deadline
-- `registrationDeadline.date` - Final registration deadline
-- `registrationDeadline.active` - Enable/disable registration deadline (true/false)
 
 ## How to Edit Configuration
 
