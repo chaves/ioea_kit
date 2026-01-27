@@ -33,7 +33,7 @@
 	{#if shouldShowProgram}
 		<div class="sidebar-widget">
 			<h3>Program {config.currentYear}</h3>
-			<a href="/{config.currentYear}" class="program-preview">
+			<a href={`/pdf/${config.program.pdfName}`} target="_blank" class="program-preview">
 				<img
 					src={`/images/${config.program.imageName}`}
 					alt="IOEA {config.currentYear} Program"
