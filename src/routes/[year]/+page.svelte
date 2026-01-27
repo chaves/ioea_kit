@@ -34,7 +34,7 @@
 
 <svelte:head>
 	<title>IOEA {year} - the {sessionNumber}{sessionOrdinal} session of the Institutional and Organizational Economics Academy</title>
-	<meta name="description" content="IOEA {year}, the {sessionNumber}{sessionOrdinal} session of the Institutional and Organizational Economics Academy, 12-16 May {year} in Corsica, France." />
+	<meta name="description" content="IOEA {year}, the {sessionNumber}{sessionOrdinal} session of the Institutional and Organizational Economics Academy, {config.session.dateRange} {year} in Corsica, France." />
 </svelte:head>
 
 <PageHeader title="IOEA {year}" />
@@ -44,7 +44,7 @@
 		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
 				<h3 class="text-2xl font-semibold mb-6 text-primary leading-relaxed">
-					{sessionNumber}<sup class="text-[0.7em] align-super">{sessionOrdinal}</sup> session of the Institutional and Organizational Economics Academy 12-16 May {year} in Corsica (France)
+					{sessionNumber}<sup class="text-[0.7em] align-super">{sessionOrdinal}</sup> session of the Institutional and Organizational Economics Academy {config.session.dateRange} {year} in Corsica (France)
 				</h3>
 
 				{#if config.callIsOpen}

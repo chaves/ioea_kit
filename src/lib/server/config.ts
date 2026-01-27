@@ -6,6 +6,14 @@
 import { prisma } from './db';
 
 interface DynamicConfig {
+	session: {
+		year: number;
+		startDate: number;
+		endDate: number;
+		month: string;
+		dateRange: string;
+		fullDateRange: string;
+	};
 	emails: {
 		general: string;
 		coordination: string;
@@ -62,6 +70,14 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 
 		// Build the config object
 		const dynamicConfig: DynamicConfig = {
+			session: {
+				year: parseInt(configMap.get('session.year') || '2026', 10),
+				startDate: parseInt(configMap.get('session.startDate') || '6', 10),
+				endDate: parseInt(configMap.get('session.endDate') || '10', 10),
+				month: configMap.get('session.month') || 'May',
+				dateRange: configMap.get('session.dateRange') || '6-10 May',
+				fullDateRange: configMap.get('session.fullDateRange') || '6-10 May 2026'
+			},
 			emails: {
 				general: configMap.get('email.general') || 'ioea.coordinator@gmail.com',
 				coordination: configMap.get('email.coordination') || 'ioea.coordinator@gmail.com',
@@ -102,6 +118,14 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 
 		// Return defaults if database fails
 		return {
+			session: {
+				year: 2026,
+				startDate: 6,
+				endDate: 10,
+				month: 'May',
+				dateRange: '6-10 May',
+				fullDateRange: '6-10 May 2026'
+			},
 			emails: {
 				general: 'ioea.coordinator@gmail.com',
 				coordination: 'ioea.coordinator@gmail.com',

@@ -13,6 +13,16 @@ export const staticConfig = {
 
 // Default configuration (fallback for dynamic values)
 const defaultDynamicConfig = {
+  // Session dates (loaded from database)
+  session: {
+    year: 2026,
+    startDate: 6,
+    endDate: 10,
+    month: "May",
+    dateRange: "6-10 May",
+    fullDateRange: "6-10 May 2026",
+  },
+
   // Emails
   emails: {
     general: "ioea.coordinator@gmail.com",

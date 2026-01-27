@@ -12,6 +12,9 @@
 	const currentYear = $derived(data.currentYear);
 	const randomTestimonials = $derived(data.testimonials);
 	const randomVideoTestimonials = $derived(data.videoTestimonials);
+
+	// Get session dates from dynamic config (via layout)
+	const sessionDates = $derived(data.dynamicConfig?.session?.fullDateRange || '6-10 May 2026');
 	const combinedTestimonials = $derived<TestimonialCard[]>([
 		...randomTestimonials.map<TestimonialCard>((t) => ({
 			type: 'text' as const,
@@ -81,7 +84,7 @@
 			<h1 class="text-white text-4xl leading-tight mb-4 sm:text-3xl">Institutional and Organizational Economics<br />Academy</h1>
 			<p class="text-xl opacity-95 mb-6 leading-relaxed font-medium sm:text-lg">
 				<strong>The 22nd session of the Institutional and Organizational Economics Academy</strong>
-				<strong>will be held in Cargèse (Corsica - France) on 12-16 May 2025.</strong>
+				<strong>will be held in Cargèse (Corsica - France) on {sessionDates}.</strong>
 			</p>
 			<div class="flex gap-4 flex-wrap">
 				<a href="/{currentYear}" class="btn btn-primary px-8 py-4 text-lg">
