@@ -16,29 +16,29 @@
 	// Get config
 	const appConfig = $derived(getConfig());
 	const sessionDates = $derived(appConfig.session.fullDateRange);
-	
+
 	// Get session number from config
 	const sessionNumber = $derived(appConfig.sessionNumber);
-	
+
 	// Calculate ordinal suffix (1st, 2nd, 3rd, 4th, etc.)
 	function getOrdinal(num: number): string {
 		const lastDigit = num % 10;
 		const lastTwoDigits = num % 100;
-		
+
 		// Handle special cases: 11th, 12th, 13th (not 11st, 12nd, 13rd)
 		if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {
 			return 'th';
 		}
-		
+
 		// Handle regular cases
 		if (lastDigit === 1) return 'st';
 		if (lastDigit === 2) return 'nd';
 		if (lastDigit === 3) return 'rd';
 		return 'th';
 	}
-	
+
 	const sessionOrdinal = $derived(getOrdinal(sessionNumber));
-	
+
 	const combinedTestimonials = $derived<TestimonialCard[]>([
 		...randomTestimonials.map<TestimonialCard>((t) => ({
 			type: 'text' as const,
@@ -105,16 +105,16 @@
 <section class="relative text-white py-12 overflow-hidden bg-gradient-to-br from-primary to-primary-dark before:content-[''] before:absolute before:inset-0 before:opacity-20">
 	<div class="container">
 		<div class="relative z-10">
-			<h1 class="text-white text-4xl leading-tight mb-4 sm:text-3xl">Institutional and Organizational Economics<br />Academy</h1>
-			<p class="text-xl opacity-95 mb-6 leading-relaxed font-medium sm:text-lg">
+			<h1 class="mb-4 text-4xl leading-tight text-white sm:text-3xl">Institutional and Organizational Economics<br />Academy</h1>
+			<p class="mb-6 text-xl font-medium leading-relaxed opacity-95 sm:text-lg">
 				<strong>The {sessionNumber}{sessionOrdinal} session of the Institutional and Organizational Economics Academy</strong>
 				<strong>will be held in Cargèse (Corsica - France) on {sessionDates}.</strong>
 			</p>
-			<div class="flex gap-4 flex-wrap">
-				<a href="/{currentYear}" class="btn btn-primary px-8 py-4 text-lg">
+			<div class="flex flex-wrap gap-4">
+				<a href="/{currentYear}" class="px-8 py-4 text-lg btn btn-primary">
 					IOEA {currentYear}
 				</a>
-				<a href="/call" class="btn btn-secondary px-8 py-4 text-lg">
+				<a href="/call" class="px-8 py-4 text-lg btn btn-secondary">
 					Apply Now
 				</a>
 			</div>
@@ -143,7 +143,7 @@
 						{:else}
 							<button
 								type="button"
-								class="absolute top-0 left-0 w-full h-full border-0 p-0 bg-transparent cursor-pointer flex items-center justify-center transition-opacity duration-200 hover:opacity-90"
+								class="flex absolute top-0 left-0 justify-center items-center p-0 w-full h-full bg-transparent border-0 transition-opacity duration-200 cursor-pointer hover:opacity-90"
 								onclick={loadMainVideo}
 								aria-label="Play IOEA Presentation"
 							>
@@ -151,7 +151,7 @@
 									src={getThumbnailUrl(mainVideoId)}
 									alt="IOEA Presentation"
 									loading="lazy"
-									class="absolute top-0 left-0 w-full h-full object-cover"
+									class="object-cover absolute top-0 left-0 w-full h-full"
 									onerror={(e) => {
 										// Fallback to hqdefault if maxresdefault doesn't exist
 										const img = e.currentTarget as HTMLImageElement;
@@ -171,32 +171,32 @@
 
 				<!-- About Section -->
 				<div class="mb-12">
-					<p class="text-lg leading-relaxed mb-4">
-						In more than twenty years of existence, the <strong class="text-primary font-semibold">Institutional and Organizational Economics Academy</strong> (IOEA) has become one of the most prominent events in research on institutional and organizational economics.
+					<p class="mb-4 text-lg leading-relaxed">
+						In more than twenty years of existence, the <strong class="font-semibold text-primary">Institutional and Organizational Economics Academy</strong> (IOEA) has become one of the most prominent events in research on institutional and organizational economics.
 					</p>
 
-					<p class="text-lg leading-relaxed mb-4">
-						Using rigorous scientific methods, <strong class="text-primary font-semibold">Institutional and Organizational Economics</strong> (IOE) focuses on the analysis of the economic impacts and on the evolutions of co-ordination frameworks: institutions, organizations and contracts. Main subjects of investigation cover issues that are essential in the design of efficient public policies and firm strategies. IOE put emphasis on applied analysis to confront the theory to facts to enrich the former accordingly. In addition, it is based on multi-disciplinarity to stimulate cross-fertilisation among political science, anthropology, sociology, management, law, and economics.
+					<p class="mb-4 text-lg leading-relaxed">
+						Using rigorous scientific methods, <strong class="font-semibold text-primary">Institutional and Organizational Economics</strong> (IOE) focuses on the analysis of the economic impacts and on the evolutions of co-ordination frameworks: institutions, organizations and contracts. Main subjects of investigation cover issues that are essential in the design of efficient public policies and firm strategies. IOE put emphasis on applied analysis to confront the theory to facts to enrich the former accordingly. In addition, it is based on multi-disciplinarity to stimulate cross-fertilisation among political science, anthropology, sociology, management, law, and economics.
 					</p>
 
-					<p class="text-lg leading-relaxed mb-4">
+					<p class="mb-4 text-lg leading-relaxed">
 						The IOEA organizes three types of activities:
 					</p>
 
 					<ol class="mb-6 ml-6 space-y-4">
-						<li class="text-lg leading-relaxed pl-2">
-							A one-week <strong class="text-primary font-semibold">spring school</strong> which is held every year at the Institut d'Etudes Scientifiques de Cargèse in Corsica (France) and combines lectures given by internationally recognized scholars, and workshops and seminars coordinated by young scientists known for their expertise either on a research topic or on a methodology;
+						<li class="pl-2 text-lg leading-relaxed">
+							A one-week <strong class="font-semibold text-primary">spring school</strong> which is held every year at the Institut d'Etudes Scientifiques de Cargèse in Corsica (France) and combines lectures given by internationally recognized scholars, and workshops and seminars coordinated by young scientists known for their expertise either on a research topic or on a methodology;
 						</li>
-						<li class="text-lg leading-relaxed pl-2">
-							<strong class="text-primary font-semibold">Workshops</strong> focusing on a specific topic in the field
+						<li class="pl-2 text-lg leading-relaxed">
+							<strong class="font-semibold text-primary">Workshops</strong> focusing on a specific topic in the field
 						</li>
 					</ol>
 
-					<p class="text-lg leading-relaxed mb-4">
+					<p class="mb-4 text-lg leading-relaxed">
 						Over the years, IOEA has continually built up a dense and wide network of researchers and students interested in this dynamic field.
 					</p>
 
-					<p class="text-lg leading-relaxed mb-4">
+					<p class="mb-4 text-lg leading-relaxed">
 						The strong mobilization of scholars, the organization of complementary workshops and joint publications, the development of on-line resources, the benefit of well-suited facilities, the support of renowned universities, the reiterated financial support from numerous noteworthy institutions and the positive signal that these supports gives to researchers have all contributed to a long-term success. Today more than 350 alumni currently hold academic positions throughout the world, and many scientific co-operations were initiated in this framework.
 					</p>
 				</div>
@@ -204,18 +204,15 @@
 				<!-- Current Edition -->
 				<div class="mb-12">
 					<h2 class="mb-6">IOEA {currentYear}</h2>
-					<p class="text-lg leading-relaxed mb-4">
+					<p class="mb-4 text-lg leading-relaxed">
 						The {currentYear} edition of the IOEA will take place in spring at the
 						Institut d'Études Scientifiques de Cargèse in Corsica, France.
 					</p>
-					<div class="bg-bg-alt p-6 rounded-lg my-6">
-						<h3 class="text-base mb-4">Important Dates</h3>
-						<ul class="list-none p-0 m-0">
+					<div class="p-6 my-6 rounded-lg bg-bg-alt">
+						<h3 class="mb-4 text-base">Important Dates</h3>
+						<ul class="p-0 m-0 list-none">
 							<li class="py-2 border-b border-border last:border-b-0">
-								<strong>Application Deadline:</strong> {appConfig.deadlines.application}
-							</li>
-							<li class="py-2 border-b border-border last:border-b-0">
-								<strong>Notification:</strong> {appConfig.deadlines.notification}
+								<strong>Application Deadline:</strong> {appConfig.deadlines.application}   - [Earlier application is recommended] – notification of acceptance from Mid-February
 							</li>
 							<li class="py-2 border-b border-border last:border-b-0">
 								<strong>Registration:</strong> {appConfig.deadlines.registration}
@@ -234,11 +231,11 @@
 					{#each combinedTestimonials as item, index}
 						{#if item.type === 'text'}
 							<div class="flex gap-6 bg-white p-6 rounded-lg border border-border shadow-[0_2px_8px_rgba(0,0,0,0.05)] flex-col text-center sm:flex-row sm:text-left">
-								<div class="flex-shrink-0 w-24 h-24 rounded-full overflow-hidden mx-auto sm:mx-0">
+								<div class="overflow-hidden flex-shrink-0 mx-auto w-24 h-24 rounded-full sm:mx-0">
 									<img
 										src={item.photo}
 										alt={item.name}
-										class="w-full h-full object-cover"
+										class="object-cover w-full h-full"
 										onerror={(e) => {
 											const img = e.currentTarget as HTMLImageElement;
 											img.src = '/images/placeholder-person.jpg';
@@ -252,16 +249,16 @@
 									{#if item.quote.length > maxQuoteLength}
 										<button
 											type="button"
-											class="text-secondary text-xs font-semibold mb-3 cursor-pointer bg-transparent border-0 p-0 underline transition-colors duration-200 hover:text-secondary-dark"
+											class="p-0 mb-3 text-xs font-semibold underline bg-transparent border-0 transition-colors duration-200 cursor-pointer text-secondary hover:text-secondary-dark"
 											onclick={() => toggleQuote(index)}
 										>
 											{expandedQuotes.has(index) ? 'Read less' : 'Read more'}
 										</button>
 									{/if}
 									<div class="flex flex-col gap-1">
-										<strong class="text-primary font-semibold">
+										<strong class="font-semibold text-primary">
 											{#if item.website}
-												<a href={item.website} target="_blank" rel="noopener" class="text-primary font-semibold hover:text-secondary">
+												<a href={item.website} target="_blank" rel="noopener" class="font-semibold text-primary hover:text-secondary">
 													{item.name}
 												</a>
 											{:else}
@@ -276,8 +273,8 @@
 						{/if}
 					{/each}
 				</div>
-				<div class="text-center mt-8">
-					<a href="/community/testimonials" class="inline-flex items-center gap-2 px-6 py-3 text-base font-semibold text-white bg-secondary rounded-lg transition-all duration-200 hover:bg-secondary-dark hover:shadow-lg hover:-translate-y-0.5 no-underline">
+				<div class="mt-8 text-center">
+					<a href="/community/testimonials" class="inline-flex gap-2 items-center px-6 py-3 text-base font-semibold text-white no-underline rounded-lg transition-all duration-200 bg-secondary hover:bg-secondary-dark hover:shadow-lg hover:-translate-y-0.5">
 						Read more testimonials →
 					</a>
 				</div>
@@ -299,7 +296,7 @@
 									{:else}
 										<button
 											type="button"
-											class="absolute top-0 left-0 w-full h-full border-0 p-0 bg-transparent cursor-pointer flex items-center justify-center transition-opacity duration-200 hover:opacity-90"
+											class="flex absolute top-0 left-0 justify-center items-center p-0 w-full h-full bg-transparent border-0 transition-opacity duration-200 cursor-pointer hover:opacity-90"
 											onclick={() => loadVideo(item.videoId)}
 											aria-label="Play {item.name}"
 										>
@@ -307,7 +304,7 @@
 												src={getThumbnailUrl(item.videoId)}
 												alt="{item.name}"
 												loading="lazy"
-												class="absolute top-0 left-0 w-full h-full object-cover"
+												class="object-cover absolute top-0 left-0 w-full h-full"
 												onerror={(e) => {
 													// Fallback to hqdefault if maxresdefault doesn't exist
 													const img = e.currentTarget as HTMLImageElement;
@@ -325,18 +322,18 @@
 								</div>
 								<div class="flex-1">
 									<div class="flex flex-col gap-1">
-										<strong class="text-primary font-semibold">{item.name}</strong>
+										<strong class="font-semibold text-primary">{item.name}</strong>
 										<span class="text-xs text-text-light">{item.institution}</span>
 										<span class="text-sm text-text-light">Video testimonial</span>
 									</div>
-									<a class="text-secondary text-sm font-semibold inline-block mt-2 no-underline hover:text-secondary-dark" href="/videos">Watch more videos →</a>
+									<a class="inline-block mt-2 text-sm font-semibold no-underline text-secondary hover:text-secondary-dark" href="/videos">Watch more videos →</a>
 								</div>
 							</div>
 						{/if}
 					{/each}
 				</div>
-				<div class="text-center mt-8">
-					<a href="/videos" class="inline-flex items-center gap-2 px-6 py-3 text-base font-semibold text-white bg-secondary rounded-lg transition-all duration-200 hover:bg-secondary-dark hover:shadow-lg hover:-translate-y-0.5 no-underline">
+				<div class="mt-8 text-center">
+					<a href="/videos" class="inline-flex gap-2 items-center px-6 py-3 text-base font-semibold text-white no-underline rounded-lg transition-all duration-200 bg-secondary hover:bg-secondary-dark hover:shadow-lg hover:-translate-y-0.5">
 						Read more faculty videos →
 					</a>
 				</div>
@@ -346,9 +343,9 @@
 			<!-- Sidebar -->
 			<aside class="sticky top-[100px] self-start hidden lg:block">
 				<Sidebar />
-				<div class="bg-bg-alt rounded-lg p-6 text-center mt-6">
+				<div class="p-6 mt-6 text-center rounded-lg bg-bg-alt">
 					<p class="mb-4 text-[0.95rem] leading-relaxed">
-						<strong class="text-primary block mb-2">Discover our on-line learning platform on its dedicated website:</strong>
+						<strong class="block mb-2 text-primary">Discover our on-line learning platform on its dedicated website:</strong>
 					</p>
 					<a href="https://learn.ioea.eu" target="_blank" rel="noopener" class="inline-block my-4 transition-opacity duration-200 hover:opacity-80">
 						<img src="/images/logo_learn.svg" alt="IOEA Learn" class="max-w-[180px] w-full h-auto" />
