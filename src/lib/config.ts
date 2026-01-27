@@ -45,13 +45,13 @@ const defaultDynamicConfig = {
 } as const;
 
 /**
- * Merge static config with dynamic config loaded from database
- * @param dynamicConfig - Optional dynamic config from layout data
+ * Get configuration - uses static config only
+ * @param dynamicConfig - Deprecated: no longer used, kept for backward compatibility
  */
 export function getConfig(dynamicConfig?: typeof defaultDynamicConfig) {
   return {
     ...staticConfig,
-    ...(dynamicConfig || defaultDynamicConfig),
+    ...defaultDynamicConfig,
     // Status options for call applications
     statusOptions: {
       1: "Ph.D. student",

@@ -1,5 +1,4 @@
 import { config, getConfig, staticConfig } from "$lib/config";
-import { loadDynamicConfig } from "./config";
 
 interface EmailOptions {
   to: string;
@@ -88,9 +87,8 @@ export async function applicationReceiptEmail(applicant: {
   lastName: string;
   email: string;
 }): Promise<EmailOptions> {
-  // Load dynamic config to get session number
-  const dynamicConfig = await loadDynamicConfig();
-  const fullConfig = getConfig(dynamicConfig);
+  // Get config (static only)
+  const fullConfig = getConfig();
   const year = fullConfig.session.year;
   const sessionNumber = fullConfig.session.sessionNumber || staticConfig.sessionNumber;
   const sessionOrdinal = getOrdinal(sessionNumber);

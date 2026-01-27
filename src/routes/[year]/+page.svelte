@@ -7,7 +7,6 @@
 		data: {
 			year: number;
 			isCurrent: boolean;
-			dynamicConfig?: any;
 			lecturers: Array<{
 				id: number;
 				firstName: string;
@@ -25,8 +24,7 @@
 
 	let { data }: Props = $props();
 	const year = $derived(data.year);
-	const dynamicConfig = $derived(data.dynamicConfig);
-	const config = $derived(getConfig(dynamicConfig));
+	const config = $derived(getConfig());
 
 	// Use session number from config (database) if available, otherwise calculate it
 	const sessionNumber = $derived(

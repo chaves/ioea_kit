@@ -1,6 +1,5 @@
 import type { LayoutServerLoad } from './$types';
 import { getPhotoYears, staticConfig, getConfig } from '$lib/config';
-import { loadDynamicConfig } from '$lib/server/config';
 import { readdir, access } from 'fs/promises';
 import { join } from 'path';
 import { constants } from 'fs';
@@ -48,13 +47,11 @@ async function checkProgramPDFExists(): Promise<boolean> {
 
 export const load: LayoutServerLoad = async ({ locals }) => {
 	const randomPhoto = await getRandomPhoto();
-	const dynamicConfig = await loadDynamicConfig();
 	const programPDFExists = await checkProgramPDFExists();
 
 	return {
 		session: locals.session,
 		randomPhoto,
-		dynamicConfig,
 		programPDFExists
 	};
 };

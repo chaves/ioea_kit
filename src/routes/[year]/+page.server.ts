@@ -1,15 +1,11 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { staticConfig } from '$lib/config';
-import { loadDynamicConfig } from '$lib/server/config';
 import { prisma } from '$lib/server/db';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const year = parseInt(params.year);
 	const isCurrent = year === staticConfig.currentYear;
-
-	// Load dynamic config for the page
-	const dynamicConfig = await loadDynamicConfig();
 
 	// For archive years, redirect to lectures page
 	if (!isCurrent) {
@@ -61,7 +57,6 @@ export const load: PageServerLoad = async ({ params }) => {
 	return {
 		year,
 		isCurrent,
-		dynamicConfig,
 		lecturers: lecturers.map((l) => ({
 			id: l.id,
 			firstName: l.prenom ?? '',

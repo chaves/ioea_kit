@@ -13,13 +13,12 @@
 	const randomTestimonials = $derived(data.testimonials);
 	const randomVideoTestimonials = $derived(data.videoTestimonials);
 
-	// Get session dates from dynamic config (via layout)
-	const sessionDates = $derived(data.dynamicConfig?.session?.fullDateRange || '6-10 May 2026');
+	// Get session dates from static config
+	const config = $derived(getConfig());
+	const sessionDates = $derived(config.session.fullDateRange);
 	
-	// Get session number from config (now static, not from database)
-	const sessionNumber = $derived(
-		data.dynamicConfig?.session?.sessionNumber || staticConfig.sessionNumber
-	);
+	// Get session number from static config
+	const sessionNumber = $derived(staticConfig.sessionNumber);
 	
 	// Calculate ordinal suffix (1st, 2nd, 3rd, 4th, etc.)
 	function getOrdinal(num: number): string {
