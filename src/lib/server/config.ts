@@ -66,8 +66,16 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 	const now = Date.now();
 
 	// Return cached config if still valid
-	if (cachedConfig && now - cacheTime < CACHE_TTL) {
+	// BUT: If cache is stale (older than 1 minute), force refresh to catch DB updates
+	if (cachedConfig && now - cacheTime < CACHE_TTL && now - cacheTime < 60000) {
 		return cachedConfig;
+	}
+	
+	// Clear cache if it's too old
+	if (cachedConfig && now - cacheTime >= 60000) {
+		console.log(`[Config] Cache is stale (${Math.floor((now - cacheTime) / 1000)}s old), forcing refresh`);
+		cachedConfig = null;
+		cacheTime = 0;
 	}
 
 	try {
@@ -79,24 +87,39 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 		const sessionConfigs = configs.filter(c => c.key.startsWith('session.'));
 		console.log(`[Config] Session-related configs from DB:`, sessionConfigs.map(c => ({ key: c.key, value: c.value })));
 		
-		// Check specifically for session.sessionNumber
-		const sessionNumberRecord = configs.find(c => c.key === 'session.sessionNumber');
+		// Check specifically for session.sessionNumber - try exact match and trimmed
+		const sessionNumberRecord = configs.find(c => c.key === 'session.sessionNumber' || c.key.trim() === 'session.sessionNumber');
 		if (sessionNumberRecord) {
 			console.log(`[Config] ✅ Found session.sessionNumber in DB: key="${sessionNumberRecord.key}", value="${sessionNumberRecord.value}", type=${typeof sessionNumberRecord.value}`);
+			console.log(`[Config] Key length: ${sessionNumberRecord.key.length}, Key bytes:`, Array.from(sessionNumberRecord.key).map(c => c.charCodeAt(0)));
 		} else {
 			console.error(`[Config] ❌ session.sessionNumber NOT FOUND in database!`);
 			console.error(`[Config] Available keys:`, configs.map(c => c.key));
+			// Try to find similar keys
+			const similarKeys = configs.filter(c => c.key.toLowerCase().includes('sessionnumber') || c.key.toLowerCase().includes('session_number'));
+			if (similarKeys.length > 0) {
+				console.error(`[Config] Found similar keys:`, similarKeys.map(c => ({ key: c.key, value: c.value })));
+			}
 		}
 
-		// Convert to a Map for easy lookup
+		// Convert to a Map for easy lookup - ensure keys are trimmed
 		const configMap = new Map<string, string>(
-			configs.map((c) => [c.key, c.value])
+			configs.map((c) => [c.key.trim(), c.value])
 		);
 		
 		// Debug: Log all session-related config keys
 		const sessionKeys = Array.from(configMap.keys()).filter(k => k.startsWith('session.'));
 		console.log(`[Config] Session keys in Map:`, sessionKeys);
-		console.log(`[Config] session.sessionNumber in Map:`, configMap.get('session.sessionNumber'));
+		const mapValue = configMap.get('session.sessionNumber');
+		console.log(`[Config] session.sessionNumber in Map:`, mapValue, `(type: ${typeof mapValue})`);
+		
+		// Also try with trimmed key lookup
+		if (!mapValue) {
+			const trimmedLookup = Array.from(configMap.entries()).find(([k]) => k.trim() === 'session.sessionNumber');
+			if (trimmedLookup) {
+				console.log(`[Config] Found with trimmed lookup:`, trimmedLookup);
+			}
+		}
 
 		// Load status options from call_statuses table
 		const statuses = await prisma.call_statuses.findMany({
@@ -128,7 +151,29 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 		// Build the config object
 		// NOTE: Session dates should come from database - fallbacks are generic/placeholder values
 		const sessionYear = parseInt(configMap.get('session.year') || String(staticConfig.currentYear), 10);
-		const sessionNumberFromDB = configMap.get('session.sessionNumber');
+		
+		// Try multiple ways to get the session number (handle potential key issues)
+		let sessionNumberFromDB = configMap.get('session.sessionNumber');
+		if (!sessionNumberFromDB) {
+			// Try with trimmed key
+			const trimmedEntry = Array.from(configMap.entries()).find(([k]) => k.trim() === 'session.sessionNumber');
+			if (trimmedEntry) {
+				sessionNumberFromDB = trimmedEntry[1];
+				console.log(`[Config] Found sessionNumber using trimmed key lookup: ${sessionNumberFromDB}`);
+			}
+		}
+		
+		// If still not found, try direct database query as last resort
+		if (!sessionNumberFromDB) {
+			console.warn(`[Config] sessionNumber not in Map, trying direct DB query...`);
+			const directQuery = await prisma.site_config.findUnique({
+				where: { key: 'session.sessionNumber' }
+			});
+			if (directQuery) {
+				sessionNumberFromDB = directQuery.value;
+				console.log(`[Config] Found via direct DB query: ${sessionNumberFromDB}`);
+			}
+		}
 		
 		// Log for debugging - always log to help diagnose production issues
 		console.log(`[Config] Loading session config for year ${sessionYear}`);
