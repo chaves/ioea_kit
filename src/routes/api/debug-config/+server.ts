@@ -1,0 +1,50 @@
+import { json } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
+import { loadDynamicConfig } from '$lib/server/config';
+import { getConfig } from '$lib/config';
+
+/**
+ * Debug endpoint to check current configuration values
+ * Accessible at /api/debug-config
+ * Useful for diagnosing production issues
+ */
+export const GET: RequestHandler = async () => {
+	try {
+		const dynamicConfig = await loadDynamicConfig();
+		const fullConfig = getConfig(dynamicConfig);
+
+		return json({
+			success: true,
+			timestamp: new Date().toISOString(),
+			dynamicConfig: {
+				session: {
+					year: dynamicConfig.session.year,
+					sessionNumber: dynamicConfig.session.sessionNumber,
+					fullDateRange: dynamicConfig.session.fullDateRange,
+					dateRange: dynamicConfig.session.dateRange
+				}
+			},
+			fullConfig: {
+				session: {
+					year: fullConfig.session.year,
+					sessionNumber: fullConfig.session.sessionNumber,
+					fullDateRange: fullConfig.session.fullDateRange
+				}
+			},
+			raw: {
+				sessionNumber: dynamicConfig.session.sessionNumber,
+				sessionNumberType: typeof dynamicConfig.session.sessionNumber
+			}
+		});
+	} catch (error) {
+		console.error('[Debug Config] Error:', error);
+		return json(
+			{
+				success: false,
+				error: error instanceof Error ? error.message : 'Unknown error',
+				timestamp: new Date().toISOString()
+			},
+			{ status: 500 }
+		);
+	}
+};

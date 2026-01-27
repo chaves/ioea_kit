@@ -56,7 +56,7 @@ interface DynamicConfig {
 
 let cachedConfig: DynamicConfig | null = null;
 let cacheTime = 0;
-const CACHE_TTL = 10000; // Cache for 10 seconds (reduced for faster updates in production)
+const CACHE_TTL = 5000; // Cache for 5 seconds (very short for production debugging)
 
 /**
  * Load dynamic configuration from database
@@ -82,6 +82,7 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 		// Debug: Log all session-related config keys
 		const sessionKeys = Array.from(configMap.keys()).filter(k => k.startsWith('session.'));
 		console.log(`[Config] Found session config keys:`, sessionKeys);
+		console.log(`[Config] All config keys:`, Array.from(configMap.keys()));
 
 		// Load status options from call_statuses table
 		const statuses = await prisma.call_statuses.findMany({
@@ -115,16 +116,29 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 		const sessionYear = parseInt(configMap.get('session.year') || String(staticConfig.currentYear), 10);
 		const sessionNumberFromDB = configMap.get('session.sessionNumber');
 		
-		// Log for debugging
+		// Log for debugging - always log to help diagnose production issues
+		console.log(`[Config] Loading session config for year ${sessionYear}`);
+		console.log(`[Config] Raw sessionNumberFromDB value:`, sessionNumberFromDB, `(type: ${typeof sessionNumberFromDB})`);
+		
 		if (sessionNumberFromDB) {
-			console.log(`[Config] Loaded session number from DB: ${sessionNumberFromDB} for year ${sessionYear}`);
+			const parsed = parseInt(sessionNumberFromDB, 10);
+			if (isNaN(parsed)) {
+				console.error(`[Config] ERROR: session.sessionNumber value "${sessionNumberFromDB}" is not a valid number!`);
+			} else {
+				console.log(`[Config] ✅ Loaded session number from DB: ${parsed} (parsed from "${sessionNumberFromDB}")`);
+			}
 		} else {
-			console.warn(`[Config] session.sessionNumber not found in database, using fallback calculation: ${sessionYear - staticConfig.archiveFromYear + 1}`);
+			const fallback = sessionYear - staticConfig.archiveFromYear + 1;
+			console.warn(`[Config] ⚠️  session.sessionNumber not found in database, using fallback calculation: ${fallback}`);
+			console.warn(`[Config] Available session keys:`, Array.from(configMap.keys()).filter(k => k.startsWith('session.')));
 		}
 		
 		const sessionNumber = sessionNumberFromDB 
 			? parseInt(sessionNumberFromDB, 10)
 			: sessionYear - staticConfig.archiveFromYear + 1; // Fallback calculation
+		
+		// Final validation log
+		console.log(`[Config] Final sessionNumber value: ${sessionNumber} (type: ${typeof sessionNumber})`);
 		
 		const dynamicConfig: DynamicConfig = {
 			session: {

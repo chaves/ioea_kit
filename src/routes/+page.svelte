@@ -18,13 +18,19 @@
 	
 	// Get session number from config (database) or calculate it
 	const sessionNumber = $derived(() => {
+		// Debug: Log what we're receiving
+		console.log('[Homepage] dynamicConfig:', data.dynamicConfig);
+		console.log('[Homepage] session:', data.dynamicConfig?.session);
+		console.log('[Homepage] sessionNumber from DB:', data.dynamicConfig?.session?.sessionNumber);
+		
 		const dbValue = data.dynamicConfig?.session?.sessionNumber;
-		if (dbValue) {
+		if (dbValue !== undefined && dbValue !== null) {
+			console.log(`[Homepage] ✅ Using session number from database: ${dbValue}`);
 			return dbValue;
 		}
 		// Fallback calculation
 		const calculated = currentYear - 2002 + 1;
-		console.warn(`[Homepage] sessionNumber not found in dynamicConfig, using fallback: ${calculated}`);
+		console.warn(`[Homepage] ⚠️  sessionNumber not found in dynamicConfig (value: ${dbValue}), using fallback: ${calculated}`);
 		return calculated;
 	});
 	
