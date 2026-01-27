@@ -17,32 +17,34 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
 	default: async ({ request, cookies }) => {
+		// Extract form data outside try block so it's available in catch
+		const data = await request.formData();
+
+		// Safely extract form values with null checks
+		const firstName = data.get('first_name')?.toString()?.trim() || '';
+		const lastName = data.get('last_name')?.toString()?.trim() || '';
+		const email = data.get('email')?.toString()?.trim()?.toLowerCase() || '';
+		const nationalityStr = data.get('nationality')?.toString() || '';
+		const gender = data.get('gender')?.toString() || '';
+		const ageStr = data.get('age')?.toString() || '';
+		const statusStr = data.get('status')?.toString() || '';
+		const domain = data.get('domain')?.toString()?.trim() || '';
+		const diploma = data.get('diploma')?.toString()?.trim() || '';
+
+		// Collect values for re-population
+		const values = {
+			first_name: firstName,
+			last_name: lastName,
+			email: email,
+			nationality: nationalityStr,
+			gender: gender,
+			age: ageStr,
+			status: statusStr,
+			domain: domain,
+			diploma: diploma
+		};
+
 		try {
-			const data = await request.formData();
-
-			// Safely extract form values with null checks
-			const firstName = data.get('first_name')?.toString()?.trim() || null;
-			const lastName = data.get('last_name')?.toString()?.trim() || null;
-			const email = data.get('email')?.toString()?.trim()?.toLowerCase() || null;
-			const nationalityStr = data.get('nationality')?.toString() || null;
-			const gender = data.get('gender')?.toString() || null;
-			const ageStr = data.get('age')?.toString() || null;
-			const statusStr = data.get('status')?.toString() || null;
-			const domain = data.get('domain')?.toString()?.trim() || null;
-			const diploma = data.get('diploma')?.toString()?.trim() || null;
-
-			// Collect values for re-population
-			const values = {
-				first_name: firstName ?? '',
-				last_name: lastName ?? '',
-				email: email ?? '',
-				nationality: nationalityStr ?? '',
-				gender: gender ?? '',
-				age: ageStr ?? '',
-				status: statusStr ?? '',
-				domain: domain ?? '',
-				diploma: diploma ?? ''
-			};
 
 			// Detailed validation with specific error messages
 			if (!firstName || firstName.length < 2) {
@@ -179,7 +181,7 @@ export const actions: Actions = {
 			return fail(500, {
 				error:
 					'An unexpected error occurred while processing your application. Please try again or contact support if the problem persists.',
-				values: {}
+				values
 			});
 		}
 	}
