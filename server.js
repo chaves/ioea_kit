@@ -4,7 +4,9 @@
  */
 
 import { createServer } from 'http';
-import { handler } from './build/handler.js';
+
+// IMPORTANT: Set environment variables BEFORE importing the handler
+// The handler reads these at import time
 
 // Set body size limit for file uploads (12MB)
 process.env.BODY_SIZE_LIMIT = process.env.BODY_SIZE_LIMIT || '12582912';
@@ -19,20 +21,14 @@ if (!process.env.ORIGIN) {
 process.env.PROTOCOL_HEADER = process.env.PROTOCOL_HEADER || 'x-forwarded-proto';
 process.env.HOST_HEADER = process.env.HOST_HEADER || 'x-forwarded-host';
 
+// Dynamic import AFTER env vars are set
+const { handler } = await import('./build/handler.js');
+
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 
-// Create HTTP server with request pre-processing
-const server = createServer((req, res) => {
-	// Ensure content-length is properly set for the body parser
-	// This helps with proxy configurations that might strip headers
-	if (req.method === 'POST' && !req.headers['content-length'] && req.headers['transfer-encoding'] !== 'chunked') {
-		console.warn('POST request without content-length or transfer-encoding');
-	}
-	
-	// Pass to SvelteKit handler
-	handler(req, res);
-});
+// Create HTTP server
+const server = createServer(handler);
 
 // Track if server is shutting down
 let isShuttingDown = false;
@@ -90,25 +86,12 @@ process.on('unhandledRejection', (reason, promise) => {
 	gracefulShutdown('unhandledRejection');
 });
 
-// Clear config cache on startup to ensure fresh data after deployment
-// This ensures the latest database values are loaded immediately
-try {
-	// Try to import and clear cache - path may vary based on build structure
-	const configModule = await import('./build/server/lib/server/config.js').catch(() => null);
-	if (configModule?.clearConfigCache) {
-		configModule.clearConfigCache();
-		console.log('✅ Config cache cleared on startup');
-	}
-} catch (error) {
-	// Ignore - cache will expire naturally after 10 seconds
-	console.log('ℹ️  Config cache will refresh automatically');
-}
-
 // Start server
 server.listen(PORT, HOST, () => {
 	console.log(`Server running on http://${HOST}:${PORT}`);
 	console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 	console.log(`Node version: ${process.version}`);
+	console.log(`Body size limit: ${process.env.BODY_SIZE_LIMIT} bytes`);
 	console.log('Ready to accept connections');
 });
 
