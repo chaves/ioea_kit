@@ -9,7 +9,9 @@ const config = {
 
 	kit: {
 		adapter: adapter({
-			out: 'build'
+			out: 'build',
+			// Allow larger body for file uploads (CV + paper, max 5MB each)
+			bodySize: 12 * 1024 * 1024 // 12MB
 		})
 	}
 };
