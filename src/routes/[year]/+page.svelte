@@ -90,13 +90,9 @@
 								</svg>
 								Submit Your Application
 							</a>
-							{#if config.applicationDeadlines.first.active || config.applicationDeadlines.second.active}
+							{#if config.deadlines.application && config.deadlines.application !== 'TBD'}
 								<p class="text-white/80 text-sm mt-4">
-									{#if config.applicationDeadlines.first.active}
-										Next deadline: <strong class="text-white">{config.applicationDeadlines.first.date}</strong>
-									{:else if config.applicationDeadlines.second.active}
-										Final deadline: <strong class="text-white">{config.applicationDeadlines.second.date}</strong>
-									{/if}
+									Application deadline: <strong class="text-white">{config.deadlines.application}</strong>
 								</p>
 							{/if}
 						</div>
@@ -169,18 +165,13 @@
 				<p class="text-[1.05rem] leading-relaxed mb-6">Attendants will be selected on the basis of their resume, and of a paper or of a presentation of their research program.</p>
 
 				<h4 class="text-xl font-semibold mt-8 mb-4 text-primary">Calendar</h4>
-				<p class="text-[1.05rem] leading-relaxed mb-6">There are three deadlines for applications. As capacity is limited, we recommend that you do not wait until the last date to apply in order to have the best chance of being accepted.</p>
+				<p class="text-[1.05rem] leading-relaxed mb-6">As capacity is limited, we recommend that you apply early to have the best chance of being accepted.</p>
 				<ul class="text-[1.05rem] leading-relaxed mb-6 pl-6">
 					<li class="mb-2">
-						Closing dates for application:
-						<ul class="mt-2 mb-2 pl-6">
-							<li class="mb-1 {!config.applicationDeadlines.first.active ? 'line-through opacity-60' : ''}">
-								{config.applicationDeadlines.first.date} - Notification of acceptance on {config.applicationDeadlines.first.notificationDate}
-							</li>
-							<li class="mb-1 {!config.applicationDeadlines.second.active ? 'line-through opacity-60' : ''}">
-								{config.applicationDeadlines.second.date} - Notification of acceptance on {config.applicationDeadlines.second.notificationDate}
-							</li>
-						</ul>
+						Closing date for application: <strong>{config.deadlines.application}</strong>
+						{#if config.deadlines.notification && config.deadlines.notification !== 'TBD'}
+							<br />Notification of acceptance: {config.deadlines.notification}
+						{/if}
 					</li>
 					<li class="mb-2 {!config.registrationDeadline.active ? 'line-through opacity-60' : ''}">
 						Closing date for registration: {config.registrationDeadline.date}

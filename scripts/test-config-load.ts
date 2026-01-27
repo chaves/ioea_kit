@@ -13,7 +13,6 @@ async function testConfigLoad() {
 		console.log('✓ Configuration loaded successfully!\n');
 		console.log('Emails:', JSON.stringify(config.emails, null, 2));
 		console.log('\nDeadlines:', JSON.stringify(config.deadlines, null, 2));
-		console.log('\nApplication Deadlines:', JSON.stringify(config.applicationDeadlines, null, 2));
 		console.log(
 			'\nRegistration Deadline:',
 			JSON.stringify(config.registrationDeadline, null, 2)

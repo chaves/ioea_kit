@@ -20,11 +20,11 @@ const defaultDynamicConfig = {
   session: {
     year: staticConfig.currentYear,
     sessionNumber: staticConfig.sessionNumber,
-    startDate: 0,
-    endDate: 0,
-    month: "TBD",
-    dateRange: "TBD",
-    fullDateRange: "TBD",
+    startDate: 6,
+    endDate: 10,
+    month: "April",
+    dateRange: "6-10 April",
+    fullDateRange: "6-10 April 2026",
   },
 
   // Emails
@@ -36,25 +36,12 @@ const defaultDynamicConfig = {
 
   // Deadlines
   deadlines: {
-    application: "TBD",
-    notification: "TBD",
-    registration: "TBD",
-    students: "TBD",
+    application: "March 15th",
+    notification: "by March 15th",
+    registration: "March 27th",
+    students: "March 27th",
   },
 
-  // Application deadlines with status flags
-  applicationDeadlines: {
-    first: {
-      date: "TBD",
-      notificationDate: "TBD",
-      active: false,
-    },
-    second: {
-      date: "TBD",
-      notificationDate: "TBD",
-      active: false,
-    },
-  },
   registrationDeadline: {
     date: "TBD",
     active: false,

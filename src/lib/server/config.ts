@@ -27,18 +27,6 @@ interface DynamicConfig {
 		registration: string;
 		students: string;
 	};
-	applicationDeadlines: {
-		first: {
-			date: string;
-			notificationDate: string;
-			active: boolean;
-		};
-		second: {
-			date: string;
-			notificationDate: string;
-			active: boolean;
-		};
-	};
 	registrationDeadline: {
 		date: string;
 		active: boolean;
@@ -141,19 +129,6 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 				registration: configMap.get('deadline.registration') || 'TBD',
 				students: configMap.get('deadline.students') || 'TBD'
 			},
-			applicationDeadlines: {
-				first: {
-					date: configMap.get('applicationDeadline.first.date') || 'TBD',
-					notificationDate: configMap.get('applicationDeadline.first.notificationDate') || 'TBD',
-					active: configMap.get('applicationDeadline.first.active') === 'true'
-				},
-				second: {
-					date: configMap.get('applicationDeadline.second.date') || 'TBD',
-					notificationDate:
-						configMap.get('applicationDeadline.second.notificationDate') || 'TBD',
-					active: configMap.get('applicationDeadline.second.active') === 'true'
-				}
-			},
 			registrationDeadline: {
 				date: configMap.get('registrationDeadline.date') || 'TBD',
 				active: configMap.get('registrationDeadline.active') === 'true'
@@ -190,18 +165,6 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 				notification: 'TBD',
 				registration: 'TBD',
 				students: 'TBD'
-			},
-			applicationDeadlines: {
-				first: {
-					date: 'TBD',
-					notificationDate: 'TBD',
-					active: false
-				},
-				second: {
-					date: 'TBD',
-					notificationDate: 'TBD',
-					active: false
-				}
 			},
 			registrationDeadline: {
 				date: 'TBD',
