@@ -31,8 +31,7 @@
 		const titles: Record<string, string> = {
 			email: 'Email Addresses',
 			deadline: 'General Deadlines',
-			applicationDeadline: 'Application Deadlines',
-			registrationDeadline: 'Registration Deadline'
+			applicationDeadline: 'Application Deadlines'
 		};
 		return titles[category] || category;
 	}
@@ -62,8 +61,6 @@
 			'applicationDeadline.second.notificationDate':
 				'Notification date for second round',
 			'applicationDeadline.second.active': 'Enable second application deadline',
-			'registrationDeadline.date': 'Final registration deadline',
-			'registrationDeadline.active': 'Enable registration deadline'
 		};
 		return descriptions[key] || '';
 	}

@@ -27,10 +27,6 @@ interface DynamicConfig {
 		registration: string;
 		students: string;
 	};
-	registrationDeadline: {
-		date: string;
-		active: boolean;
-	};
 	statusOptions: Record<number, string>;
 	travel: {
 		transport: string[];
@@ -129,10 +125,6 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 				registration: configMap.get('deadline.registration') || 'TBD',
 				students: configMap.get('deadline.students') || 'TBD'
 			},
-			registrationDeadline: {
-				date: configMap.get('registrationDeadline.date') || 'TBD',
-				active: configMap.get('registrationDeadline.active') === 'true'
-			}
 		};
 
 		// Update cache
@@ -166,10 +158,6 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 				registration: 'TBD',
 				students: 'TBD'
 			},
-			registrationDeadline: {
-				date: 'TBD',
-				active: false
-			}
 		};
 	}
 }

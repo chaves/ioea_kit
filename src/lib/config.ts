@@ -42,10 +42,6 @@ const defaultDynamicConfig = {
     students: "March 27th",
   },
 
-  registrationDeadline: {
-    date: "TBD",
-    active: false,
-  },
 } as const;
 
 /**

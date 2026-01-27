@@ -173,9 +173,11 @@
 							<br />Notification of acceptance: {config.deadlines.notification}
 						{/if}
 					</li>
-					<li class="mb-2 {!config.registrationDeadline.active ? 'line-through opacity-60' : ''}">
-						Closing date for registration: {config.registrationDeadline.date}
-					</li>
+					{#if config.deadlines.registration && config.deadlines.registration !== 'TBD'}
+						<li class="mb-2">
+							Closing date for registration: <strong>{config.deadlines.registration}</strong>
+						</li>
+					{/if}
 				</ul>
 			</div>
 
