@@ -89,45 +89,11 @@ export async function loadDynamicConfig(forceRefresh: boolean = false): Promise<
 	try {
 		// Load all config from database
 		const configs = await prisma.site_config.findMany();
-		
-		// Debug: Log raw database results
-		console.log(`[Config] Total configs loaded from DB: ${configs.length}`);
-		const sessionConfigs = configs.filter(c => c.key.startsWith('session.'));
-		console.log(`[Config] Session-related configs from DB:`, sessionConfigs.map(c => ({ key: c.key, value: c.value })));
-		
-		// Check specifically for session.sessionNumber - try exact match and trimmed
-		const sessionNumberRecord = configs.find(c => c.key === 'session.sessionNumber' || c.key.trim() === 'session.sessionNumber');
-		if (sessionNumberRecord) {
-			console.log(`[Config] ✅ Found session.sessionNumber in DB: key="${sessionNumberRecord.key}", value="${sessionNumberRecord.value}", type=${typeof sessionNumberRecord.value}`);
-			console.log(`[Config] Key length: ${sessionNumberRecord.key.length}, Key bytes:`, Array.from(sessionNumberRecord.key).map(c => c.charCodeAt(0)));
-		} else {
-			console.error(`[Config] ❌ session.sessionNumber NOT FOUND in database!`);
-			console.error(`[Config] Available keys:`, configs.map(c => c.key));
-			// Try to find similar keys
-			const similarKeys = configs.filter(c => c.key.toLowerCase().includes('sessionnumber') || c.key.toLowerCase().includes('session_number'));
-			if (similarKeys.length > 0) {
-				console.error(`[Config] Found similar keys:`, similarKeys.map(c => ({ key: c.key, value: c.value })));
-			}
-		}
 
-		// Convert to a Map for easy lookup - ensure keys are trimmed
+		// Convert to a Map for easy lookup
 		const configMap = new Map<string, string>(
-			configs.map((c) => [c.key.trim(), c.value])
+			configs.map((c) => [c.key, c.value])
 		);
-		
-		// Debug: Log all session-related config keys
-		const sessionKeys = Array.from(configMap.keys()).filter(k => k.startsWith('session.'));
-		console.log(`[Config] Session keys in Map:`, sessionKeys);
-		const mapValue = configMap.get('session.sessionNumber');
-		console.log(`[Config] session.sessionNumber in Map:`, mapValue, `(type: ${typeof mapValue})`);
-		
-		// Also try with trimmed key lookup
-		if (!mapValue) {
-			const trimmedLookup = Array.from(configMap.entries()).find(([k]) => k.trim() === 'session.sessionNumber');
-			if (trimmedLookup) {
-				console.log(`[Config] Found with trimmed lookup:`, trimmedLookup);
-			}
-		}
 
 		// Load status options from call_statuses table
 		const statuses = await prisma.call_statuses.findMany({
