@@ -38,7 +38,7 @@
 														<img
 															src={`/images/lec/${lecture.author.photo}`}
 															alt="{lecture.author.firstName} {lecture.author.lastName}"
-															class="w-18 h-18 rounded-full object-cover border-[3px] border-white shadow-[0_2px_8px_rgba(0,0,0,0.1)] transition-all duration-300 flex-shrink-0 group-hover:scale-105 group-hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
+															class="max-w-[100px] w-18 h-18 rounded-full object-cover border-[3px] border-white shadow-[0_2px_8px_rgba(0,0,0,0.1)] transition-all duration-300 flex-shrink-0 group-hover:scale-105 group-hover:shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
 															onerror={(e) => {
 																const img = e.currentTarget as HTMLImageElement;
 																img.style.display = 'none';
