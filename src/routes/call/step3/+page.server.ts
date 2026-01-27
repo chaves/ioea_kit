@@ -74,8 +74,9 @@ export const actions: Actions = {
       await writeFile(join(UPLOAD_DIR, paperFilename), paperBuffer);
 
       // Create database entry
-      await prisma.call_proposals.create({
+      await prisma.call_submissions.create({
         data: {
+          call_year: new Date().getFullYear(),
           first_name: step1.first_name,
           last_name: step1.last_name,
           email: step1.email,
@@ -88,13 +89,15 @@ export const actions: Actions = {
           university: step2.university,
           department: step2.department,
           country: step2.country,
-          phd_title: step2.phd_title,
-          phd_ad_name: step2.phd_ad_name,
-          phd_ad_mail: step2.phd_ad_mail,
-          phd_year: step2.phd_year ? String(step2.phd_year) : null,
-          phd_summary: step2.phd_summary,
+          title: step2.phd_title,
+          phd_ad_name: step2.phd_ad_name || null,
+          phd_ad_mail: step2.phd_ad_mail || null,
+          phd_year: step2.phd_year || null,
+          summary: step2.phd_summary,
           cv: cvFilename,
           paper: paperFilename,
+          created_at: new Date(),
+          updated_at: new Date(),
         },
       });
 

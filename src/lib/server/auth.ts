@@ -244,7 +244,7 @@ export async function validateAdminCredentials(
 	reviewerType: string;
 	reviewerGroup: number | null;
 } | null> {
-	// Try new system first
+	// Use new system only - legacy call_reviewers auth removed
 	const user = await validateUserCredentials(email, password);
 	if (user) {
 		return {
@@ -255,22 +255,7 @@ export async function validateAdminCredentials(
 		};
 	}
 
-	// Fallback to legacy call_reviewers table
-	const reviewer = await prisma.call_reviewers.findFirst({
-		where: { email },
-	});
-
-	if (!reviewer) return null;
-
-	// Simple password comparison (legacy - not hashed)
-	if (reviewer.password !== password) return null;
-
-	return {
-		userId: reviewer.id,
-		name: reviewer.name ?? `${reviewer.email}`,
-		reviewerType: reviewer.type ?? 'reviewer',
-		reviewerGroup: reviewer.group ?? null,
-	};
+	return null;
 }
 
 export async function validateStudentCredentials(

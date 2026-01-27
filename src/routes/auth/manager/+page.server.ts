@@ -10,8 +10,8 @@ export const load: PageServerLoad = async ({ cookies }) => {
 		throw redirect(302, '/auth/login');
 	}
 
-	// Get all proposals with their notes
-	const proposals = await prisma.call_proposals.findMany({
+	// Get all submissions
+	const submissions = await prisma.call_submissions.findMany({
 		orderBy: { last_name: 'asc' }
 	});
 
@@ -21,9 +21,12 @@ export const load: PageServerLoad = async ({ cookies }) => {
 	// Get reviewers
 	const reviewers = await prisma.call_reviewers.findMany();
 
-	// Calculate average scores for each proposal
-	const proposalsWithScores = proposals.map((p) => {
-		const proposalNotes = notes.filter((n) => n.call_id === p.id);
+	// Get groups
+	const groups = await prisma.call_groups.findMany();
+
+	// Calculate average scores for each submission
+	const proposalsWithScores = submissions.map((p) => {
+		const proposalNotes = notes.filter((n) => n.call_submission_id === p.id);
 		const avgScore =
 			proposalNotes.length > 0
 				? proposalNotes.reduce((sum, n) => sum + n.note, 0) / proposalNotes.length
@@ -31,19 +34,24 @@ export const load: PageServerLoad = async ({ cookies }) => {
 
 		return {
 			id: p.id,
-			firstName: p.first_name ?? '',
-			lastName: p.last_name ?? '',
-			email: p.email ?? '',
-			university: p.university ?? '',
-			country: p.country ?? 0,
-			status: p.status ?? 0,
-			reviewerGroup: p.reviewer_group ?? 0,
+			firstName: p.first_name,
+			lastName: p.last_name,
+			email: p.email,
+			university: p.university,
+			country: p.country,
+			status: p.status,
+			callYear: p.call_year,
+			accepted: p.accepted,
+			groupId: p.call_group_id,
+			groupName: p.call_group_id
+				? groups.find((g) => g.id === p.call_group_id)?.name ?? 'Unknown'
+				: 'Unassigned',
 			avgScore,
 			noteCount: proposalNotes.length,
 			notes: proposalNotes.map((n) => ({
 				note: n.note,
-				reviewerId: n.reviewer_id,
-				reviewerName: reviewers.find((r) => r.id === n.reviewer_id)?.name ?? 'Unknown'
+				reviewerId: n.call_reviewer_id,
+				reviewerName: reviewers.find((r) => r.id === n.call_reviewer_id)?.name ?? 'Unknown'
 			}))
 		};
 	});
@@ -53,8 +61,16 @@ export const load: PageServerLoad = async ({ cookies }) => {
 		reviewers: reviewers.map((r) => ({
 			id: r.id,
 			name: r.name,
-			type: r.type,
-			group: r.group
+			email: r.email,
+			groupId: r.call_group_id,
+			groupName: r.call_group_id
+				? groups.find((g) => g.id === r.call_group_id)?.name ?? 'Unknown'
+				: 'Unassigned'
+		})),
+		groups: groups.map((g) => ({
+			id: g.id,
+			year: g.year,
+			name: g.name
 		}))
 	};
 };

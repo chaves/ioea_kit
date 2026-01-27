@@ -14,8 +14,8 @@ async function testConnection() {
 		const count = await prisma.countries.count();
 		console.log(`✓ Found ${count} countries in database`);
 
-		// Test call_proposals table
-		const proposals = await prisma.call_proposals.count();
+		// Test call_submissions table
+		const submissions = await prisma.call_submissions.count();
 		console.log(`✓ Found ${proposals} call proposals in database`);
 
 		console.log('\n✓ Database connection is working correctly');

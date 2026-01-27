@@ -126,15 +126,19 @@ export const actions: Actions = {
 				});
 			}
 
-			// Check if email already exists
-			const existing = await prisma.call_proposals.findFirst({
-				where: { email }
+			// Check if email already exists for current year
+			const currentYear = new Date().getFullYear();
+			const existing = await prisma.call_submissions.findFirst({
+				where: {
+					email,
+					call_year: currentYear
+				}
 			});
 
 			if (existing) {
 				return fail(400, {
 					error:
-						'An application with this email address already exists. If you need to update your application, please contact us.',
+						`An application with this email address already exists for ${currentYear}. If you need to update your application, please contact us.`,
 					values
 				});
 			}

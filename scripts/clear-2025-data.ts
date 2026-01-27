@@ -1,6 +1,6 @@
 /**
  * Clear 2025 data to start fresh for 2026
- * This script deletes all data from generic tables (students, call_proposals, etc.)
+ * This script deletes all data from generic tables (students, call_submissions, etc.)
  */
 
 import { PrismaClient } from '@prisma/client';
@@ -24,6 +24,9 @@ async function clearData() {
 		console.log('Clearing students_groups...');
 		await prisma.students_groups.deleteMany();
 
+		console.log('Clearing call_reviewer_call_submissions...');
+		await prisma.call_reviewer_call_submissions.deleteMany();
+
 		console.log('Clearing call_comments...');
 		await prisma.call_comments.deleteMany();
 
@@ -35,9 +38,9 @@ async function clearData() {
 		const studentsDeleted = await prisma.students.deleteMany();
 		console.log(`  → Deleted ${studentsDeleted.count} students`);
 
-		console.log('Clearing call_proposals...');
-		const proposalsDeleted = await prisma.call_proposals.deleteMany();
-		console.log(`  → Deleted ${proposalsDeleted.count} proposals`);
+		console.log('Clearing call_submissions...');
+		const submissionsDeleted = await prisma.call_submissions.deleteMany();
+		console.log(`  → Deleted ${submissionsDeleted.count} submissions`);
 
 		console.log('\n✓ All 2025 data has been cleared successfully!');
 		console.log('Database is now ready for 2026.\n');
