@@ -45,6 +45,13 @@ export const actions: Actions = {
 		};
 
 		try {
+			console.log('[Step1] Processing submission:', {
+				firstName,
+				lastName,
+				email: email.substring(0, 3) + '***', // Partial email for privacy
+				status: statusStr,
+				currentYear: new Date().getFullYear()
+			});
 
 			// Detailed validation with specific error messages
 			if (!firstName || firstName.length < 2) {
@@ -130,12 +137,16 @@ export const actions: Actions = {
 
 			// Check if email already exists for current year
 			const currentYear = new Date().getFullYear();
+			console.log('[Step1] Checking for duplicate email:', { email: email.substring(0, 5) + '***', currentYear });
+
 			const existing = await prisma.call_submissions.findFirst({
 				where: {
 					email,
 					call_year: currentYear
 				}
 			});
+
+			console.log('[Step1] Duplicate check result:', existing ? 'Found existing' : 'No duplicate');
 
 			if (existing) {
 				return fail(400, {
