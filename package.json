@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
-		"prebuild": "tsx scripts/generate-program-image.ts all || echo 'PDF conversion skipped (tools not available)'",
+		"prebuild": "npx tsx scripts/generate-program-image.ts all || echo 'PDF conversion skipped (tools not available)'",
 		"build": "vite build",
 		"preview": "vite preview",
 		"start": "node server.js",
@@ -13,7 +13,7 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"generate-placeholders": "node scripts/generate-placeholders.js",
-		"generate-images": "tsx scripts/generate-program-image.ts all"
+		"generate-images": "npx tsx scripts/generate-program-image.ts all"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^7.0.0",
@@ -27,6 +27,7 @@
 		"svelte": "^5.43.8",
 		"svelte-check": "^4.3.4",
 		"tailwindcss": "^3.4.17",
+		"tsx": "^4.19.2",
 		"typescript": "^5.9.3",
 		"vite": "^7.2.2"
 	},
