@@ -6,6 +6,9 @@
 import { createServer } from 'http';
 import { handler } from './build/handler.js';
 
+// Set body size limit for file uploads (12MB)
+process.env.BODY_SIZE_LIMIT = process.env.BODY_SIZE_LIMIT || '12582912';
+
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 
