@@ -90,7 +90,7 @@ export async function applicationReceiptEmail(applicant: {
   // Get config (static only)
   const fullConfig = getConfig();
   const year = fullConfig.session.year;
-  const sessionNumber = fullConfig.session.sessionNumber || staticConfig.sessionNumber;
+  const sessionNumber = fullConfig.sessionNumber;
   const sessionOrdinal = getOrdinal(sessionNumber);
 
   return {

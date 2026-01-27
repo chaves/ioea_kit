@@ -13,12 +13,12 @@
 	const randomTestimonials = $derived(data.testimonials);
 	const randomVideoTestimonials = $derived(data.videoTestimonials);
 
-	// Get session dates from static config
-	const config = $derived(getConfig());
-	const sessionDates = $derived(config.session.fullDateRange);
+	// Get config
+	const appConfig = $derived(getConfig());
+	const sessionDates = $derived(appConfig.session.fullDateRange);
 	
-	// Get session number from static config
-	const sessionNumber = $derived(staticConfig.sessionNumber);
+	// Get session number from config
+	const sessionNumber = $derived(appConfig.sessionNumber);
 	
 	// Calculate ordinal suffix (1st, 2nd, 3rd, 4th, etc.)
 	function getOrdinal(num: number): string {
@@ -212,13 +212,13 @@
 						<h3 class="text-base mb-4">Important Dates</h3>
 						<ul class="list-none p-0 m-0">
 							<li class="py-2 border-b border-border last:border-b-0">
-								<strong>Application Deadline:</strong> {config.deadlines.application}
+								<strong>Application Deadline:</strong> {appConfig.deadlines.application}
 							</li>
 							<li class="py-2 border-b border-border last:border-b-0">
-								<strong>Notification:</strong> {config.deadlines.notification}
+								<strong>Notification:</strong> {appConfig.deadlines.notification}
 							</li>
 							<li class="py-2 border-b border-border last:border-b-0">
-								<strong>Registration:</strong> {config.deadlines.registration}
+								<strong>Registration:</strong> {appConfig.deadlines.registration}
 							</li>
 						</ul>
 					</div>

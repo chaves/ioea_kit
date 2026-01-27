@@ -24,11 +24,11 @@
 
 	let { data }: Props = $props();
 	const year = $derived(data.year);
-	const config = $derived(getConfig());
+	const appConfig = $derived(getConfig());
 
 	// Use session number from config (database) if available, otherwise calculate it
 	const sessionNumber = $derived(
-		config.session.sessionNumber || staticConfig.sessionNumber
+		appConfig.session.sessionNumber
 	);
 
 	// Calculate ordinal suffix (1st, 2nd, 3rd, 4th, etc.)
@@ -66,7 +66,7 @@
 					{sessionNumber}<sup class="text-[0.7em] align-super">{sessionOrdinal}</sup> session of the Institutional and Organizational Economics Academy {config.session.dateRange} {year} in Corsica (France)
 				</h3>
 
-				{#if config.callIsOpen}
+				{#if appConfig.callIsOpen}
 					<div class="bg-gradient-to-br from-primary to-secondary rounded-2xl p-8 mb-8 shadow-[0_8px_24px_rgba(0,0,0,0.12)] border border-primary/20">
 						<div class="text-center">
 							<h4 class="mb-3 text-2xl font-bold text-white">

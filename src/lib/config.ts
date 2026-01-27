@@ -1,7 +1,10 @@
 // IOEA Configuration - migrated from config_perso.php
 
-// Static configuration (compile-time constants)
-export const staticConfig = {
+/**
+ * Main configuration object
+ */
+export const config = {
+  // Basic constants
   currentYear: 2026,
   archiveFromYear: 2002,
   archiveToYear: 2025,
@@ -10,14 +13,11 @@ export const staticConfig = {
   // Bad sessions (cancelled years)
   badSessions: [2013, 2020, 2021] as number[],
   badPhotos: [2020, 2021] as number[],
-} as const;
 
-// Default configuration values
-const defaultDynamicConfig = {
   // Session dates
   session: {
-    year: staticConfig.currentYear,
-    sessionNumber: staticConfig.sessionNumber,
+    year: 2026,
+    sessionNumber: 23,
     startDate: 6,
     endDate: 10,
     month: "April",
@@ -35,105 +35,106 @@ const defaultDynamicConfig = {
   // Deadlines
   deadlines: {
     application: "March 15th",
-    notification: false,
+    notification: "by March 15th",
     registration: "March 27th",
     students: "March 27th",
   },
+  // Status options for call applications
+  statusOptions: {
+    1: "Ph.D. student",
+    2: "Post-doc",
+    3: "Academic",
+    4: "Other",
+  } as Record<number, string>,
+  // Call steps
+  callSteps: {
+    1: "Information about you",
+    2: "Affiliation and project",
+    3: "Upload your files",
+  } as Record<number, string>,
+  // Travel options
+  travel: {
+    transport: ["", "Plane", "Boat"],
+    locations: {
+      1: "Ajaccio",
+      2: "Bastia",
+      3: "Calvi",
+      4: "Ile Rousse",
+      5: "Propriano",
+    } as Record<number, string>,
+  },
+  // Transfer options
+  transfer: {
+    arrival: {
+      1: "Collective bus (from Ajaccio airport)",
+      2: "Car rental",
+      3: "Public bus",
+      4: "Taxi",
+      5: "Personal car",
+      6: "Unknown",
+    } as Record<number, string>,
+    departure: {
+      1: "Collective bus (to Ajaccio airport)",
+      2: "Car rental",
+      3: "Public bus",
+      4: "Taxi",
+      5: "Personal car",
+      6: "Unknown",
+    } as Record<number, string>,
+  },
+  // Students group open
+  studentsGroupOpen: false,
+  // Call for applications status - controls whether applications are open
+  callIsOpen: true,
+  // Brochure configuration
+  brochure: {
+    // PDF source (optional - if provided, image will be generated from this)
+    pdfName: "IOEABrochure2024.pdf",
+    name: "IOEABrochure2024.pdf",
+    // Image filename (generated from PDF or manually created)
+    imageName: "graphiques/IOEABrochure2024.jpg",
+  },
+  // Program configuration
+  program: {
+    // PDF source (optional - if provided, image will be generated from this)
+    pdfName: `IOEAProgramme2026.pdf`,
+    // Image filename (generated from PDF or manually created)
+    imageName: `graphiques/IOEAProgramme2026.jpg`,
+  },
+  // Financial information (prices in euros)
+  prices: {
+    travel: {
+      flightMin: 200,
+      flightMax: 400,
+      busTransfer: 60,
+    },
+    accommodation: {
+      roomPerWeek: 340,
+      hotelPerNight: 80,
+    },
+    meals: {
+      weeklyRate: 200,
+    },
+    registration: {
+      fee: 600,
+    },
+  },
 } as const;
 
-/**
- * Get configuration - uses static config only
- * @param dynamicConfig - Deprecated: no longer used, kept for backward compatibility
- */
-export function getConfig(dynamicConfig?: typeof defaultDynamicConfig) {
-  return {
-    ...staticConfig,
-    ...defaultDynamicConfig,
-    // Status options for call applications
-    statusOptions: {
-      1: "Ph.D. student",
-      2: "Post-doc",
-      3: "Academic",
-      4: "Other",
-    } as Record<number, string>,
-    // Call steps
-    callSteps: {
-      1: "Information about you",
-      2: "Affiliation and project",
-      3: "Upload your files",
-    } as Record<number, string>,
-    // Travel options
-    travel: {
-      transport: ["", "Plane", "Boat"],
-      locations: {
-        1: "Ajaccio",
-        2: "Bastia",
-        3: "Calvi",
-        4: "Ile Rousse",
-        5: "Propriano",
-      } as Record<number, string>,
-    },
-    // Transfer options
-    transfer: {
-      arrival: {
-        1: "Collective bus (from Ajaccio airport)",
-        2: "Car rental",
-        3: "Public bus",
-        4: "Taxi",
-        5: "Personal car",
-        6: "Unknown",
-      } as Record<number, string>,
-      departure: {
-        1: "Collective bus (to Ajaccio airport)",
-        2: "Car rental",
-        3: "Public bus",
-        4: "Taxi",
-        5: "Personal car",
-        6: "Unknown",
-      } as Record<number, string>,
-    },
-    // Students group open
-    studentsGroupOpen: false,
-    // Call for applications status - controls whether applications are open
-    callIsOpen: true,
-    // Brochure configuration
-    brochure: {
-      // PDF source (optional - if provided, image will be generated from this)
-      pdfName: "IOEABrochure2024.pdf",
-      name: "IOEABrochure2024.pdf",
-      // Image filename (generated from PDF or manually created)
-      imageName: "graphiques/IOEABrochure2024.jpg",
-    },
-    // Program configuration
-    program: {
-      // PDF source (optional - if provided, image will be generated from this)
-      pdfName: `IOEAProgramme${staticConfig.currentYear}.pdf`,
-      // Image filename (generated from PDF or manually created)
-      imageName: `graphiques/IOEAProgramme${staticConfig.currentYear}.jpg`,
-    },
-    // Financial information (prices in euros)
-    prices: {
-      travel: {
-        flightMin: 200,
-        flightMax: 400,
-        busTransfer: 60,
-      },
-      accommodation: {
-        roomPerWeek: 340,
-        hotelPerNight: 80,
-      },
-      meals: {
-        weeklyRate: 200,
-      },
-      registration: {
-        fee: 600,
-      },
-    },
-  };
-}
+// Export for backward compatibility
+export const staticConfig = {
+  currentYear: config.currentYear,
+  archiveFromYear: config.archiveFromYear,
+  archiveToYear: config.archiveToYear,
+  sessionNumber: config.sessionNumber,
+  badSessions: config.badSessions,
+  badPhotos: config.badPhotos,
+} as const;
 
-// Export default config for backward compatibility
-export const config = getConfig();
+// Backward compatibility function
+export function getConfig() {
+  return config;
+}
 
 // Menu configuration
 export const menus = {
@@ -234,11 +235,11 @@ export const menus = {
 export function getArchiveYears(): number[] {
   const years: number[] = [];
   for (
-    let i = staticConfig.archiveToYear;
-    i >= staticConfig.archiveFromYear;
+    let i = config.archiveToYear;
+    i >= config.archiveFromYear;
     i--
   ) {
-    if (!staticConfig.badSessions.includes(i)) {
+    if (!config.badSessions.includes(i)) {
       years.push(i);
     }
   }
@@ -249,11 +250,11 @@ export function getArchiveYears(): number[] {
 export function getPhotoYears(): number[] {
   const years: number[] = [];
   for (
-    let i = staticConfig.archiveToYear;
-    i >= staticConfig.archiveFromYear;
+    let i = config.archiveToYear;
+    i >= config.archiveFromYear;
     i--
   ) {
-    if (!staticConfig.badPhotos.includes(i)) {
+    if (!config.badPhotos.includes(i)) {
       years.push(i);
     }
   }
