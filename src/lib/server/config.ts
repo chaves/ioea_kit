@@ -62,12 +62,20 @@ const CACHE_TTL = 5000; // Cache for 5 seconds (very short for production debugg
  * Load dynamic configuration from database
  * Results are cached for 1 minute to reduce database queries
  */
-export async function loadDynamicConfig(): Promise<DynamicConfig> {
+export async function loadDynamicConfig(forceRefresh: boolean = false): Promise<DynamicConfig> {
 	const now = Date.now();
+
+	// Force refresh if requested (useful for debugging)
+	if (forceRefresh) {
+		console.log(`[Config] Force refresh requested, clearing cache`);
+		cachedConfig = null;
+		cacheTime = 0;
+	}
 
 	// Return cached config if still valid
 	// BUT: If cache is stale (older than 1 minute), force refresh to catch DB updates
 	if (cachedConfig && now - cacheTime < CACHE_TTL && now - cacheTime < 60000) {
+		console.log(`[Config] Using cached config (age: ${Math.floor((now - cacheTime) / 1000)}s)`);
 		return cachedConfig;
 	}
 	
@@ -165,14 +173,27 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 		
 		// If still not found, try direct database query as last resort
 		if (!sessionNumberFromDB) {
-			console.warn(`[Config] sessionNumber not in Map, trying direct DB query...`);
-			const directQuery = await prisma.site_config.findUnique({
-				where: { key: 'session.sessionNumber' }
-			});
-			if (directQuery) {
-				sessionNumberFromDB = directQuery.value;
-				console.log(`[Config] Found via direct DB query: ${sessionNumberFromDB}`);
+			console.warn(`[Config] ⚠️ sessionNumber not in Map, trying direct DB query...`);
+			try {
+				const directQuery = await prisma.site_config.findUnique({
+					where: { key: 'session.sessionNumber' }
+				});
+				if (directQuery) {
+					sessionNumberFromDB = directQuery.value;
+					console.log(`[Config] ✅ Found via direct DB query: ${sessionNumberFromDB}`);
+				} else {
+					console.error(`[Config] ❌ Direct DB query also returned null for session.sessionNumber`);
+				}
+			} catch (error) {
+				console.error(`[Config] ❌ Error in direct DB query:`, error);
 			}
+		}
+		
+		// Final check - if we still don't have it, log all available keys for debugging
+		if (!sessionNumberFromDB) {
+			console.error(`[Config] ❌ CRITICAL: sessionNumber still not found after all attempts!`);
+			console.error(`[Config] All config keys in database:`, configs.map(c => c.key));
+			console.error(`[Config] All session keys in Map:`, Array.from(configMap.keys()).filter(k => k.includes('session')));
 		}
 		
 		// Log for debugging - always log to help diagnose production issues
@@ -196,8 +217,13 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 			? parseInt(sessionNumberFromDB, 10)
 			: sessionYear - staticConfig.archiveFromYear + 1; // Fallback calculation
 		
-		// Final validation log
-		console.log(`[Config] Final sessionNumber value: ${sessionNumber} (type: ${typeof sessionNumber})`);
+		// Final validation log - be very explicit
+		if (sessionNumberFromDB) {
+			console.log(`[Config] ✅ Using sessionNumber from database: ${sessionNumber} (from "${sessionNumberFromDB}")`);
+		} else {
+			console.error(`[Config] ❌ Using FALLBACK sessionNumber: ${sessionNumber} (calculated, NOT from database!)`);
+			console.error(`[Config] This means sessionNumberFromDB was:`, sessionNumberFromDB);
+		}
 		
 		const dynamicConfig: DynamicConfig = {
 			session: {

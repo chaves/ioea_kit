@@ -25,7 +25,8 @@ export const GET: RequestHandler = async ({ locals }) => {
 			where: { key: 'session.sessionNumber' }
 		});
 		
-		const dynamicConfig = await loadDynamicConfig();
+		// Force refresh to bypass cache for debugging
+		const dynamicConfig = await loadDynamicConfig(true);
 		const fullConfig = getConfig(dynamicConfig);
 
 		return json({
