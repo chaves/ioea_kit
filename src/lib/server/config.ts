@@ -4,6 +4,7 @@
  */
 
 import { prisma } from './db';
+import { staticConfig } from '../config';
 
 interface DynamicConfig {
 	session: {
@@ -69,14 +70,15 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 		);
 
 		// Build the config object
+		// NOTE: Session dates should come from database - fallbacks are generic/placeholder values
 		const dynamicConfig: DynamicConfig = {
 			session: {
-				year: parseInt(configMap.get('session.year') || '2026', 10),
-				startDate: parseInt(configMap.get('session.startDate') || '6', 10),
-				endDate: parseInt(configMap.get('session.endDate') || '10', 10),
-				month: configMap.get('session.month') || 'May',
-				dateRange: configMap.get('session.dateRange') || '6-10 May',
-				fullDateRange: configMap.get('session.fullDateRange') || '6-10 May 2026'
+				year: parseInt(configMap.get('session.year') || String(staticConfig.currentYear), 10),
+				startDate: parseInt(configMap.get('session.startDate') || '0', 10),
+				endDate: parseInt(configMap.get('session.endDate') || '0', 10),
+				month: configMap.get('session.month') || 'TBD',
+				dateRange: configMap.get('session.dateRange') || 'TBD',
+				fullDateRange: configMap.get('session.fullDateRange') || 'TBD'
 			},
 			emails: {
 				general: configMap.get('email.general') || 'ioea.coordinator@gmail.com',
@@ -116,15 +118,16 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 	} catch (error) {
 		console.error('Error loading dynamic config from database:', error);
 
-		// Return defaults if database fails
+		// Return generic fallback values if database fails
+		// WARNING: These are placeholder values - database should be fixed ASAP
 		return {
 			session: {
-				year: 2026,
-				startDate: 6,
-				endDate: 10,
-				month: 'May',
-				dateRange: '6-10 May',
-				fullDateRange: '6-10 May 2026'
+				year: staticConfig.currentYear,
+				startDate: 0,
+				endDate: 0,
+				month: 'TBD',
+				dateRange: 'TBD',
+				fullDateRange: 'TBD'
 			},
 			emails: {
 				general: 'ioea.coordinator@gmail.com',

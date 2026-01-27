@@ -30,11 +30,19 @@ async function testSessionDates() {
 		console.log('   Month:', config.session.month);
 		console.log('');
 
-		// Test 3: Verify expected values
-		console.log('Test 3: Verifying expected values...');
+		// Test 3: Verify values come from database (not fallbacks)
+		console.log('Test 3: Verifying values come from database...');
 		const expectedYear = 2026;
 		const expectedDateRange = '6-10 May';
 		const expectedFullDateRange = '6-10 May 2026';
+
+		// Check if values are not fallback/placeholder values
+		if (config.session.dateRange === 'TBD' || config.session.startDate === 0) {
+			console.error('❌ CRITICAL: Session dates are using fallback values!');
+			console.error('   This means the database is not properly configured.');
+			console.error('   Please run: mysql -u root ioea < scripts/add-session-dates-config.sql');
+			process.exit(1);
+		}
 
 		if (config.session.year === expectedYear) {
 			console.log('✅ Session year is correct:', expectedYear);
@@ -53,6 +61,8 @@ async function testSessionDates() {
 		} else {
 			console.error('❌ Full date range mismatch! Expected:', expectedFullDateRange, 'Got:', config.session.fullDateRange);
 		}
+
+		console.log('✅ Values are loaded from database (not fallbacks)');
 
 		console.log('');
 		console.log('✨ All tests passed! Session dates are correctly configured.');

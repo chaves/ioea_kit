@@ -12,15 +12,17 @@ export const staticConfig = {
 } as const;
 
 // Default configuration (fallback for dynamic values)
+// NOTE: Session dates should be loaded from database (site_config table)
+// These are fallback values only, used if database is unavailable
 const defaultDynamicConfig = {
-  // Session dates (loaded from database)
+  // Session dates (PRIMARY SOURCE: database site_config table)
   session: {
-    year: 2026,
-    startDate: 6,
-    endDate: 10,
-    month: "May",
-    dateRange: "6-10 May",
-    fullDateRange: "6-10 May 2026",
+    year: staticConfig.currentYear,
+    startDate: 0,
+    endDate: 0,
+    month: "TBD",
+    dateRange: "TBD",
+    fullDateRange: "TBD",
   },
 
   // Emails
