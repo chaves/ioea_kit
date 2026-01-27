@@ -62,26 +62,17 @@ const CACHE_TTL = 5000; // Cache for 5 seconds (very short for production debugg
  * Load dynamic configuration from database
  * Results are cached for 1 minute to reduce database queries
  */
-export async function loadDynamicConfig(forceRefresh: boolean = false): Promise<DynamicConfig> {
+export async function loadDynamicConfig(): Promise<DynamicConfig> {
 	const now = Date.now();
-
-	// Force refresh if requested (useful for debugging)
-	if (forceRefresh) {
-		console.log(`[Config] Force refresh requested, clearing cache`);
-		cachedConfig = null;
-		cacheTime = 0;
-	}
 
 	// Return cached config if still valid
 	// BUT: If cache is stale (older than 1 minute), force refresh to catch DB updates
 	if (cachedConfig && now - cacheTime < CACHE_TTL && now - cacheTime < 60000) {
-		console.log(`[Config] Using cached config (age: ${Math.floor((now - cacheTime) / 1000)}s)`);
 		return cachedConfig;
 	}
 	
 	// Clear cache if it's too old
 	if (cachedConfig && now - cacheTime >= 60000) {
-		console.log(`[Config] Cache is stale (${Math.floor((now - cacheTime) / 1000)}s old), forcing refresh`);
 		cachedConfig = null;
 		cacheTime = 0;
 	}
