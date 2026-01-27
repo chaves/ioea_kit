@@ -68,6 +68,20 @@ process.on('unhandledRejection', (reason, promise) => {
 	gracefulShutdown('unhandledRejection');
 });
 
+// Clear config cache on startup to ensure fresh data after deployment
+// This ensures the latest database values are loaded immediately
+try {
+	// Try to import and clear cache - path may vary based on build structure
+	const configModule = await import('./build/server/lib/server/config.js').catch(() => null);
+	if (configModule?.clearConfigCache) {
+		configModule.clearConfigCache();
+		console.log('✅ Config cache cleared on startup');
+	}
+} catch (error) {
+	// Ignore - cache will expire naturally after 10 seconds
+	console.log('ℹ️  Config cache will refresh automatically');
+}
+
 // Start server
 server.listen(PORT, HOST, () => {
 	console.log(`Server running on http://${HOST}:${PORT}`);

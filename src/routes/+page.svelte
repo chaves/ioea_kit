@@ -17,9 +17,16 @@
 	const sessionDates = $derived(data.dynamicConfig?.session?.fullDateRange || '6-10 May 2026');
 	
 	// Get session number from config (database) or calculate it
-	const sessionNumber = $derived(
-		data.dynamicConfig?.session?.sessionNumber || (currentYear - 2002 + 1)
-	);
+	const sessionNumber = $derived(() => {
+		const dbValue = data.dynamicConfig?.session?.sessionNumber;
+		if (dbValue) {
+			return dbValue;
+		}
+		// Fallback calculation
+		const calculated = currentYear - 2002 + 1;
+		console.warn(`[Homepage] sessionNumber not found in dynamicConfig, using fallback: ${calculated}`);
+		return calculated;
+	});
 	
 	// Calculate ordinal suffix (1st, 2nd, 3rd, 4th, etc.)
 	function getOrdinal(num: number): string {

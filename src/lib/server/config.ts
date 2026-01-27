@@ -56,7 +56,7 @@ interface DynamicConfig {
 
 let cachedConfig: DynamicConfig | null = null;
 let cacheTime = 0;
-const CACHE_TTL = 60000; // Cache for 1 minute
+const CACHE_TTL = 10000; // Cache for 10 seconds (reduced for faster updates in production)
 
 /**
  * Load dynamic configuration from database
@@ -78,6 +78,10 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 		const configMap = new Map<string, string>(
 			configs.map((c) => [c.key, c.value])
 		);
+		
+		// Debug: Log all session-related config keys
+		const sessionKeys = Array.from(configMap.keys()).filter(k => k.startsWith('session.'));
+		console.log(`[Config] Found session config keys:`, sessionKeys);
 
 		// Load status options from call_statuses table
 		const statuses = await prisma.call_statuses.findMany({
@@ -110,6 +114,14 @@ export async function loadDynamicConfig(): Promise<DynamicConfig> {
 		// NOTE: Session dates should come from database - fallbacks are generic/placeholder values
 		const sessionYear = parseInt(configMap.get('session.year') || String(staticConfig.currentYear), 10);
 		const sessionNumberFromDB = configMap.get('session.sessionNumber');
+		
+		// Log for debugging
+		if (sessionNumberFromDB) {
+			console.log(`[Config] Loaded session number from DB: ${sessionNumberFromDB} for year ${sessionYear}`);
+		} else {
+			console.warn(`[Config] session.sessionNumber not found in database, using fallback calculation: ${sessionYear - staticConfig.archiveFromYear + 1}`);
+		}
+		
 		const sessionNumber = sessionNumberFromDB 
 			? parseInt(sessionNumberFromDB, 10)
 			: sessionYear - staticConfig.archiveFromYear + 1; // Fallback calculation
