@@ -166,9 +166,9 @@
 				<p class="text-[1.05rem] leading-relaxed mb-6">As capacity is limited, we recommend that you apply early to have the best chance of being accepted.</p>
 				<ul class="text-[1.05rem] leading-relaxed mb-6 pl-6">
 					<li class="mb-2">
-						Closing date for application: <strong>{config.deadlines.application}</strong>
-						{#if config.deadlines.notification}
-							<br />Notification of acceptance: {config.deadlines.notification}
+						Closing date for application: <strong>{appConfig.deadlines.application}</strong>
+						{#if appConfig.deadlines.notification}
+							<br />Notification of acceptance: {appConfig.deadlines.notification}
 						{/if}
 					</li>
 					{#if appConfig.deadlines.registration}
