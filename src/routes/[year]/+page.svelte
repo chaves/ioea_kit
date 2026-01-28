@@ -198,8 +198,8 @@
 						</div>
 					</div>
 					{#if appConfig.deadlines.registration}
-						<div class="flex items-start gap-4 p-4 bg-bg-alt rounded-lg border-l-4 border-primary-dark">
-							<div class="flex-shrink-0 w-10 h-10 bg-primary-dark rounded-lg flex items-center justify-center">
+						<div class="flex items-start gap-4 p-4 bg-bg-alt rounded-lg border-l-4 border-primary-light">
+							<div class="flex-shrink-0 w-10 h-10 bg-primary-light rounded-lg flex items-center justify-center">
 								<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 									<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
 									<circle cx="8.5" cy="7" r="4"></circle>
@@ -209,7 +209,7 @@
 							</div>
 							<div>
 								<p class="font-semibold text-text">Closing date for registration</p>
-								<p class="text-primary-dark font-bold">{appConfig.deadlines.registration}</p>
+								<p class="text-primary-light font-bold">{appConfig.deadlines.registration}</p>
 							</div>
 						</div>
 					{/if}
