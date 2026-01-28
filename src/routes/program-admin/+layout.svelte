@@ -71,18 +71,7 @@
 					Seminar Chairs
 				</a>
 
-				<div class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">
-					Settings
-				</div>
-
-				<a href="/program-admin/config" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/program-admin/config' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
-					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<circle cx="12" cy="12" r="3"></circle>
-						<path d="M12 1v6m0 6v6m9-9h-6m-6 0H3"></path>
-					</svg>
-					Configuration
-				</a>
-			</nav>
+		</nav>
 
 			<div class="p-6 border-t border-white/10">
 				<div class="mb-4">

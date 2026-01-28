@@ -7,16 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model site_config {
-  id       Int      @id @default(autoincrement()) @db.UnsignedInt
-  key      String   @unique(map: "key") @db.VarChar(100)
-  value    String   @db.Text
-  category String   @db.VarChar(50)
-  updated  DateTime @default(now()) @updatedAt @db.DateTime(0)
-
-  @@index([category], map: "category")
-}
-
 model call_comments {
   id                 BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
   comment            String    @db.Text
