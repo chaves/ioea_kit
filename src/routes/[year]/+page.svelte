@@ -89,8 +89,9 @@
 								Submit Your Application
 							</a>
 							{#if appConfig.deadlines.application}
-								<p class="mt-4 text-sm text-white/80">
-									Application deadline: <strong class="text-white">{appConfig.deadlines.application}</strong>
+								<p class="mt-4 text-sm font-bold text-white">
+									Applications will be continuously assessed from February 15th until March 15th
+									<!-- Application deadline: <strong class="text-white">{appConfig.deadlines.application}</strong> -->
 								</p>
 							{/if}
 						</div>
@@ -163,15 +164,15 @@
 				<p class="text-[1.05rem] leading-relaxed mb-6">Attendants will be selected on the basis of their resume, and of a paper or of a presentation of their research program.</p>
 
 				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Calendar</h4>
-				<p class="text-[1.05rem] leading-relaxed mb-4">
+				<p class="text-[1.05rem] leading-relaxed mb-4 font-bold">
 					Applications will be continuously assessed from February 15th until March 15th.
 				</p>
 				<p class="text-[1.05rem] leading-relaxed mb-6">
 					As the number of available positions is limited, early submission of applications is strongly encouraged.
 				</p>
-				<div class="space-y-4 mb-6">
-					<div class="flex items-start gap-4 p-4 bg-bg-alt rounded-lg border-l-4 border-primary-light">
-						<div class="flex-shrink-0 w-10 h-10 bg-primary-light rounded-lg flex items-center justify-center">
+				<div class="mb-6 space-y-4">
+					<div class="flex gap-4 items-start p-4 rounded-lg border-l-4 bg-bg-alt border-primary-light">
+						<div class="flex flex-shrink-0 justify-center items-center w-10 h-10 rounded-lg bg-primary-light">
 							<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
 								<line x1="16" y1="2" x2="16" y2="6"></line>
@@ -181,12 +182,12 @@
 						</div>
 						<div>
 							<p class="font-semibold text-text">Closing date for application</p>
-							<p class="text-primary-light font-bold">{appConfig.deadlines.application}</p>
-							<p class="text-sm text-text-light">Earlier application is recommended</p>
+							<p class="font-bold text-primary-light">{appConfig.deadlines.application}</p>
+							<p class="text-sm font-bold text-red-600">Earlier application is strongly recommended</p>
 						</div>
 					</div>
-					<div class="flex items-start gap-4 p-4 bg-bg-alt rounded-lg border-l-4 border-primary-light">
-						<div class="flex-shrink-0 w-10 h-10 bg-primary-light rounded-lg flex items-center justify-center">
+					<div class="flex gap-4 items-start p-4 rounded-lg border-l-4 bg-bg-alt border-primary-light">
+						<div class="flex flex-shrink-0 justify-center items-center w-10 h-10 rounded-lg bg-primary-light">
 							<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
 								<polyline points="22 4 12 14.01 9 11.01"></polyline>
@@ -194,12 +195,12 @@
 						</div>
 						<div>
 							<p class="font-semibold text-text">Notification of acceptance</p>
-							<p class="text-primary-light font-bold">from Mid-February</p>
+							<p class="font-bold text-primary-light">from Mid-February</p>
 						</div>
 					</div>
 					{#if appConfig.deadlines.registration}
-						<div class="flex items-start gap-4 p-4 bg-bg-alt rounded-lg border-l-4 border-primary-light">
-							<div class="flex-shrink-0 w-10 h-10 bg-primary-light rounded-lg flex items-center justify-center">
+						<div class="flex gap-4 items-start p-4 rounded-lg border-l-4 bg-bg-alt border-primary-light">
+							<div class="flex flex-shrink-0 justify-center items-center w-10 h-10 rounded-lg bg-primary-light">
 								<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 									<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
 									<circle cx="8.5" cy="7" r="4"></circle>
@@ -209,7 +210,7 @@
 							</div>
 							<div>
 								<p class="font-semibold text-text">Closing date for registration</p>
-								<p class="text-primary-light font-bold">{appConfig.deadlines.registration}</p>
+								<p class="font-bold text-primary-light">{appConfig.deadlines.registration}</p>
 							</div>
 						</div>
 					{/if}
