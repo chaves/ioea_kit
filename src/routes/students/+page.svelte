@@ -76,8 +76,8 @@
 							<h3>{data.student.firstName} {data.student.lastName}</h3>
 							<p>{data.student.email}</p>
 							<p>{data.student.university ?? 'University not set'}</p>
-							{#if data.student.group}
-								<span class="group-badge">Group {data.student.group}</span>
+							{#if data.groups && data.groups.length > 0}
+								<span class="group-badge">Group {data.groups[0].groupId}</span>
 							{/if}
 						</div>
 					</div>
@@ -90,10 +90,10 @@
 					<h2>Your Paper</h2>
 				</div>
 				<div class="card-body">
-					{#if data.student.paper}
-						<h3 class="paper-title">{data.student.paper.title ?? 'No title'}</h3>
-						{#if data.student.paper.abstract}
-							<p class="paper-abstract">{data.student.paper.abstract}</p>
+					{#if data.papers && data.papers.length > 0}
+						<h3 class="paper-title">{data.papers[0].title ?? 'No title'}</h3>
+						{#if data.papers[0].abstract}
+							<p class="paper-abstract">{data.papers[0].abstract}</p>
 						{/if}
 					{:else}
 						<p class="no-data">No paper information yet.</p>
@@ -107,17 +107,17 @@
 					<h2>Travel Information</h2>
 				</div>
 				<div class="card-body">
-					{#if data.student.travel}
+					{#if data.travel}
 						<div class="travel-info">
 							<div class="travel-item">
 								<span class="label">Arrival</span>
-								<span class="value">{formatDate(data.student.travel.arrivalDate)}</span>
-								<span class="sub">{getTransferLabel(data.student.travel.arrivalTransfer)}</span>
+								<span class="value">{formatDate(data.travel.arrivalDate)}</span>
+								<span class="sub">{getTransferLabel(data.travel.arrivalTransfer)}</span>
 							</div>
 							<div class="travel-item">
 								<span class="label">Departure</span>
-								<span class="value">{formatDate(data.student.travel.departureDate)}</span>
-								<span class="sub">{getTransferLabel(data.student.travel.departureTransfer)}</span>
+								<span class="value">{formatDate(data.travel.departureDate)}</span>
+								<span class="sub">{getTransferLabel(data.travel.departureTransfer)}</span>
 							</div>
 						</div>
 					{:else}
@@ -138,15 +138,17 @@
 							<span class="icon">📋</span>
 							<span>Participant Survey</span>
 						</a>
-						<a href="/ioea/{config.currentYear}" class="quick-link">
+						<a href="/{config.currentYear}" class="quick-link">
 							<span class="icon">📅</span>
 							<span>Program</span>
 						</a>
-						<a href="/ioea/{config.currentYear}/students" class="quick-link">
-							<span class="icon">👥</span>
-							<span>All Participants</span>
-						</a>
-						<a href="/ioea/{config.currentYear}/informations" class="quick-link">
+						{#if config.showParticipants}
+							<a href="/{config.currentYear}/students" class="quick-link">
+								<span class="icon">👥</span>
+								<span>All Participants</span>
+							</a>
+						{/if}
+						<a href="/{config.currentYear}/informations" class="quick-link">
 							<span class="icon">ℹ️</span>
 							<span>Practical Info</span>
 						</a>

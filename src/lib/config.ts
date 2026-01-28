@@ -84,6 +84,8 @@ export const config = {
   },
   // Students group open
   studentsGroupOpen: false,
+  // Show participants in student dashboard
+  showParticipants: false,
   // Call for applications status - controls whether applications are open
   callIsOpen: true,
   // Brochure configuration
