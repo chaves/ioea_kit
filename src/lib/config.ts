@@ -35,7 +35,7 @@ export const config = {
   // Deadlines
   deadlines: {
     application: "March 15th",
-    notification: "by March 15th",
+    notification: "from Mid-February",
     registration: "March 27th",
     students: "March 27th",
   },
@@ -234,11 +234,7 @@ export const menus = {
 // Generate archive years
 export function getArchiveYears(): number[] {
   const years: number[] = [];
-  for (
-    let i = config.archiveToYear;
-    i >= config.archiveFromYear;
-    i--
-  ) {
+  for (let i = config.archiveToYear; i >= config.archiveFromYear; i--) {
     if (!config.badSessions.includes(i)) {
       years.push(i);
     }
@@ -249,11 +245,7 @@ export function getArchiveYears(): number[] {
 // Generate photo years
 export function getPhotoYears(): number[] {
   const years: number[] = [];
-  for (
-    let i = config.archiveToYear;
-    i >= config.archiveFromYear;
-    i--
-  ) {
+  for (let i = config.archiveToYear; i >= config.archiveFromYear; i--) {
     if (!config.badPhotos.includes(i)) {
       years.push(i);
     }

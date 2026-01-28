@@ -170,8 +170,8 @@
 					As the number of available positions is limited, early submission of applications is strongly encouraged.
 				</p>
 				<div class="space-y-4 mb-6">
-					<div class="flex items-start gap-4 p-4 bg-bg-alt rounded-lg border-l-4 border-primary">
-						<div class="flex-shrink-0 w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+					<div class="flex items-start gap-4 p-4 bg-bg-alt rounded-lg border-l-4 border-primary-light">
+						<div class="flex-shrink-0 w-10 h-10 bg-primary-light rounded-lg flex items-center justify-center">
 							<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
 								<line x1="16" y1="2" x2="16" y2="6"></line>
@@ -181,12 +181,12 @@
 						</div>
 						<div>
 							<p class="font-semibold text-text">Closing date for application</p>
-							<p class="text-primary font-bold">{appConfig.deadlines.application}</p>
+							<p class="text-primary-light font-bold">{appConfig.deadlines.application}</p>
 							<p class="text-sm text-text-light">Earlier application is recommended</p>
 						</div>
 					</div>
-					<div class="flex items-start gap-4 p-4 bg-bg-alt rounded-lg border-l-4 border-secondary">
-						<div class="flex-shrink-0 w-10 h-10 bg-secondary rounded-lg flex items-center justify-center">
+					<div class="flex items-start gap-4 p-4 bg-bg-alt rounded-lg border-l-4 border-primary-light">
+						<div class="flex-shrink-0 w-10 h-10 bg-primary-light rounded-lg flex items-center justify-center">
 							<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
 								<polyline points="22 4 12 14.01 9 11.01"></polyline>
@@ -194,7 +194,7 @@
 						</div>
 						<div>
 							<p class="font-semibold text-text">Notification of acceptance</p>
-							<p class="text-secondary font-bold">from Mid-February</p>
+							<p class="text-primary-light font-bold">from Mid-February</p>
 						</div>
 					</div>
 					{#if appConfig.deadlines.registration}
