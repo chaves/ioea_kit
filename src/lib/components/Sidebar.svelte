@@ -90,34 +90,37 @@
 <style>
 	.sidebar-widget {
 		background: white;
-		border-radius: 0.5rem;
-		padding: 1.5rem;
-		margin-bottom: 1.5rem;
+		border-radius: 1rem;
+		padding: 1.75rem;
+		margin-bottom: 2rem;
 		border: 1px solid var(--color-border);
+		box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 	}
 
 	.sidebar-widget h3 {
-		font-size: 1rem;
-		font-weight: 700;
-		margin: 0 0 1rem 0;
+		font-size: 1.1rem;
+		font-weight: 800;
+		margin: 0 0 1.25rem 0;
 		padding-bottom: 0.75rem;
 		border-bottom: 2px solid var(--color-secondary);
 		color: var(--color-primary);
+		text-transform: uppercase;
+		letter-spacing: 0.025em;
 	}
 
 	.program-preview {
 		display: block;
 		position: relative;
-		border-radius: 0.375rem;
+		border-radius: 0.5rem;
 		overflow: hidden;
-		transition: transform 0.3s ease;
+		transition: all 0.3s ease;
 		width: 100%;
 		max-width: 100%;
 	}
 
 	.program-preview:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		transform: translateY(-4px);
+		box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
 	}
 
 	.program-image {
@@ -126,30 +129,31 @@
 		max-width: 100%;
 		display: block;
 		object-fit: contain;
-		transition: transform 0.3s ease;
+		transition: transform 0.5s ease;
 	}
 
 	.program-preview:hover .program-image {
-		transform: scale(1.02);
+		transform: scale(1.05);
 	}
 
 	.photos-preview {
 		display: block;
 		position: relative;
-		border-radius: 0.375rem;
+		border-radius: 0.5rem;
 		overflow: hidden;
-		margin-bottom: 0.75rem;
+		margin-bottom: 1rem;
+		transition: all 0.3s ease;
 	}
 
 	.photos-thumb {
 		width: 100%;
-		height: 150px;
+		height: 160px;
 		object-fit: cover;
-		transition: transform 0.3s ease;
+		transition: transform 0.5s ease;
 	}
 
 	.photos-preview:hover .photos-thumb {
-		transform: scale(1.05);
+		transform: scale(1.1);
 	}
 
 	.photos-label {
@@ -157,33 +161,41 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
-		background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+		background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
 		color: white;
-		padding: 1rem 0.75rem 0.5rem;
-		font-weight: 600;
-		font-size: 0.9rem;
+		padding: 1.5rem 1rem 0.75rem;
+		font-weight: 700;
+		font-size: 1rem;
 	}
 
 	.view-all-link {
 		display: block;
 		text-align: right;
-		font-size: 0.85rem;
+		font-size: 0.95rem;
+		font-weight: 700;
 		color: var(--color-secondary);
+		text-decoration: none;
+		transition: color 0.2s;
+	}
+
+	.view-all-link:hover {
+		color: var(--color-primary);
+		text-decoration: underline;
 	}
 
 	.brochure-preview {
 		display: block;
 		position: relative;
-		border-radius: 0.375rem;
+		border-radius: 0.5rem;
 		overflow: hidden;
-		transition: transform 0.3s ease;
+		transition: all 0.3s ease;
 		width: 100%;
 		max-width: 100%;
 	}
 
 	.brochure-preview:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		transform: translateY(-4px);
+		box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
 	}
 
 	.brochure-image {
@@ -192,23 +204,30 @@
 		max-width: 100%;
 		display: block;
 		object-fit: contain;
-		transition: transform 0.3s ease;
+		transition: transform 0.5s ease;
 	}
 
 	.brochure-preview:hover .brochure-image {
-		transform: scale(1.02);
+		transform: scale(1.05);
 	}
 
 	.subscribe-widget p {
-		font-size: 0.9rem;
-		color: var(--color-text-light);
-		margin-bottom: 1rem;
+		font-size: 1rem;
+		font-weight: 500;
+		color: var(--color-text);
+		line-height: 1.6;
+		margin-bottom: 1.5rem;
 	}
 
 	.btn-block {
 		display: block;
 		width: 100%;
 		text-align: center;
+		padding: 0.875rem;
+		font-weight: 800;
+		font-size: 1rem;
+		text-transform: uppercase;
+		letter-spacing: 0.025em;
 	}
 </style>
 

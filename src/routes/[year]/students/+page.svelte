@@ -61,23 +61,23 @@
 				{#if data.students.length > 0 || data.chairs.length > 0}
 					<!-- Filter buttons -->
 					{#if data.showGroups && data.groups.length > 0}
-						<div class="flex flex-wrap gap-2 mb-8">
+						<div class="flex flex-wrap gap-3 mb-10">
 							<button
 								type="button"
-								class="px-4 py-2 bg-white border border-border rounded-md text-sm cursor-pointer transition-all duration-200 {viewMode === 'all' ? 'bg-primary text-white border-primary' : 'hover:border-primary hover:bg-bg-alt'}"
+								class="px-6 py-2.5 bg-white border border-border rounded-xl text-base font-bold cursor-pointer transition-all duration-300 {viewMode === 'all' ? 'bg-primary text-white border-primary shadow-lg scale-105' : 'text-text-light hover:border-primary hover:bg-primary/5'}"
 								onclick={() => setViewMode('all')}
 							>
-								All ({data.students.length})
+								All <span class="ml-1 opacity-70 font-medium">({data.students.length})</span>
 							</button>
 							{#each data.groups as group}
 								{@const count = data.students.filter((s) => s.groupId === group).length}
 								{#if count > 0}
 									<button
 										type="button"
-										class="px-4 py-2 bg-white border border-border rounded-md text-sm cursor-pointer transition-all duration-200 {viewMode === group ? 'bg-primary text-white border-primary' : 'hover:border-primary hover:bg-bg-alt'}"
+										class="px-6 py-2.5 bg-white border border-border rounded-xl text-base font-bold cursor-pointer transition-all duration-300 {viewMode === group ? 'bg-primary text-white border-primary shadow-lg scale-105' : 'text-text-light hover:border-primary hover:bg-primary/5'}"
 										onclick={() => setViewMode(group)}
 									>
-										Group {group} ({count})
+										Group {group} <span class="ml-1 opacity-70 font-medium">({count})</span>
 									</button>
 								{/if}
 							{/each}
@@ -130,75 +130,75 @@
 					{#if filteredStudents.length > 0}
 						<section>
 							<h2 class="text-primary text-2xl mb-6 pb-2 border-b-2 border-secondary">Participants</h2>
-							<div class="bg-white rounded-lg overflow-hidden border border-border overflow-x-auto">
-								<table class="w-full border-collapse text-sm">
-									<thead>
-										<tr>
-											<th class="bg-primary text-white px-4 py-3.5 text-left font-semibold whitespace-nowrap">Full Name</th>
-											<th class="bg-primary text-white px-4 py-3.5 text-left font-semibold whitespace-nowrap">Affiliation / University</th>
-											<th class="bg-primary text-white px-4 py-3.5 text-left font-semibold whitespace-nowrap">Paper or Project</th>
-											{#if data.showGroups && data.groups.length > 0}
-												<th class="bg-primary text-white px-4 py-3.5 text-left font-semibold whitespace-nowrap w-20 text-center">Group</th>
+							<div class="overflow-x-auto my-8 rounded-xl border border-border shadow-sm">
+						<table class="w-full border-collapse text-sm sm:text-base">
+							<thead>
+								<tr>
+									<th class="bg-primary text-white px-6 py-4 text-left font-bold uppercase tracking-wider">Full Name</th>
+									<th class="bg-primary text-white px-6 py-4 text-left font-bold uppercase tracking-wider">Affiliation / University</th>
+									<th class="bg-primary text-white px-6 py-4 text-left font-bold uppercase tracking-wider">Paper or Project</th>
+									{#if data.showGroups && data.groups.length > 0}
+										<th class="bg-primary text-white px-6 py-4 text-center font-bold uppercase tracking-wider w-24">Group</th>
+									{/if}
+									<th class="bg-primary text-white px-6 py-4 text-center font-bold uppercase tracking-wider w-24">Photo</th>
+								</tr>
+							</thead>
+							<tbody>
+								{#each filteredStudents as student}
+									<tr class="hover:bg-bg-alt/50 transition-colors last:[&>td]:border-b-0">
+										<td class="px-6 py-4 border-b border-border align-middle">
+											<a href="/{data.year}/students/{student.id}" class="text-primary font-bold no-underline hover:text-secondary hover:underline text-base">
+												{student.lastName}, {student.firstName}
+											</a>
+										</td>
+										<td class="px-6 py-4 border-b border-border align-middle text-text font-medium">
+											{student.university ?? '-'}
+										</td>
+										<td class="px-6 py-4 border-b border-border align-middle max-w-[300px] sm:max-w-[200px]">
+											{#if student.paperTitle}
+												<span class="block whitespace-nowrap overflow-hidden text-ellipsis text-sm sm:text-base font-medium" title={student.paperTitle}>
+													{student.paperTitle}
+												</span>
+											{:else}
+												<span class="text-red-600 text-xs font-bold uppercase tracking-tight">Details not uploaded</span>
 											{/if}
-											<th class="bg-primary text-white px-4 py-3.5 text-left font-semibold whitespace-nowrap w-20 text-center">Photo</th>
-										</tr>
-									</thead>
-									<tbody>
-										{#each filteredStudents as student}
-											<tr class="hover:bg-bg-alt last:[&>td]:border-b-0">
-												<td class="px-4 py-3 border-b border-border align-middle">
-													<a href="/{data.year}/students/{student.id}" class="text-primary font-medium no-underline hover:text-secondary hover:underline">
-														{student.lastName}, {student.firstName}
-													</a>
-												</td>
-												<td class="px-4 py-3 border-b border-border align-middle text-text-light">
-													{student.university ?? '-'}
-												</td>
-												<td class="px-4 py-3 border-b border-border align-middle max-w-[300px] sm:max-w-[150px]">
-													{#if student.paperTitle}
-														<span class="block whitespace-nowrap overflow-hidden text-ellipsis" title={student.paperTitle}>
-															{student.paperTitle}
-														</span>
+										</td>
+										{#if data.showGroups && data.groups.length > 0}
+											<td class="px-6 py-4 border-b border-border align-middle text-center">
+												{#if student.groupId}
+													{#if viewMode === 'all'}
+														<button
+															type="button"
+															class="inline-block px-4 py-1.5 bg-secondary text-white rounded-md text-sm font-bold shadow-sm cursor-pointer transition-all duration-200 hover:bg-primary hover:scale-110"
+															onclick={() => setViewMode(student.groupId as number)}
+														>
+															{student.groupId}
+														</button>
 													{:else}
-														<span class="text-[#dc3545] text-xs">Details not uploaded</span>
+														<span class="inline-block px-4 py-1.5 bg-bg-alt rounded-md text-sm font-bold text-text border border-border">{student.groupId}</span>
 													{/if}
-												</td>
-												{#if data.showGroups && data.groups.length > 0}
-													<td class="px-4 py-3 border-b border-border align-middle text-center">
-														{#if student.groupId}
-															{#if viewMode === 'all'}
-																<button
-																	type="button"
-																	class="inline-block px-3 py-1 bg-bg-alt border border-border rounded text-xs font-medium text-primary cursor-pointer transition-all duration-200 hover:bg-primary hover:text-white hover:border-primary"
-																	onclick={() => setViewMode(student.groupId as number)}
-																>
-																	{student.groupId}
-																</button>
-															{:else}
-																<span class="inline-block px-3 py-1 text-xs font-medium text-text">{student.groupId}</span>
-															{/if}
-														{:else}
-															-
-														{/if}
-													</td>
+												{:else}
+													<span class="text-text-light">-</span>
 												{/if}
-												<td class="px-4 py-3 border-b border-border align-middle text-center">
-													{#if student.photo}
-														<a href="/{data.year}/students/{student.id}" class="inline-block no-underline">
-															<img
-																src={`/images/students/${student.photo}`}
-																alt="{student.firstName} {student.lastName}"
-																class="w-15 h-15 object-cover rounded-md transition-transform duration-200 hover:scale-110"
-																onerror={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-															/>
-														</a>
-													{/if}
-												</td>
-											</tr>
-										{/each}
-									</tbody>
-								</table>
-							</div>
+											</td>
+										{/if}
+										<td class="px-6 py-4 border-b border-border align-middle text-center">
+											{#if student.photo}
+												<a href="/{data.year}/students/{student.id}" class="inline-block no-underline">
+													<img
+														src={`/images/students/${student.photo}`}
+														alt="{student.firstName} {student.lastName}"
+														class="w-16 h-16 object-cover rounded-lg border-2 border-white shadow-md transition-transform duration-200 hover:scale-125 hover:z-10"
+														onerror={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+													/>
+												</a>
+											{/if}
+										</td>
+									</tr>
+								{/each}
+							</tbody>
+						</table>
+					</div>
 						</section>
 					{/if}
 				{:else}

@@ -23,32 +23,35 @@
 	<div class="container">
 		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-				<p class="text-lg text-text-light mb-8">
+				<p class="text-lg sm:text-xl font-medium text-text mb-10 leading-relaxed">
 					Lunch sessions provide informal opportunities for discussion and networking
 					during the IOEA program.
 				</p>
 
-				<div>
-					<h2 class="mb-4">About Lunch Sessions</h2>
-					<p class="leading-loose mb-4">
+				<article>
+					<h2 class="text-primary text-2xl mb-6 pb-2 border-b-2 border-secondary font-bold">About Lunch Sessions</h2>
+					<p class="text-base sm:text-[1.05rem] leading-relaxed mb-6 text-text">
 						The lunch sessions complement the formal program by offering:
 					</p>
-					<ul class="mb-6 pl-6">
-						<li class="mb-2 leading-relaxed">Informal presentations by faculty on emerging topics</li>
-						<li class="mb-2 leading-relaxed">Q&A sessions with lecturers</li>
-						<li class="mb-2 leading-relaxed">Career development discussions</li>
-						<li class="mb-2 leading-relaxed">Networking opportunities with peers and faculty</li>
+					<ul class="mb-8 pl-6 space-y-3 text-base sm:text-[1.05rem] text-text">
+						<li class="pl-2 leading-relaxed font-medium"><span class="text-secondary mr-2">•</span> Informal presentations by faculty on emerging topics</li>
+						<li class="pl-2 leading-relaxed font-medium"><span class="text-secondary mr-2">•</span> Q&A sessions with lecturers</li>
+						<li class="pl-2 leading-relaxed font-medium"><span class="text-secondary mr-2">•</span> Career development discussions</li>
+						<li class="pl-2 leading-relaxed font-medium"><span class="text-secondary mr-2">•</span> Networking opportunities with peers and faculty</li>
 					</ul>
 
-					<p class="leading-loose mb-4">
+					<p class="text-base sm:text-[1.05rem] leading-relaxed mb-10 text-text">
 						These sessions take place during lunch breaks and provide a relaxed
 						atmosphere for continued learning and discussion.
 					</p>
-				</div>
+				</article>
 
-				<div class="bg-bg-alt p-6 rounded-lg mt-8">
-					<h3 class="mb-4">Schedule</h3>
-					<p class="m-0 leading-loose">
+				<div class="bg-bg-alt p-8 rounded-2xl border border-border shadow-inner mt-10">
+					<h3 class="text-xl font-bold text-primary mb-4 flex items-center gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+						Schedule
+					</h3>
+					<p class="text-base sm:text-[1.05rem] m-0 leading-relaxed text-text font-medium">
 						The detailed schedule for lunch sessions will be announced during the program.
 						Sessions typically cover topics not addressed in the main lectures and provide
 						opportunities for more interactive discussions.

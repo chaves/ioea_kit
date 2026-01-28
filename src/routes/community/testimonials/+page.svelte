@@ -30,21 +30,21 @@
 								/>
 							</div>
 							<div class="flex-1">
-								<blockquote class="italic text-text leading-relaxed mb-4 m-0 p-0">
+								<blockquote class="italic text-text text-base sm:text-lg leading-relaxed mb-6 m-0 p-0">
 									"{testimonial.quote}"
 								</blockquote>
-								<div class="flex flex-col gap-1">
-									<strong class="text-primary">
+								<div class="flex flex-col gap-1.5">
+									<strong class="text-primary text-lg">
 										{#if testimonial.website}
-											<a href={testimonial.website} target="_blank" rel="noopener" class="text-primary no-underline hover:text-secondary">
+											<a href={testimonial.website} target="_blank" rel="noopener" class="text-primary no-underline hover:text-secondary hover:underline">
 												{testimonial.name}
 											</a>
 										{:else}
 											{testimonial.name}
 										{/if}
 									</strong>
-									<span class="text-sm text-text-light">{testimonial.position}</span>
-									<span class="text-xs text-text-light">{testimonial.institution}</span>
+									<span class="text-base text-text-light font-medium">{testimonial.position}</span>
+									<span class="text-sm text-text-light">{testimonial.institution}</span>
 								</div>
 							</div>
 						</div>

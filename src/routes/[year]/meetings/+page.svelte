@@ -21,7 +21,7 @@
 	<div class="container">
 		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-				<p class="text-[1.05rem] leading-relaxed mb-4">
+				<p class="text-lg sm:text-xl font-medium text-text leading-relaxed mb-10">
 					Having world-class researchers and young scientists for a week in the same place allows multiple informal and bilateral meetings. IOEA allows networking and provide participants and lecturers with multiple occasions to launch co-operative projects.
 				</p>
 			</div>

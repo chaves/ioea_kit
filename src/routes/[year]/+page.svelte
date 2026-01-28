@@ -90,24 +90,24 @@
 	<div class="container">
 		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-				<h3 class="mb-6 text-2xl font-semibold leading-relaxed text-primary">
+				<h3 class="mb-8 text-2xl font-semibold leading-relaxed text-primary">
 					{sessionNumber}<sup class="text-[0.7em] align-super">{sessionOrdinal}</sup> session of the Institutional and Organizational Economics Academy {appConfig.session.dateRange} {year} in Corsica (France)
 				</h3>
 
 				{#if appConfig.callIsOpen}
-					<div class="bg-gradient-to-br from-primary to-secondary rounded-2xl p-8 mb-8 shadow-[0_8px_24px_rgba(0,0,0,0.12)] border border-primary/20">
+					<div class="bg-gradient-to-br from-primary to-secondary rounded-2xl p-10 mb-12 shadow-xl border border-primary/20">
 						<div class="text-center">
-							<h4 class="mb-3 text-2xl font-bold text-white">
+							<h4 class="mb-4 text-3xl font-bold text-white">
 								Applications Now Open for IOEA {year}!
 							</h4>
-							<p class="mx-auto mb-6 max-w-2xl text-lg text-white/90">
+							<p class="mx-auto mb-8 max-w-2xl text-xl text-white/95 leading-relaxed">
 								Join us for an intensive week of lectures, workshops, and seminars with leading scholars in Institutional and Organizational Economics.
 							</p>
 							<a
 								href="/call"
-								class="inline-flex items-center gap-2 bg-white text-primary px-8 py-4 rounded-xl font-bold text-lg shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.2)] hover:scale-105 transition-all duration-200 no-underline"
+								class="inline-flex items-center gap-3 bg-white text-primary px-10 py-5 rounded-2xl font-bold text-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 no-underline"
 							>
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
+								<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
 									<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
 									<polyline points="14 2 14 8 20 8"></polyline>
 									<line x1="16" y1="13" x2="8" y2="13"></line>
@@ -117,48 +117,47 @@
 								Submit Your Application
 							</a>
 							{#if appConfig.deadlines.application}
-								<p class="mt-4 text-sm font-bold text-white">
+								<p class="mt-6 text-base font-bold text-white uppercase tracking-wide">
 									Applications will be continuously assessed from February 15th until March 15th
-									<!-- Application deadline: <strong class="text-white">{appConfig.deadlines.application}</strong> -->
 								</p>
 							{/if}
 						</div>
 					</div>
 				{:else}
-					<div class="p-6 mb-8 bg-gray-100 rounded-lg border-l-4 border-gray-400">
-						<p class="text-lg font-medium text-gray-700">
+					<div class="p-8 mb-12 bg-bg-alt rounded-xl border-l-8 border-border">
+						<p class="text-xl font-semibold text-text">
 							The call for applications is currently closed.
 						</p>
 					</div>
 				{/if}
 
-				<p class="text-[1.05rem] leading-relaxed mb-6">
+				<p class="text-lg sm:text-[1.1rem] leading-relaxed mb-8 text-text font-medium">
 					Using rigorous methodologies, Institutional and Organizational Economics focuses on the theoretical and empirical analysis of institutions, organizations and contracts, as well as on the conditions under which these arrangements emerge and evolve.
 				</p>
 
-				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Objectives</h4>
-				<ul class="text-[1.05rem] leading-relaxed mb-6 pl-6">
-					<li class="mb-2">To promote the use of appropriate methods to analyze governance, structures and dynamics of collectives and communities.</li>
-					<li class="mb-2">To provide researchers with up to date synthesis on the evolutions of the research program.</li>
-					<li class="mb-2">To develop networking and cooperation among researchers and among their institutions.</li>
+				<h4 class="mt-12 mb-6 text-2xl font-bold text-primary border-b-2 border-secondary pb-2">Objectives</h4>
+				<ul class="text-base sm:text-[1.05rem] leading-relaxed mb-8 pl-6 space-y-3">
+					<li class="pl-2">To promote the use of appropriate methods to analyze governance, structures and dynamics of collectives and communities.</li>
+					<li class="pl-2">To provide researchers with up to date synthesis on the evolutions of the research program.</li>
+					<li class="pl-2">To develop networking and cooperation among researchers and among their institutions.</li>
 				</ul>
 
-				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Public</h4>
-				<p class="text-[1.05rem] leading-relaxed mb-6">Ph.D. students, Post-docs and researchers, in Economics, Management, Political Science, Sociology, Law and other social sciences.</p>
+				<h4 class="mt-12 mb-6 text-2xl font-bold text-primary border-b-2 border-secondary pb-2">Public</h4>
+				<p class="text-base sm:text-[1.05rem] leading-relaxed mb-8 text-text">Ph.D. students, Post-docs and researchers, in Economics, Management, Political Science, Sociology, Law and other social sciences.</p>
 
-				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Program</h4>
-				<p class="text-[1.05rem] leading-relaxed mb-6">Formal lectures will be given every morning. Each lecture is dedicated to the extensive presentation of the state of the art of the discipline on a specific applied or theoretical topic. Afternoons will be dedicated to workshops devoted either to research questions or methodologies. Seminars, held in the second part of the afternoon, allow the participants to have their work discussed by recognized scholars in the field.</p>
+				<h4 class="mt-12 mb-6 text-2xl font-bold text-primary border-b-2 border-secondary pb-2">Program</h4>
+				<p class="text-base sm:text-[1.05rem] leading-relaxed mb-8 text-text">Formal lectures will be given every morning. Each lecture is dedicated to the extensive presentation of the state of the art of the discipline on a specific applied or theoretical topic. Afternoons will be dedicated to workshops devoted either to research questions or methodologies. Seminars, held in the second part of the afternoon, allow the participants to have their work discussed by recognized scholars in the field.</p>
 
-				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Lecturers</h4>
-				<p class="text-[1.05rem] leading-relaxed mb-6">
+				<h4 class="mt-12 mb-6 text-2xl font-bold text-primary border-b-2 border-secondary pb-2">Lecturers</h4>
+				<p class="text-base sm:text-[1.05rem] leading-relaxed mb-8 text-text">
 					{#each data.lecturers as lecturer, index}
 						<strong>
-							<a href="/{year}/presentation/{lecturer.id}" class="font-semibold no-underline transition-colors duration-200 text-primary hover:text-secondary hover:underline">
+							<a href="/{year}/presentation/{lecturer.id}" class="font-bold no-underline transition-colors duration-200 text-primary hover:text-secondary hover:underline">
 								{lecturer.firstName} {lecturer.lastName}
 							</a>
 						</strong>
 						{#if lecturer.institution}
-							({lecturer.institution}){index < data.lecturers.length - 1 ? ',' : '.'}
+							<span class="text-text-light">({lecturer.institution})</span>{index < data.lecturers.length - 1 ? ',' : '.'}
 						{/if}
 						{#if index < data.lecturers.length - 1}
 							{' '}
@@ -166,16 +165,16 @@
 					{/each}
 				</p>
 
-				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Workshop organizers</h4>
-				<p class="text-[1.05rem] leading-relaxed mb-6">
+				<h4 class="mt-12 mb-6 text-2xl font-bold text-primary border-b-2 border-secondary pb-2">Workshop organizers</h4>
+				<p class="text-base sm:text-[1.05rem] leading-relaxed mb-8 text-text">
 					{#each data.workshopOrganizers as organizer, index}
 						<strong>
-							<a href="/{year}/presentation/{organizer.id}" class="font-semibold no-underline transition-colors duration-200 text-primary hover:text-secondary hover:underline">
+							<a href="/{year}/presentation/{organizer.id}" class="font-bold no-underline transition-colors duration-200 text-primary hover:text-secondary hover:underline">
 								{organizer.firstName} {organizer.lastName}
 							</a>
 						</strong>
 						{#if organizer.institution}
-							({organizer.institution}){index < data.workshopOrganizers.length - 1 ? ',' : '.'}
+							<span class="text-text-light">({organizer.institution})</span>{index < data.workshopOrganizers.length - 1 ? ',' : '.'}
 						{/if}
 						{#if index < data.workshopOrganizers.length - 1}
 							{' '}
@@ -183,25 +182,25 @@
 					{/each}
 				</p>
 
-				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Director</h4>
-				<p class="text-[1.05rem] leading-relaxed mb-6">
-					<strong>Eric Brousseau</strong> (University Paris-Dauphine - PSL)
+				<h4 class="mt-12 mb-6 text-2xl font-bold text-primary border-b-2 border-secondary pb-2">Director</h4>
+				<p class="text-base sm:text-[1.05rem] leading-relaxed mb-8 text-text">
+					<strong class="font-bold">Eric Brousseau</strong> (University Paris-Dauphine - PSL)
 				</p>
 
-				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Registrations</h4>
-				<p class="text-[1.05rem] leading-relaxed mb-6">Attendants will be selected on the basis of their resume, and of a paper or of a presentation of their research program.</p>
+				<h4 class="mt-12 mb-6 text-2xl font-bold text-primary border-b-2 border-secondary pb-2">Registrations</h4>
+				<p class="text-base sm:text-[1.05rem] leading-relaxed mb-8 text-text">Attendants will be selected on the basis of their resume, and of a paper or of a presentation of their research program.</p>
 
-				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Calendar</h4>
-				<p class="text-[1.05rem] leading-relaxed mb-4 font-bold">
+				<h4 class="mt-12 mb-6 text-2xl font-bold text-primary border-b-2 border-secondary pb-2">Calendar</h4>
+				<p class="text-lg sm:text-[1.1rem] leading-relaxed mb-4 font-bold text-secondary">
 					Applications will be continuously assessed from February 15th until March 15th.
 				</p>
-				<p class="text-[1.05rem] leading-relaxed mb-6">
+				<p class="text-base sm:text-[1.05rem] leading-relaxed mb-8 text-text font-medium">
 					As the number of available positions is limited, early submission of applications is strongly encouraged.
 				</p>
-				<div class="mb-6 space-y-4">
-					<div class="flex gap-4 items-start p-4 rounded-lg border-l-4 bg-bg-alt border-primary-light">
-						<div class="flex flex-shrink-0 justify-center items-center w-10 h-10 rounded-lg bg-primary-light">
-							<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<div class="mb-12 space-y-6">
+					<div class="flex gap-6 items-center p-6 rounded-xl border-l-8 bg-bg-alt border-primary-light shadow-sm">
+						<div class="flex flex-shrink-0 justify-center items-center w-14 h-14 rounded-xl bg-primary-light shadow-md">
+							<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
 								<line x1="16" y1="2" x2="16" y2="6"></line>
 								<line x1="8" y1="2" x2="8" y2="6"></line>
@@ -209,27 +208,27 @@
 							</svg>
 						</div>
 						<div>
-							<p class="font-semibold text-text">Closing date for application</p>
-							<p class="font-bold text-primary-light">{appConfig.deadlines.application}</p>
-							<p class="text-sm font-bold text-red-600">Earlier application is strongly recommended</p>
+							<p class="text-sm font-bold uppercase tracking-wider text-text-light mb-1">Closing date for application</p>
+							<p class="text-2xl font-bold text-primary">{appConfig.deadlines.application}</p>
+							<p class="text-sm font-bold text-red-600 mt-1 uppercase">Earlier application is strongly recommended</p>
 						</div>
 					</div>
-					<div class="flex gap-4 items-start p-4 rounded-lg border-l-4 bg-bg-alt border-primary-light">
-						<div class="flex flex-shrink-0 justify-center items-center w-10 h-10 rounded-lg bg-primary-light">
-							<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<div class="flex gap-6 items-center p-6 rounded-xl border-l-8 bg-bg-alt border-primary-light shadow-sm">
+						<div class="flex flex-shrink-0 justify-center items-center w-14 h-14 rounded-xl bg-primary-light shadow-md">
+							<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
 								<polyline points="22 4 12 14.01 9 11.01"></polyline>
 							</svg>
 						</div>
 						<div>
-							<p class="font-semibold text-text">Notification of acceptance</p>
-							<p class="font-bold text-primary-light">from Mid-February</p>
+							<p class="text-sm font-bold uppercase tracking-wider text-text-light mb-1">Notification of acceptance</p>
+							<p class="text-2xl font-bold text-primary">from Mid-February</p>
 						</div>
 					</div>
 					{#if appConfig.deadlines.registration}
-						<div class="flex gap-4 items-start p-4 rounded-lg border-l-4 bg-bg-alt border-primary-light">
-							<div class="flex flex-shrink-0 justify-center items-center w-10 h-10 rounded-lg bg-primary-light">
-								<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<div class="flex gap-6 items-center p-6 rounded-xl border-l-8 bg-bg-alt border-primary-light shadow-sm">
+							<div class="flex flex-shrink-0 justify-center items-center w-14 h-14 rounded-xl bg-primary-light shadow-md">
+								<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 									<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
 									<circle cx="8.5" cy="7" r="4"></circle>
 									<line x1="20" y1="8" x2="20" y2="14"></line>
@@ -237,8 +236,8 @@
 								</svg>
 							</div>
 							<div>
-								<p class="font-semibold text-text">Closing date for registration</p>
-								<p class="font-bold text-primary-light">{appConfig.deadlines.registration}</p>
+								<p class="text-sm font-bold uppercase tracking-wider text-text-light mb-1">Closing date for registration</p>
+								<p class="text-2xl font-bold text-primary">{appConfig.deadlines.registration}</p>
 							</div>
 						</div>
 					{/if}

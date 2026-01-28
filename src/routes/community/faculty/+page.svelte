@@ -30,44 +30,45 @@
 		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
 				<article class="content">
-					<p class="text-xl text-[var(--color-text-light)] mb-8 leading-[1.7]">
+					<p class="text-lg sm:text-xl font-medium text-text mb-12 leading-relaxed">
 						The IOEA brings together world-renowned scholars in institutional and
 						organizational economics. Our faculty members are leaders in their fields,
 						with extensive research and teaching experience.
 					</p>
 
-					<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+					<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
 						{#each data.faculty as member}
-							<div class="bg-white rounded-lg overflow-hidden border border-[var(--color-border)] transition-shadow duration-200 hover:shadow-lg">
-								<div class="aspect-square overflow-hidden bg-[var(--color-bg-alt)]">
+							<div class="bg-white rounded-xl overflow-hidden border border-border shadow-sm transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 group">
+								<div class="aspect-square overflow-hidden bg-bg-alt relative">
 									{#if member.photo}
 									<img
 										src={`/images/lec/${member.photo}`}
 										alt="{member.firstName} {member.lastName}"
-										class="w-full h-full object-cover"
+										class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
 										onerror={(e) => {
 											const img = e.currentTarget as HTMLImageElement;
 											img.src = '/images/placeholder-person.jpg';
 										}}
 									/>
 									{:else}
-										<div class="w-full h-full flex items-center justify-center bg-[var(--color-primary)] text-white text-2xl font-semibold">
+										<div class="w-full h-full flex items-center justify-center bg-primary text-white text-3xl font-bold">
 											{member.firstName[0]}{member.lastName[0]}
 										</div>
 									{/if}
+									<div class="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 								</div>
-								<div class="p-3">
-									<h3 class="!text-sm !font-semibold mb-0.5 !leading-tight !font-sans">
+								<div class="p-4">
+									<h3 class="text-base font-bold mb-1.5 leading-tight">
 										{#if member.website}
-											<a href={member.website} target="_blank" rel="noopener" class="text-[var(--color-primary)] hover:text-[var(--color-secondary)] transition-colors">
+											<a href={member.website} target="_blank" rel="noopener" class="text-primary hover:text-secondary transition-colors no-underline">
 												{member.firstName} {member.lastName}
 											</a>
 										{:else}
-											<span class="text-[var(--color-primary)]">{member.firstName} {member.lastName}</span>
+											<span class="text-text">{member.firstName} {member.lastName}</span>
 										{/if}
 									</h3>
 									{#if member.institution}
-										<p class="text-xs text-[var(--color-text-light)] m-0 leading-snug line-clamp-2">{member.institution}</p>
+										<p class="text-xs font-medium text-text-light m-0 leading-snug line-clamp-2">{member.institution}</p>
 									{/if}
 								</div>
 							</div>
@@ -75,7 +76,9 @@
 					</div>
 
 					{#if data.faculty.length === 0}
-						<p class="text-center text-[var(--color-text-light)] py-8">Faculty information will be available soon.</p>
+						<div class="text-center py-20 bg-bg-alt rounded-2xl border-2 border-dashed border-border mt-8">
+							<p class="text-text-light text-lg italic m-0">Faculty information will be available soon.</p>
+						</div>
 					{/if}
 				</article>
 			</div>

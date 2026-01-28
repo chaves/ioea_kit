@@ -29,47 +29,50 @@
 	<div class="container">
 		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-				<p class="text-lg leading-relaxed mb-8 text-text-light">
+				<p class="text-lg sm:text-xl font-medium text-text mb-10 leading-relaxed">
 					Meet the distinguished lecturers and workshop organizers who have contributed to the IOEA over the years.
 				</p>
 
 				{#if data.lecturers.length > 0}
-					<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+					<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
 						{#each data.lecturers as lecturer}
-							<div class="bg-white rounded-lg overflow-hidden border border-border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
-								<div class="aspect-square overflow-hidden bg-bg-alt">
+							<div class="bg-white rounded-xl overflow-hidden border border-border shadow-sm transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 group">
+								<div class="aspect-square overflow-hidden bg-bg-alt relative">
 									{#if lecturer.photo}
 										<img
 											src={`/images/lec/${lecturer.photo}`}
 											alt="{lecturer.firstName} {lecturer.lastName}"
-											class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+											class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
 											onerror={(e) => { e.currentTarget.src = '/images/placeholder-person.jpg'; }}
 										/>
 									{:else}
-										<div class="w-full h-full flex items-center justify-center bg-primary text-white text-3xl font-semibold">
+										<div class="w-full h-full flex items-center justify-center bg-primary text-white text-3xl font-bold">
 											{lecturer.firstName[0]}{lecturer.lastName[0]}
 										</div>
 									{/if}
+									<div class="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 								</div>
 								<div class="p-4">
-									<h3 class="text-base mb-1 m-0">
+									<h3 class="text-base font-bold mb-1.5 leading-tight">
 										{#if lecturer.website}
 											<a href={lecturer.website} target="_blank" rel="noopener" class="text-primary no-underline transition-colors duration-200 hover:text-secondary">
 												{lecturer.firstName} {lecturer.lastName}
 											</a>
 										{:else}
-											{lecturer.firstName} {lecturer.lastName}
+											<span class="text-text">{lecturer.firstName} {lecturer.lastName}</span>
 										{/if}
 									</h3>
 									{#if lecturer.institution}
-										<p class="text-sm text-text-light m-0">{lecturer.institution}</p>
+										<p class="text-xs font-medium text-text-light m-0 line-clamp-2">{lecturer.institution}</p>
 									{/if}
 								</div>
 							</div>
 						{/each}
 					</div>
 				{:else}
-					<p class="text-center py-12 bg-bg-alt rounded-lg text-text-light">No lecturer photos available.</p>
+					<div class="text-center py-20 bg-bg-alt rounded-2xl border-2 border-dashed border-border">
+						<p class="text-text-light text-lg italic m-0">No lecturer photos available.</p>
+					</div>
 				{/if}
 			</div>
 

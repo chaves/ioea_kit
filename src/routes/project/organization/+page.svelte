@@ -16,30 +16,30 @@
 			<div class="main-content">
 				<article>
 					<div class="mt-0 pt-0 border-t-0">
-						<h2 class="text-primary mb-4 pb-2 border-b-2 border-secondary">Lectures</h2>
-						<p class="text-[1.05rem] leading-relaxed mb-4">
+						<h2 class="text-primary mb-6 pb-2 border-b-2 border-secondary text-2xl">Lectures</h2>
+						<p class="text-base sm:text-[1.05rem] leading-relaxed mb-4 text-text">
 							Each morning features two lectures by internationally renowned researchers,
 							covering broad subjects within IOE. Lecturers provide summaries of existing
 							literature, discuss main research questions, and explore implications for
 							public policies.
 						</p>
-						<p class="text-[1.05rem] leading-relaxed mb-0">
+						<p class="text-base sm:text-[1.05rem] leading-relaxed mb-0 text-text">
 							Topics include institutions and economic growth, economics of formal and
 							informal contracts, economics of organizations, and theories of institutional changes.
 						</p>
 					</div>
 
-					<div class="mt-10 pt-8 border-t border-border">
-						<h2 class="text-primary mb-4 pb-2 border-b-2 border-secondary">Workshops</h2>
-						<p class="text-[1.05rem] leading-relaxed mb-6">
+					<div class="mt-12 pt-10 border-t border-border">
+						<h2 class="text-primary mb-6 pb-2 border-b-2 border-secondary text-2xl">Workshops</h2>
+						<p class="text-base sm:text-[1.05rem] leading-relaxed mb-6 text-text">
 							Afternoon sessions consist of two parallel workshops, allowing participants
 							to choose based on their interests:
 						</p>
 
-						<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
-							<div class="bg-bg-alt p-6 rounded-lg border-l-4 border-secondary">
-								<h3 class="text-lg mb-3">Thematic Workshops</h3>
-								<p class="text-sm m-0">
+						<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">
+							<div class="bg-bg-alt p-8 rounded-lg border-l-4 border-secondary shadow-sm">
+								<h3 class="text-xl font-semibold text-primary mb-4">Thematic Workshops</h3>
+								<p class="text-base m-0 leading-relaxed">
 									Focus on specific research questions, presenting recent developments,
 									controversies, and debates within a single theme, such as the economics
 									of relational contracts. These workshops facilitate in-depth discussions
@@ -47,9 +47,9 @@
 								</p>
 							</div>
 
-							<div class="bg-bg-alt p-6 rounded-lg border-l-4 border-secondary">
-								<h3 class="text-lg mb-3">Methodology Workshops</h3>
-								<p class="text-sm m-0">
+							<div class="bg-bg-alt p-8 rounded-lg border-l-4 border-secondary shadow-sm">
+								<h3 class="text-xl font-semibold text-primary mb-4">Methodology Workshops</h3>
+								<p class="text-base m-0 leading-relaxed">
 									Concentrate on particular techniques, aiming to familiarize students
 									with specific methods applicable to their research. Examples include
 									experimental economics, econometrics of contracts, and qualitative
@@ -59,9 +59,9 @@
 						</div>
 					</div>
 
-					<div class="mt-10 pt-8 border-t border-border">
-						<h2 class="text-primary mb-4 pb-2 border-b-2 border-secondary">Thesis Seminars</h2>
-						<p class="text-[1.05rem] leading-relaxed mb-0">
+					<div class="mt-12 pt-10 border-t border-border">
+						<h2 class="text-primary mb-6 pb-2 border-b-2 border-secondary text-2xl">Thesis Seminars</h2>
+						<p class="text-base sm:text-[1.05rem] leading-relaxed mb-0 text-text">
 							Evening sessions are dedicated to seminars where participants present their
 							research projects or working papers. These sessions foster collective discussions,
 							with feedback from peers and faculty members, enhancing the quality and direction
@@ -69,9 +69,9 @@
 						</p>
 					</div>
 
-					<div class="mt-10 pt-8 border-t border-border">
-						<h2 class="text-primary mb-4 pb-2 border-b-2 border-secondary">Lunch Sessions</h2>
-						<p class="text-[1.05rem] leading-relaxed mb-0">
+					<div class="mt-12 pt-10 border-t border-border">
+						<h2 class="text-primary mb-6 pb-2 border-b-2 border-secondary text-2xl">Lunch Sessions</h2>
+						<p class="text-base sm:text-[1.05rem] leading-relaxed mb-0 text-text">
 							Introduced in 2012, these short sessions from Tuesday to Friday address key
 							aspects of academic life, such as journal submission processes, job markets,
 							and non-academic careers. Participants engage in discussions with experienced
@@ -79,14 +79,14 @@
 						</p>
 					</div>
 
-					<div class="mt-10 pt-8 border-t border-border">
-						<h2 class="text-primary mb-4 pb-2 border-b-2 border-secondary">Informal Interactions</h2>
-						<p class="text-[1.05rem] leading-relaxed mb-4">
+					<div class="mt-12 pt-10 border-t border-border">
+						<h2 class="text-primary mb-6 pb-2 border-b-2 border-secondary text-2xl">Informal Interactions</h2>
+						<p class="text-base sm:text-[1.05rem] leading-relaxed mb-4 text-text">
 							Beyond formal sessions, IOEA emphasizes informal interactions between participants
 							and faculty. The academy organizes events to encourage networking, fostering
 							collaborations that often lead to joint research projects and publications.
 						</p>
-						<p class="text-[1.05rem] leading-relaxed mb-0">
+						<p class="text-base sm:text-[1.05rem] leading-relaxed mb-0 text-text">
 							This network effect has resulted in numerous scientific collaborations among participants.
 						</p>
 					</div>

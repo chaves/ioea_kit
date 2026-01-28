@@ -53,12 +53,12 @@
 														{/if}
 													</div>
 												</div>
-												<div class="p-5 flex flex-col gap-3 flex-1">
+												<div class="p-6 flex flex-col gap-4 flex-1">
 													{#if workshop.title}
-														<h4 class="text-primary m-0 text-[1.05rem] font-semibold leading-snug">{workshop.title}</h4>
+														<h4 class="text-primary m-0 text-lg font-bold leading-snug group-hover:text-secondary transition-colors">{workshop.title}</h4>
 													{/if}
 													{#if workshop.abstract}
-														<p class="text-text leading-relaxed m-0 text-[0.95rem]">{@html workshop.abstract}</p>
+														<p class="text-text leading-relaxed m-0 text-base">{@html workshop.abstract}</p>
 													{/if}
 													{#if workshop.link}
 														<button
@@ -70,7 +70,7 @@
 																	window.open(workshop.link, '_blank', 'noopener');
 																}
 															}}
-															class="bg-transparent border-0 p-0 text-secondary font-semibold text-sm mt-auto inline-flex items-center gap-1 transition-all duration-200 no-underline cursor-pointer font-inherit hover:text-secondary-dark hover:gap-2"
+															class="bg-transparent border-0 p-0 text-secondary font-bold text-base mt-auto inline-flex items-center gap-2 transition-all duration-200 no-underline cursor-pointer font-inherit hover:text-secondary-dark hover:gap-3"
 														>
 															View materials →
 														</button>
