@@ -163,10 +163,18 @@
 				<p class="text-[1.05rem] leading-relaxed mb-6">Attendants will be selected on the basis of their resume, and of a paper or of a presentation of their research program.</p>
 
 				<h4 class="mt-8 mb-4 text-xl font-semibold text-primary">Calendar</h4>
-				<p class="text-[1.05rem] leading-relaxed mb-6">As capacity is limited, we recommend that you apply early to have the best chance of being accepted.</p>
+				<p class="text-[1.05rem] leading-relaxed mb-4">
+					Applications will be continuously assessed from February 15th until March 15th.
+				</p>
+				<p class="text-[1.05rem] leading-relaxed mb-6">
+					As the number of available positions is limited, early submission of applications is strongly encouraged.
+				</p>
 				<ul class="text-[1.05rem] leading-relaxed mb-6 pl-6">
 					<li class="mb-2">
-						Closing date for application: <strong>{appConfig.deadlines.application}</strong>  - [Earlier application is recommended] – notification of acceptance from Mid-February
+						Closing date for application: <strong>{appConfig.deadlines.application}</strong> [Earlier application is recommended]
+					</li>
+					<li class="mb-2">
+						Notification of acceptance: <strong>from Mid-February</strong>
 					</li>
 					{#if appConfig.deadlines.registration}
 						<li class="mb-2">
