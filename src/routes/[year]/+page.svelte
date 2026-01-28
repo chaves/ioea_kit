@@ -169,19 +169,51 @@
 				<p class="text-[1.05rem] leading-relaxed mb-6">
 					As the number of available positions is limited, early submission of applications is strongly encouraged.
 				</p>
-				<ul class="text-[1.05rem] leading-relaxed mb-6 pl-6">
-					<li class="mb-2">
-						Closing date for application: <strong>{appConfig.deadlines.application}</strong> [Earlier application is recommended]
-					</li>
-					<li class="mb-2">
-						Notification of acceptance: <strong>from Mid-February</strong>
-					</li>
+				<div class="space-y-4 mb-6">
+					<div class="flex items-start gap-4 p-4 bg-bg-alt rounded-lg border-l-4 border-primary">
+						<div class="flex-shrink-0 w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+							<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+								<line x1="16" y1="2" x2="16" y2="6"></line>
+								<line x1="8" y1="2" x2="8" y2="6"></line>
+								<line x1="3" y1="10" x2="21" y2="10"></line>
+							</svg>
+						</div>
+						<div>
+							<p class="font-semibold text-text">Closing date for application</p>
+							<p class="text-primary font-bold">{appConfig.deadlines.application}</p>
+							<p class="text-sm text-text-light">Earlier application is recommended</p>
+						</div>
+					</div>
+					<div class="flex items-start gap-4 p-4 bg-bg-alt rounded-lg border-l-4 border-secondary">
+						<div class="flex-shrink-0 w-10 h-10 bg-secondary rounded-lg flex items-center justify-center">
+							<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+								<polyline points="22 4 12 14.01 9 11.01"></polyline>
+							</svg>
+						</div>
+						<div>
+							<p class="font-semibold text-text">Notification of acceptance</p>
+							<p class="text-secondary font-bold">from Mid-February</p>
+						</div>
+					</div>
 					{#if appConfig.deadlines.registration}
-						<li class="mb-2">
-							Closing date for registration: <strong>{appConfig.deadlines.registration}</strong>
-						</li>
+						<div class="flex items-start gap-4 p-4 bg-bg-alt rounded-lg border-l-4 border-accent">
+							<div class="flex-shrink-0 w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
+								<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+									<circle cx="8.5" cy="7" r="4"></circle>
+									<line x1="20" y1="8" x2="20" y2="14"></line>
+									<line x1="23" y1="11" x2="17" y2="11"></line>
+								</svg>
+							</div>
+							<div>
+								<p class="font-semibold text-text">Closing date for registration</p>
+								<p class="text-accent font-bold">{appConfig.deadlines.registration}</p>
+							</div>
+						</div>
 					{/if}
-				</ul>
+				</div>
 			</div>
 
 			<aside class="sticky top-[100px] self-start hidden lg:block">
