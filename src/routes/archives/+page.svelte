@@ -1,6 +1,7 @@
 <script lang="ts">
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 	import { config } from '$lib/config';
 
 	interface Props {
@@ -15,10 +16,10 @@
 	let { data }: Props = $props();
 </script>
 
-<svelte:head>
-	<title>Past Editions | IOEA</title>
-	<meta name="description" content="Explore the archives of past IOEA sessions from {config.archiveFromYear} to {config.archiveToYear}." />
-</svelte:head>
+<SEO
+	title="Past Editions"
+	description="Explore the archives of past IOEA sessions from {config.archiveFromYear} to {config.archiveToYear}."
+/>
 
 <PageHeader title="Past Editions" />
 

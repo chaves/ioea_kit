@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PageHeader from '$lib/components/PageHeader.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 	import { videoSections } from '$lib/data/videos';
 
 	// Track which videos have been loaded (iframe shown)
@@ -17,10 +18,10 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Videos | IOEA</title>
-	<meta name="description" content="Watch videos from the Institutional and Organizational Economics Academy lectures and presentations." />
-</svelte:head>
+<SEO
+	title="Videos"
+	description="Watch videos from the Institutional and Organizational Economics Academy lectures and presentations."
+/>
 
 <PageHeader title="Videos" />
 

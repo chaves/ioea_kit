@@ -1,15 +1,17 @@
 <script lang="ts">
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 </script>
 
-<svelte:head>
-	<title>Workshops - IOEA {data.year}</title>
-</svelte:head>
+<SEO
+	title="Workshops - IOEA {data.year}"
+	description="Workshops from the IOEA {data.year} session, focusing on specific topics in institutional and organizational economics."
+/>
 
 <PageHeader title="Workshops - IOEA {data.year}" />
 

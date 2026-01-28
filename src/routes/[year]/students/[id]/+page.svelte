@@ -1,6 +1,7 @@
 <script lang="ts">
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 
 	interface Props {
 		data: {
@@ -27,12 +28,15 @@
 	let { data }: Props = $props();
 
 	const fullName = `${data.student.firstName} ${data.student.lastName}`;
+	const seoDescription = $derived(data.paper?.abstract ? data.paper.abstract.substring(0, 160) : `Profile of ${fullName}, participant at IOEA ${data.year}.`);
 </script>
 
-<svelte:head>
-	<title>{fullName} - IOEA {data.year}</title>
-	<meta name="description" content="Profile of {fullName}, participant at IOEA {data.year}." />
-</svelte:head>
+<SEO
+	title="{fullName} - IOEA {data.year}"
+	description={seoDescription}
+	ogType="article"
+	ogImage={data.student.photo ? `/images/students/${data.student.photo}` : '/site-logo.png'}
+/>
 
 <PageHeader title={fullName} />
 

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 	import { getConfig, staticConfig } from '$lib/config';
 
 	interface Props {
@@ -49,12 +50,39 @@
 	}
 
 	const sessionOrdinal = $derived(getOrdinal(sessionNumber));
+
+	const eventJsonLd = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'Event',
+		'name': `IOEA ${year} - ${sessionNumber}${sessionOrdinal} session`,
+		'description': `The ${sessionNumber}${sessionOrdinal} session of the Institutional and Organizational Economics Academy, ${appConfig.session.dateRange} ${year} in Corsica, France.`,
+		'startDate': `${year}-${appConfig.session.month === 'April' ? '04' : '05'}-${appConfig.session.startDate.toString().padStart(2, '0')}`,
+		'endDate': `${year}-${appConfig.session.month === 'April' ? '04' : '05'}-${appConfig.session.endDate.toString().padStart(2, '0')}`,
+		'eventStatus': 'https://schema.org/EventScheduled',
+		'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
+		'location': {
+			'@type': 'Place',
+			'name': 'Corsica',
+			'address': {
+				'@type': 'PostalAddress',
+				'addressLocality': 'Corsica',
+				'addressCountry': 'FR'
+			}
+		},
+		'organizer': {
+			'@type': 'EducationalOrganization',
+			'name': 'Institutional and Organizational Economics Academy',
+			'url': 'https://www.ioea.eu'
+		}
+	});
 </script>
 
-<svelte:head>
-	<title>IOEA {year} - the {sessionNumber}{sessionOrdinal} session of the Institutional and Organizational Economics Academy</title>
-	<meta name="description" content="IOEA {year}, the {sessionNumber}{sessionOrdinal} session of the Institutional and Organizational Economics Academy, {appConfig.session.dateRange} {year} in Corsica, France." />
-</svelte:head>
+<SEO
+	title="IOEA {year} - {sessionNumber}{sessionOrdinal} session"
+	description="IOEA {year}, the {sessionNumber}{sessionOrdinal} session of the Institutional and Organizational Economics Academy, {appConfig.session.dateRange} {year} in Corsica, France."
+	ogType="event"
+	jsonLd={eventJsonLd}
+/>
 
 <PageHeader title="IOEA {year}" />
 

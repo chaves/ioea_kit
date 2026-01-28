@@ -1,6 +1,7 @@
 <script lang="ts">
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 	import { page } from '$app/stores';
 	import { pdfUrl } from '$lib/utils/files';
 
@@ -21,12 +22,17 @@
 	}
 
 	const fileExtension = $derived(getFileExtension(data.presentation.link));
+
+	const seoTitle = $derived(data.presentation.title ? `${data.presentation.title} - ${data.presentation.author.firstName} ${data.presentation.author.lastName}` : `${typeLabel} - IOEA ${data.year}`);
+	const seoDescription = $derived(data.presentation.abstract ? data.presentation.abstract.replace(/<[^>]*>/g, '').substring(0, 160) : `${typeLabel} by ${data.presentation.author.firstName} ${data.presentation.author.lastName} at IOEA ${data.year}`);
 </script>
 
-<svelte:head>
-	<title>{data.presentation.title || `${typeLabel} - IOEA ${data.year}`}</title>
-	<meta name="description" content="{data.presentation.abstract || `${typeLabel} by ${data.presentation.author.firstName} ${data.presentation.author.lastName} at IOEA ${data.year}`}" />
-</svelte:head>
+<SEO
+	title={seoTitle}
+	description={seoDescription}
+	ogType="article"
+	ogImage={data.presentation.author.photo ? `/images/lec/${data.presentation.author.photo}` : '/site-logo.png'}
+/>
 
 <PageHeader title="{typeLabel} - IOEA {data.year}" />
 

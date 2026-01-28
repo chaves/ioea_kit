@@ -1,6 +1,7 @@
 <script lang="ts">
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 
 	interface Props {
 		data: {
@@ -34,9 +35,10 @@
 	});
 </script>
 
-<svelte:head>
-	<title>Seminars - IOEA {data.year}</title>
-</svelte:head>
+<SEO
+	title="Seminars - IOEA {data.year}"
+	description="Research seminars at the IOEA {data.year} session where participants present their work."
+/>
 
 <PageHeader title="Seminars - IOEA {data.year}" />
 

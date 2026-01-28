@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 	import { config } from '$lib/config';
 
 	interface Props {
@@ -30,9 +31,10 @@
 	});
 </script>
 
-<svelte:head>
-	<title>Application form - IOEA {config.currentYear} | Institutional and Organizational Economics Academy</title>
-</svelte:head>
+<SEO
+	title="Application form - IOEA {config.currentYear}"
+	description="Submit your application for the IOEA {config.currentYear} session."
+/>
 
 <PageHeader title="Application form - IOEA {config.currentYear}" />
 

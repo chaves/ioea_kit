@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { staticConfig, getConfig } from '$lib/config';
 	import Sidebar from '$lib/components/Sidebar.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 	import type { PageData } from './$types';
 
 	type TestimonialCard =
@@ -97,10 +98,7 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Institutional and Organizational Economics Academy | IOEA</title>
-	<meta name="description" content="The IOEA is an intensive one-week academy on Institutional and Organizational Economics held annually in Cargèse, Corsica, France." />
-</svelte:head>
+<SEO />
 
 <section class="relative text-white py-12 overflow-hidden bg-gradient-to-br from-primary to-primary-dark before:content-[''] before:absolute before:inset-0 before:opacity-20">
 	<div class="container">

@@ -1,12 +1,13 @@
 <script lang="ts">
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 </script>
 
-<svelte:head>
-	<title>Goals of the IOEA | Institutional and Organizational Economics Academy</title>
-	<meta name="description" content="The IOEA aims to promote advanced and original research on institutional and organizational economics." />
-</svelte:head>
+<SEO
+	title="Goals of the IOEA"
+	description="The IOEA aims to promote advanced and original research on institutional and organizational economics."
+/>
 
 <PageHeader title="Goals of the IOEA" />
 
