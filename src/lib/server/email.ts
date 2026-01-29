@@ -5,23 +5,24 @@ interface EmailOptions {
   subject: string;
   html: string;
   from?: string;
+  cc?: string | string[];
 }
 
 // Helper function to get ordinal suffix
 function getOrdinal(num: number): string {
-	const lastDigit = num % 10;
-	const lastTwoDigits = num % 100;
-	
-	// Handle special cases: 11th, 12th, 13th (not 11st, 12nd, 13rd)
-	if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {
-		return 'th';
-	}
-	
-	// Handle regular cases
-	if (lastDigit === 1) return 'st';
-	if (lastDigit === 2) return 'nd';
-	if (lastDigit === 3) return 'rd';
-	return 'th';
+  const lastDigit = num % 10;
+  const lastTwoDigits = num % 100;
+
+  // Handle special cases: 11th, 12th, 13th (not 11st, 12nd, 13rd)
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {
+    return "th";
+  }
+
+  // Handle regular cases
+  if (lastDigit === 1) return "st";
+  if (lastDigit === 2) return "nd";
+  if (lastDigit === 3) return "rd";
+  return "th";
 }
 
 // Simple email sending utility
@@ -32,13 +33,14 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
   const fromName = process.env.SMTP_FROM_NAME || "IOEA Team";
   const fromAddress = fromName ? `${fromName} <${fromEmail}>` : fromEmail;
 
-  const { to, subject, html, from = fromAddress } = options;
+  const { to, subject, html, from = fromAddress, cc } = options;
 
   // For development, just log the email
   if (process.env.NODE_ENV === "development" || !process.env.SMTP_HOST) {
     console.log("=== Email ===");
     console.log("From:", from);
     console.log("To:", to);
+    if (cc) console.log("CC:", cc);
     console.log("Subject:", subject);
     console.log("Body:", html);
     console.log("=============");
@@ -67,6 +69,7 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
     await transporter.sendMail({
       from: from,
       to: to,
+      cc: cc,
       subject: subject,
       html: html,
     });
@@ -95,6 +98,7 @@ export async function applicationReceiptEmail(applicant: {
 
   return {
     to: applicant.email,
+    cc: fullConfig.emails.webmaster,
     subject: `IOEA ${year} application receipt`,
     html: `
 			<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
