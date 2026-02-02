@@ -2,7 +2,16 @@ import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { prisma } from '$lib/server/db';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ cookies }) => {
+	// Migration: Clean up any old cookies with incorrect path='/call'
+	// This ensures users with stuck cookies can start fresh
+	try {
+		cookies.delete('call_step1', { path: '/call' });
+		cookies.delete('call_step2', { path: '/call' });
+	} catch (e) {
+		// Ignore if they don't exist
+	}
+
 	const countries = await prisma.countries.findMany({
 		orderBy: { name: 'asc' }
 	});
