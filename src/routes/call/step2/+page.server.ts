@@ -97,7 +97,7 @@ export const actions: Actions = {
 		});
 
 		cookies.set('call_step2', step2Data, {
-			path: '/call',
+			path: '/',
 			httpOnly: true,
 			secure: process.env.NODE_ENV === 'production',
 			sameSite: 'lax',

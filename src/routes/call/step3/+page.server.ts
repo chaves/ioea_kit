@@ -130,8 +130,8 @@ export const actions: Actions = {
       }
 
       // Clear cookies
-      cookies.delete("call_step1", { path: "/call" });
-      cookies.delete("call_step2", { path: "/call" });
+      cookies.delete("call_step1", { path: "/" });
+      cookies.delete("call_step2", { path: "/" });
     } catch (error) {
       console.error("Application submission error:", error);
       return fail(500, {
