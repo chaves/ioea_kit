@@ -83,7 +83,7 @@
 						return async ({ result, update }) => {
 							loading = false;
 							if (result.type === 'redirect') {
-								goto(result.location);
+								await goto(result.location);
 							} else {
 								await update();
 							}
