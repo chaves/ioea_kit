@@ -193,6 +193,13 @@ export const actions: Actions = {
 			});
 		}
 
+		if (phdSummary.length > 2000) {
+			return fail(400, {
+				error: 'Research summary must not exceed 2000 characters.',
+				values
+			});
+		}
+
 		// PhD-specific validation (status 1 = PhD student)
 		const isPhDStudent = status === 1;
 		if (isPhDStudent) {

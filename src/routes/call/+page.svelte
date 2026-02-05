@@ -333,7 +333,7 @@
 
 						<div class="mb-4">
 							<label for="phd_summary" class="block mb-2 font-medium text-text">
-								{isPhDStudent ? 'PhD Research Summary' : 'Research Summary'} (max 500 words) *
+								{isPhDStudent ? 'PhD Research Summary' : 'Research Summary'} (50–2000 characters) *
 							</label>
 							<textarea
 								id="phd_summary"
@@ -341,6 +341,8 @@
 								class="w-full px-4 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-y min-h-[150px]"
 								rows="8"
 								required
+								minlength="50"
+								maxlength="2000"
 								placeholder={isPhDStudent
 									? 'Describe your PhD research, methodology, and expected contributions...'
 									: 'Describe your research interests, current projects, and contributions...'}
