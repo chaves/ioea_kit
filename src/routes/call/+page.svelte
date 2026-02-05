@@ -35,12 +35,18 @@
 	const isPhDStudent = $derived(selectedStatus === '1');
 	const titleLabel = $derived(isPhDStudent ? 'Title of PhD' : 'Title of Research Project');
 
-	// Scroll to error message when form changes
+	// Handle form errors: scroll to error and reset file state
 	$effect(() => {
-		if (form?.error && errorDiv) {
-			setTimeout(() => {
-				errorDiv?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-			}, 100);
+		if (form?.error) {
+			// Reset file state since browser clears file inputs on form resubmission
+			cvFile = null;
+			paperFile = null;
+
+			if (errorDiv) {
+				setTimeout(() => {
+					errorDiv?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				}, 100);
+			}
 		}
 	});
 </script>
@@ -199,7 +205,7 @@
 								>
 									<option value="">-----------------</option>
 									{#each Object.entries(config.statusOptions) as [value, label]}
-										<option value={value} selected={form?.values?.status === value}>
+										<option value={value}>
 											{label}
 										</option>
 									{/each}

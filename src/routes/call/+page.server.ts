@@ -221,6 +221,13 @@ export const actions: Actions = {
 					values
 				});
 			}
+			const yearNum = parseInt(phdYearStr, 10);
+			if (isNaN(yearNum) || yearNum < 2024 || yearNum > 2035) {
+				return fail(400, {
+					error: 'Expected year of completion must be between 2024 and 2035.',
+					values
+				});
+			}
 		}
 
 		const phdYear = phdYearStr ? parseInt(phdYearStr, 10) : null;
@@ -248,6 +255,15 @@ export const actions: Actions = {
 
 		if (!paperFile.name.toLowerCase().endsWith('.pdf')) {
 			return fail(400, { error: 'Research paper must be a PDF file.', values });
+		}
+
+		// === Consent validation ===
+		const consent = data.get('consent');
+		if (!consent) {
+			return fail(400, {
+				error: 'You must agree to the processing of your personal data to submit this application.',
+				values
+			});
 		}
 
 		// === Check for duplicate submission ===
@@ -328,6 +344,6 @@ export const actions: Actions = {
 			});
 		}
 
-		redirect(303, '/call/success');
+		throw redirect(303, '/call/success');
 	}
 };
