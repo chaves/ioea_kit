@@ -22,7 +22,14 @@
 	let errorDiv: HTMLDivElement | undefined = $state();
 	let cvFile = $state<File | null>(null);
 	let paperFile = $state<File | null>(null);
-	let selectedStatus = $state(form?.values?.status ?? '');
+	let selectedStatus = $state('');
+
+	// Sync selectedStatus when form returns with values (e.g., after validation error)
+	$effect(() => {
+		if (form?.values?.status) {
+			selectedStatus = form.values.status;
+		}
+	});
 
 	// Check if user is a PhD student (status = 1)
 	const isPhDStudent = $derived(selectedStatus === '1');
