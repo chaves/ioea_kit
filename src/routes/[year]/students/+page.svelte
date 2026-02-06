@@ -58,7 +58,7 @@
 	<div class="container">
 		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-				{#if data.students.length > 0 || data.chairs.length > 0}
+				{#if data.students.length > 0 || (data.chairs.length > 0 && data.showGroups)}
 					<!-- Filter buttons -->
 					{#if data.showGroups && data.groups.length > 0}
 						<div class="flex flex-wrap gap-3 mb-10">
