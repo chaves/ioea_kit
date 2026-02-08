@@ -53,6 +53,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
 
 		return {
 			id: p.id,
+			callYear: p.call_year,
 			firstName: p.first_name,
 			lastName: p.last_name,
 			email: p.email,

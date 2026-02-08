@@ -130,12 +130,12 @@
 							<h4>Documents</h4>
 							<div class="documents">
 								{#if proposal.cv}
-									<a href="/uploads/call/{proposal.cv}" target="_blank" class="doc-link">
+									<a href="/uploads/call/{proposal.callYear}/{proposal.cv}" target="_blank" class="doc-link">
 										📄 View CV
 									</a>
 								{/if}
 								{#if proposal.paper}
-									<a href="/uploads/call/{proposal.paper}" target="_blank" class="doc-link">
+									<a href="/uploads/call/{proposal.callYear}/{proposal.paper}" target="_blank" class="doc-link">
 										📝 View Paper
 									</a>
 								{/if}

@@ -28,6 +28,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
 		return {
 			id: Number(s.id),
+			callYear: s.call_year,
 			firstName: s.first_name,
 			lastName: s.last_name,
 			email: s.email,

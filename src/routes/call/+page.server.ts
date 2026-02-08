@@ -6,7 +6,7 @@ import { join } from 'path';
 import { sendEmail, applicationReceiptEmail } from '$lib/server/email';
 import { config } from '$lib/config';
 
-const UPLOAD_DIR = `uploads/IOEA${config.currentYear}_call`;
+const UPLOAD_DIR = `uploads/call/${config.currentYear}`;
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export const load: PageServerLoad = async ({ cookies }) => {

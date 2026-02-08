@@ -3,6 +3,7 @@
 
 	interface Submission {
 		id: number;
+		callYear: number;
 		firstName: string;
 		lastName: string;
 		email: string;
@@ -169,10 +170,10 @@
 				<div class="card-actions">
 					<div class="card-links">
 						{#if sub.cv}
-							<a href="/uploads/call/{sub.cv}" target="_blank" class="doc-btn">CV</a>
+							<a href="/uploads/call/{sub.callYear}/{sub.cv}" target="_blank" class="doc-btn">CV</a>
 						{/if}
 						{#if sub.paper}
-							<a href="/uploads/call/{sub.paper}" target="_blank" class="doc-btn">Paper</a>
+							<a href="/uploads/call/{sub.callYear}/{sub.paper}" target="_blank" class="doc-btn">Paper</a>
 						{/if}
 						<button class="doc-btn" onclick={() => toggleSummary(sub.id)}>
 							{expandedIds.has(sub.id) ? '- Summary' : '+ Summary'}
