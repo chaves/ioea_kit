@@ -1,8 +1,8 @@
 import { redirect, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
-import { validateUserCredentials, createSession, getSession, hasAnyRole } from '$lib/server/auth';
+import { validateUserCredentials, createSession, getSession, hasAnyRole, getUserByEmail } from '$lib/server/auth';
 
-export const load: PageServerLoad = async ({ cookies }) => {
+export const load: PageServerLoad = async ({ cookies, url }) => {
 	const session = await getSession(cookies);
 
 	if (session && hasAnyRole(session, ['admin', 'reviewer'])) {
@@ -12,7 +12,13 @@ export const load: PageServerLoad = async ({ cookies }) => {
 		throw redirect(302, '/auth/reviewer');
 	}
 
-	return {};
+	const message = url.searchParams.get('message');
+	let successMessage: string | null = null;
+	if (message === 'password_reset') {
+		successMessage = 'Your password has been reset successfully. Please log in with your new password.';
+	}
+
+	return { successMessage };
 };
 
 export const actions: Actions = {
@@ -44,6 +50,12 @@ export const actions: Actions = {
 			reviewerGroup: user.reviewerGroup,
 			reviewerType: user.reviewerType
 		});
+
+		// Check if user must change their password
+		const fullUser = await getUserByEmail(user.email);
+		if (fullUser?.must_change_password) {
+			throw redirect(302, '/auth/change-password');
+		}
 
 		if (user.roles.includes('admin')) {
 			throw redirect(302, '/auth/manager');

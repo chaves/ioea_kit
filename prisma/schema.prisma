@@ -63,19 +63,34 @@ model call_submissions {
 }
 
 model users {
-  id                    Int          @id @default(autoincrement()) @db.UnsignedInt
-  email                 String       @unique(map: "email") @db.VarChar(255)
-  password_hash         String?      @db.VarChar(255)
-  name                  String       @db.VarChar(255)
-  active                Boolean?     @default(true)
-  created_at            DateTime?    @default(now()) @db.DateTime(0)
-  updated_at            DateTime?    @default(now()) @updatedAt @db.DateTime(0)
-  legacy_reviewer_id    Int?         @db.UnsignedInt
-  legacy_student_id     Int?         @db.UnsignedInt
-  legacy_reviewer_group Int?         @db.UnsignedTinyInt
+  id                    Int                    @id @default(autoincrement()) @db.UnsignedInt
+  email                 String                 @unique(map: "email") @db.VarChar(255)
+  password_hash         String?                @db.VarChar(255)
+  name                  String                 @db.VarChar(255)
+  active                Boolean?               @default(true)
+  created_at            DateTime?              @default(now()) @db.DateTime(0)
+  updated_at            DateTime?              @default(now()) @updatedAt @db.DateTime(0)
+  legacy_reviewer_id    Int?                   @db.UnsignedInt
+  legacy_student_id     Int?                   @db.UnsignedInt
+  legacy_reviewer_group Int?                   @db.UnsignedTinyInt
+  must_change_password  Boolean?               @default(false)
   roles                 user_roles[]
+  password_reset_tokens password_reset_tokens[]
 
   @@index([email], map: "idx_email")
+}
+
+model password_reset_tokens {
+  id         Int       @id @default(autoincrement()) @db.UnsignedInt
+  user_id    Int       @db.UnsignedInt
+  token_hash String    @unique @db.VarChar(64)
+  expires_at DateTime  @db.DateTime(0)
+  used_at    DateTime? @db.DateTime(0)
+  created_at DateTime  @default(now()) @db.DateTime(0)
+  user       users     @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "password_reset_tokens_ibfk_1")
+
+  @@index([user_id], map: "idx_prt_user_id")
+  @@index([token_hash], map: "idx_prt_token_hash")
 }
 
 model roles {

@@ -1,6 +1,7 @@
 import { prisma } from './db';
 import type { Cookies } from '@sveltejs/kit';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 
 const SESSION_COOKIE_NAME = 'ioea_session';
 const SESSION_EXPIRY_HOURS = 24;
@@ -206,6 +207,209 @@ export async function validateUserByEmail(
 		email: user.email,
 		roles: user.roleNames,
 	};
+}
+
+// --- Token & Password utilities ---
+
+export function generateSecureToken(): string {
+	return crypto.randomBytes(32).toString('hex');
+}
+
+export function hashToken(token: string): string {
+	return crypto.createHash('sha256').update(token).digest('hex');
+}
+
+export function generateRandomPassword(): string {
+	const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%';
+	let password = '';
+	const bytes = crypto.randomBytes(12);
+	for (let i = 0; i < 12; i++) {
+		password += chars[bytes[i] % chars.length];
+	}
+	return password;
+}
+
+// --- Password Reset Token functions ---
+
+export async function createPasswordResetToken(userId: number): Promise<string> {
+	// Invalidate old unused tokens for this user
+	await prisma.password_reset_tokens.updateMany({
+		where: { user_id: userId, used_at: null },
+		data: { used_at: new Date() },
+	});
+
+	const rawToken = generateSecureToken();
+	const tokenHash = hashToken(rawToken);
+	const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+	await prisma.password_reset_tokens.create({
+		data: {
+			user_id: userId,
+			token_hash: tokenHash,
+			expires_at: expiresAt,
+		},
+	});
+
+	return rawToken;
+}
+
+export async function validateResetToken(rawToken: string): Promise<number | null> {
+	const tokenHash = hashToken(rawToken);
+
+	const record = await prisma.password_reset_tokens.findUnique({
+		where: { token_hash: tokenHash },
+	});
+
+	if (!record) return null;
+	if (record.used_at) return null;
+	if (record.expires_at < new Date()) return null;
+
+	return record.user_id;
+}
+
+export async function consumeResetToken(rawToken: string): Promise<void> {
+	const tokenHash = hashToken(rawToken);
+
+	await prisma.password_reset_tokens.update({
+		where: { token_hash: tokenHash },
+		data: { used_at: new Date() },
+	});
+}
+
+// --- User CRUD functions ---
+
+export async function createUser({
+	email,
+	name,
+	password,
+	roleNames,
+	grantedBy,
+}: {
+	email: string;
+	name: string;
+	password: string;
+	roleNames: string[];
+	grantedBy?: number;
+}) {
+	const passwordHash = await hashPassword(password);
+
+	const user = await prisma.users.create({
+		data: {
+			email,
+			name,
+			password_hash: passwordHash,
+			must_change_password: true,
+		},
+	});
+
+	// Assign roles
+	if (roleNames.length > 0) {
+		const roles = await prisma.roles.findMany({
+			where: { name: { in: roleNames } },
+		});
+
+		await prisma.user_roles.createMany({
+			data: roles.map((role) => ({
+				user_id: user.id,
+				role_id: role.id,
+				granted_by: grantedBy ?? null,
+			})),
+		});
+	}
+
+	return user;
+}
+
+export async function updateUser(
+	userId: number,
+	data: {
+		name?: string;
+		email?: string;
+		active?: boolean;
+		roleNames?: string[];
+	}
+) {
+	// Update user fields
+	const updateData: Record<string, unknown> = {};
+	if (data.name !== undefined) updateData.name = data.name;
+	if (data.email !== undefined) updateData.email = data.email;
+	if (data.active !== undefined) updateData.active = data.active;
+
+	if (Object.keys(updateData).length > 0) {
+		await prisma.users.update({
+			where: { id: userId },
+			data: updateData,
+		});
+	}
+
+	// Update roles if provided
+	if (data.roleNames !== undefined) {
+		// Remove existing roles
+		await prisma.user_roles.deleteMany({
+			where: { user_id: userId },
+		});
+
+		// Assign new roles
+		if (data.roleNames.length > 0) {
+			const roles = await prisma.roles.findMany({
+				where: { name: { in: data.roleNames } },
+			});
+
+			await prisma.user_roles.createMany({
+				data: roles.map((role) => ({
+					user_id: userId,
+					role_id: role.id,
+				})),
+			});
+		}
+	}
+}
+
+export async function getAllUsersWithRoles() {
+	const users = await prisma.users.findMany({
+		include: {
+			roles: {
+				include: {
+					role: true,
+				},
+			},
+		},
+		orderBy: { created_at: 'desc' },
+	});
+
+	return users.map((user) => ({
+		id: user.id,
+		email: user.email,
+		name: user.name,
+		active: user.active,
+		must_change_password: user.must_change_password,
+		created_at: user.created_at,
+		roleNames: user.roles.map((ur) => ur.role.name),
+	}));
+}
+
+// --- Rate limiting ---
+
+const forgotPasswordAttempts = new Map<string, { count: number; firstAttempt: number }>();
+
+export function checkForgotPasswordRateLimit(ip: string): boolean {
+	const now = Date.now();
+	const windowMs = 15 * 60 * 1000; // 15 minutes
+	const maxAttempts = 5;
+
+	const record = forgotPasswordAttempts.get(ip);
+
+	if (!record || now - record.firstAttempt > windowMs) {
+		forgotPasswordAttempts.set(ip, { count: 1, firstAttempt: now });
+		return true; // allowed
+	}
+
+	if (record.count >= maxAttempts) {
+		return false; // rate limited
+	}
+
+	record.count++;
+	return true; // allowed
 }
 
 // Validate program admin password

@@ -3,12 +3,14 @@ import type { PageServerLoad } from './$types';
 import { prisma } from '$lib/server/db';
 import { getSession, hasRole } from '$lib/server/auth';
 
-export const load: PageServerLoad = async ({ cookies }) => {
+export const load: PageServerLoad = async ({ cookies, url }) => {
 	const session = await getSession(cookies);
 
 	if (!session || !hasRole(session, 'admin')) {
 		throw redirect(302, '/auth/login');
 	}
+
+	const filter = url.searchParams.get('filter') ?? 'all';
 
 	// Get all submissions
 	const submissions = await prisma.call_submissions.findMany({
@@ -24,53 +26,61 @@ export const load: PageServerLoad = async ({ cookies }) => {
 	// Get groups
 	const groups = await prisma.call_groups.findMany();
 
-	// Calculate average scores for each submission
-	const proposalsWithScores = submissions.map((p) => {
+	// Get countries for nationality lookup
+	const countries = await prisma.countries.findMany();
+	const countryMap = new Map(countries.map((c) => [c.id, c.name]));
+
+	// Build proposals with all fields the component needs
+	const allProposals = submissions.map((p) => {
 		const proposalNotes = notes.filter((n) => n.call_submission_id === p.id);
-		const avgScore =
+		const avgNote =
 			proposalNotes.length > 0
 				? proposalNotes.reduce((sum, n) => sum + n.note, 0) / proposalNotes.length
-				: 0;
+				: null;
 
 		return {
-			id: p.id,
+			id: Number(p.id),
 			firstName: p.first_name,
 			lastName: p.last_name,
 			email: p.email,
+			nationality: countryMap.get(p.nationality) ?? null,
+			country: countryMap.get(p.country) ?? null,
 			university: p.university,
-			country: p.country,
 			status: p.status,
-			callYear: p.call_year,
+			age: p.age,
+			gender: p.gender,
+			reviewerGroup: p.call_group_id ? Number(p.call_group_id) : null,
+			cv: p.cv || null,
+			paper: p.paper || null,
+			totalNotes: proposalNotes.length,
+			avgNote,
 			accepted: p.accepted,
-			groupId: p.call_group_id,
-			groupName: p.call_group_id
-				? groups.find((g) => g.id === p.call_group_id)?.name ?? 'Unknown'
-				: 'Unassigned',
-			avgScore,
-			noteCount: proposalNotes.length,
-			notes: proposalNotes.map((n) => ({
-				note: n.note,
-				reviewerId: n.call_reviewer_id,
-				reviewerName: reviewers.find((r) => r.id === n.call_reviewer_id)?.name ?? 'Unknown'
-			}))
 		};
 	});
 
+	// Compute stats from all proposals
+	const stats = {
+		total: allProposals.length,
+		accepted: allProposals.filter((p) => p.accepted).length,
+		rejected: allProposals.filter((p) => !p.accepted && p.totalNotes > 0).length,
+		notRated: allProposals.filter((p) => p.totalNotes === 0).length,
+		female: allProposals.filter((p) => p.gender?.toLowerCase() === 'f').length,
+		male: allProposals.filter((p) => p.gender?.toLowerCase() === 'm').length,
+	};
+
+	// Apply filter
+	let proposals = allProposals;
+	if (filter === 'accepted') {
+		proposals = allProposals.filter((p) => p.accepted);
+	} else if (filter === 'rejected') {
+		proposals = allProposals.filter((p) => !p.accepted && p.totalNotes > 0);
+	} else if (filter === 'not_rated') {
+		proposals = allProposals.filter((p) => p.totalNotes === 0);
+	}
+
 	return {
-		proposals: proposalsWithScores,
-		reviewers: reviewers.map((r) => ({
-			id: r.id,
-			name: r.name,
-			email: r.email,
-			groupId: r.call_group_id,
-			groupName: r.call_group_id
-				? groups.find((g) => g.id === r.call_group_id)?.name ?? 'Unknown'
-				: 'Unassigned'
-		})),
-		groups: groups.map((g) => ({
-			id: g.id,
-			year: g.year,
-			name: g.name
-		}))
+		proposals,
+		stats,
+		filter,
 	};
 };

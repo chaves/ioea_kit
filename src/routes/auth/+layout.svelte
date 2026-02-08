@@ -3,11 +3,11 @@
 
 	let { children, data } = $props();
 
-	// Don't show auth layout on login page
-	const isLoginPage = $derived($page.url.pathname === '/auth/login');
+	// Don't show auth layout on standalone pages (login, forgot/reset/change password)
+	const isStandalonePage = $derived(['/auth/login', '/auth/forgot-password', '/auth/reset-password', '/auth/change-password'].includes($page.url.pathname));
 </script>
 
-{#if isLoginPage}
+{#if isStandalonePage}
 	{@render children()}
 {:else}
 	<div class="flex min-h-screen">
@@ -29,6 +29,17 @@
 							<path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
 						</svg>
 						Applications
+					</a>
+				{/if}
+				{#if data.session?.roles?.includes('admin')}
+					<a href="/auth/manager/users" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/manager/users' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+							<circle cx="9" cy="7" r="4"></circle>
+							<line x1="19" y1="8" x2="19" y2="14"></line>
+							<line x1="22" y1="11" x2="16" y2="11"></line>
+						</svg>
+						Users
 					</a>
 				{/if}
 				<a href="/auth/reviewer" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/reviewer' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">

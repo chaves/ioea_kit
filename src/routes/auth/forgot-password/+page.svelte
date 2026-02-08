@@ -1,37 +1,30 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
 
 	interface Props {
-		data: {
-			successMessage?: string | null;
-		};
 		form?: {
 			error?: string;
+			success?: boolean;
+			message?: string;
+			email?: string;
 		};
 	}
 
-	let { data, form }: Props = $props();
+	let { form }: Props = $props();
 	let loading = $state(false);
 </script>
 
 <svelte:head>
-	<title>Admin Login | IOEA</title>
+	<title>Forgot Password | IOEA</title>
 </svelte:head>
 
 <div class="login-page">
 	<div class="login-container">
 		<div class="login-header">
 			<img src="/site-logo.png" alt="IOEA" class="login-logo" onerror={(e) => e.currentTarget.style.display = 'none'} />
-			<h1>Admin Login</h1>
-			<p>Access the IOEA administration panel</p>
+			<h1>Forgot Password</h1>
+			<p>Enter your email to receive a password reset link</p>
 		</div>
-
-		{#if data.successMessage}
-			<div class="alert alert-success">
-				{data.successMessage}
-			</div>
-		{/if}
 
 		{#if form?.error}
 			<div class="alert alert-error">
@@ -39,57 +32,48 @@
 			</div>
 		{/if}
 
-		<form
-			method="POST"
-			use:enhance={() => {
-				loading = true;
-				return async ({ result, update }) => {
-					loading = false;
-					if (result.type === 'redirect') {
-						goto(result.location);
-					} else {
+		{#if form?.success}
+			<div class="alert alert-success">
+				{form.message}
+			</div>
+		{:else}
+			<form
+				method="POST"
+				use:enhance={() => {
+					loading = true;
+					return async ({ update }) => {
+						loading = false;
 						await update();
-					}
-				};
-			}}
-			class="login-form"
-		>
-			<div class="form-group">
-				<label for="email" class="form-label">Email Address</label>
-				<input
-					type="email"
-					id="email"
-					name="email"
-					class="form-input"
-					required
-					placeholder="your.email@example.com"
-				/>
-			</div>
+					};
+				}}
+				class="login-form"
+			>
+				<div class="form-group">
+					<label for="email" class="form-label">Email Address</label>
+					<input
+						type="email"
+						id="email"
+						name="email"
+						class="form-input"
+						required
+						placeholder="your.email@example.com"
+						value={form?.email ?? ''}
+					/>
+				</div>
 
-			<div class="form-group">
-				<label for="password" class="form-label">Password</label>
-				<input
-					type="password"
-					id="password"
-					name="password"
-					class="form-input"
-					required
-				/>
-				<a href="/auth/forgot-password" class="forgot-link">Forgot your password?</a>
-			</div>
-
-			<button type="submit" class="btn btn-primary btn-block" disabled={loading}>
-				{#if loading}
-					<span class="spinner-small"></span>
-					Signing in...
-				{:else}
-					Sign In
-				{/if}
-			</button>
-		</form>
+				<button type="submit" class="btn btn-primary btn-block" disabled={loading}>
+					{#if loading}
+						<span class="spinner-small"></span>
+						Sending...
+					{:else}
+						Send Reset Link
+					{/if}
+				</button>
+			</form>
+		{/if}
 
 		<div class="login-footer">
-			<a href="/">← Back to Website</a>
+			<a href="/auth/login">← Back to Login</a>
 		</div>
 	</div>
 </div>
@@ -177,18 +161,6 @@
 		color: var(--color-primary);
 	}
 
-	.forgot-link {
-		display: block;
-		text-align: right;
-		margin-top: 0.5rem;
-		font-size: 0.85rem;
-		color: var(--color-text-light);
-	}
-
-	.forgot-link:hover {
-		color: var(--color-primary);
-	}
-
 	.alert-success {
 		background: #f0fdf4;
 		border: 1px solid #bbf7d0;
@@ -198,5 +170,14 @@
 		margin-bottom: 1.5rem;
 		font-size: 0.9rem;
 	}
-</style>
 
+	.alert-error {
+		background: #fef2f2;
+		border: 1px solid #fecaca;
+		color: #991b1b;
+		padding: 1rem;
+		border-radius: 0.5rem;
+		margin-bottom: 1.5rem;
+		font-size: 0.9rem;
+	}
+</style>
