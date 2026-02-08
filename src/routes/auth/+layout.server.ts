@@ -9,8 +9,8 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 		return { session: locals.session };
 	}
 
-	// Require authentication with admin or reviewer role
-	if (!locals.session || !hasAnyRole(locals.session, ['admin', 'reviewer'])) {
+	// Require authentication with admin, program-admin, or student role
+	if (!locals.session || !hasAnyRole(locals.session, ['admin', 'program-admin', 'student'])) {
 		throw redirect(303, '/auth/login');
 	}
 

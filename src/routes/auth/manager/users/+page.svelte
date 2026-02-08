@@ -67,7 +67,7 @@
 </svelte:head>
 
 <div class="admin-page">
-	<header class="page-header">
+	<header class="auth-header">
 		<h1>User Management</h1>
 		<button type="button" class="btn btn-primary" onclick={toggleCreateForm}>
 			{showCreateForm ? 'Cancel' : '+ New User'}
@@ -270,14 +270,14 @@
 		padding: 2rem;
 	}
 
-	.page-header {
+	.auth-header {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		margin-bottom: 2rem;
 	}
 
-	.page-header h1 {
+	.auth-header h1 {
 		margin: 0;
 		font-size: 1.75rem;
 	}

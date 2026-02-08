@@ -51,7 +51,7 @@
 </svelte:head>
 
 <div class="admin-page">
-	<header class="page-header">
+	<header class="auth-header">
 		<h1>Review Applications</h1>
 		<p class="subtitle">Rate applications from 1 (reject) to 5 (strongly accept)</p>
 	</header>
@@ -186,11 +186,11 @@
 		padding: 2rem;
 	}
 
-	.page-header {
+	.auth-header {
 		margin-bottom: 2rem;
 	}
 
-	.page-header h1 {
+	.auth-header h1 {
 		margin: 0 0 0.5rem 0;
 		font-size: 1.75rem;
 	}

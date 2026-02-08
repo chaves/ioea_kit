@@ -5,6 +5,14 @@
 
 	// Don't show auth layout on standalone pages (login, forgot/reset/change password)
 	const isStandalonePage = $derived(['/auth/login', '/auth/forgot-password', '/auth/reset-password', '/auth/change-password'].includes($page.url.pathname));
+
+	const userRoleLabel = $derived(() => {
+		const roles = data.session?.roles ?? [];
+		if (roles.includes('admin')) return 'Admin';
+		if (roles.includes('program-admin')) return 'Program Admin';
+		if (roles.includes('student')) return 'Student';
+		return 'User';
+	});
 </script>
 
 {#if isStandalonePage}
@@ -21,17 +29,7 @@
 
 			<nav class="flex-1 py-6">
 				{#if data.session?.roles?.includes('admin')}
-					<a href="/auth/manager" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/manager' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
-						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-							<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-							<circle cx="9" cy="7" r="4"></circle>
-							<path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-							<path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-						</svg>
-						Applications
-					</a>
-				{/if}
-				{#if data.session?.roles?.includes('admin')}
+					<div class="px-6 pb-2 pt-1 text-xs uppercase tracking-wider text-white/40 font-semibold">Admin</div>
 					<a href="/auth/manager/users" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/manager/users' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 							<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
@@ -42,19 +40,32 @@
 						Users
 					</a>
 				{/if}
-				<a href="/auth/reviewer" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/reviewer' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
-					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-						<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-					</svg>
-					Review
-				</a>
+				{#if data.session?.roles?.includes('admin') || data.session?.roles?.includes('program-admin')}
+					<div class="px-6 pb-2 pt-1 text-xs uppercase tracking-wider text-white/40 font-semibold">Program</div>
+					<a href="/auth/submissions" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/submissions' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M9 11l3 3L22 4"></path>
+							<path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+						</svg>
+						Submissions
+					</a>
+				{/if}
+				{#if data.session?.roles?.includes('admin') || data.session?.roles?.includes('student')}
+					<div class="px-6 pb-2 pt-1 text-xs uppercase tracking-wider text-white/40 font-semibold">Student</div>
+					<a href="/auth/student" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/student' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+							<circle cx="12" cy="7" r="4"></circle>
+						</svg>
+						My Profile
+					</a>
+				{/if}
 			</nav>
 
 			<div class="p-6 border-t border-white/10">
 				<div class="mb-4">
 					<span class="block font-semibold">{data.session?.name ?? 'User'}</span>
-					<span class="text-sm opacity-70 capitalize">{data.session?.reviewerType ?? 'Reviewer'}</span>
+					<span class="text-sm opacity-70 capitalize">{userRoleLabel()}</span>
 				</div>
 				<form method="POST" action="/auth/logout">
 					<button type="submit" class="flex items-center gap-2 bg-white/10 border-none text-white px-4 py-2 rounded-md cursor-pointer text-sm transition-colors duration-200 hover:bg-white/20">
@@ -74,5 +85,3 @@
 		</main>
 	</div>
 {/if}
-
-

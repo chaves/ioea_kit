@@ -2,14 +2,18 @@ import { redirect, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { validateUserCredentials, createSession, getSession, hasAnyRole, getUserByEmail } from '$lib/server/auth';
 
+function getRedirectForRoles(roles: string[]): string {
+	if (roles.includes('admin')) return '/auth/manager/users';
+	if (roles.includes('program-admin')) return '/auth/submissions';
+	if (roles.includes('student')) return '/auth/student';
+	return '/auth/login';
+}
+
 export const load: PageServerLoad = async ({ cookies, url }) => {
 	const session = await getSession(cookies);
 
-	if (session && hasAnyRole(session, ['admin', 'reviewer'])) {
-		if (hasAnyRole(session, ['admin'])) {
-			throw redirect(302, '/auth/manager');
-		}
-		throw redirect(302, '/auth/reviewer');
+	if (session && hasAnyRole(session, ['admin', 'program-admin', 'student'])) {
+		throw redirect(302, getRedirectForRoles(session.roles));
 	}
 
 	const message = url.searchParams.get('message');
@@ -37,9 +41,9 @@ export const actions: Actions = {
 			return fail(401, { error: 'Invalid credentials', email });
 		}
 
-		// Check if user has admin or reviewer role
-		if (!hasAnyRole({ roles: user.roles } as any, ['admin', 'reviewer'])) {
-			return fail(403, { error: 'Access denied. Admin or reviewer role required.', email });
+		// Check if user has an allowed role
+		if (!hasAnyRole({ roles: user.roles } as any, ['admin', 'program-admin', 'student'])) {
+			return fail(403, { error: 'Access denied. You do not have the required role.', email });
 		}
 
 		await createSession(cookies, {
@@ -57,9 +61,6 @@ export const actions: Actions = {
 			throw redirect(302, '/auth/change-password');
 		}
 
-		if (user.roles.includes('admin')) {
-			throw redirect(302, '/auth/manager');
-		}
-		throw redirect(302, '/auth/reviewer');
+		throw redirect(302, getRedirectForRoles(user.roles));
 	}
 };
