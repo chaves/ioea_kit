@@ -2,6 +2,8 @@ import { redirect, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { prisma } from '$lib/server/db';
 import { hasAnyRole, hasRole } from '$lib/server/auth';
+import { unlink } from 'fs/promises';
+import { join } from 'path';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!locals.session || !hasAnyRole(locals.session, ['admin', 'program-admin'])) {
@@ -105,6 +107,15 @@ export const actions: Actions = {
 			return fail(400, { error: 'Invalid submission ID' });
 		}
 
+		// Fetch submission to get file paths
+		const submission = await prisma.call_submissions.findUnique({
+			where: { id: BigInt(submissionId) },
+		});
+
+		if (!submission) {
+			return fail(404, { error: 'Submission not found' });
+		}
+
 		// Delete related notes and comments first
 		await prisma.call_notes.deleteMany({
 			where: { call_submission_id: BigInt(submissionId) },
@@ -118,6 +129,15 @@ export const actions: Actions = {
 		await prisma.call_submissions.delete({
 			where: { id: BigInt(submissionId) },
 		});
+
+		// Delete uploaded files
+		const uploadDir = join('uploads', 'call', String(submission.call_year));
+		if (submission.cv) {
+			try { await unlink(join(uploadDir, submission.cv)); } catch { /* file may not exist */ }
+		}
+		if (submission.paper) {
+			try { await unlink(join(uploadDir, submission.paper)); } catch { /* file may not exist */ }
+		}
 
 		return { success: true };
 	}
