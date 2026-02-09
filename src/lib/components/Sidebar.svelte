@@ -46,17 +46,19 @@
 {#if showPhotos && randomPhotoYear}
 	<div class="sidebar-widget">
 		<h3>Photos</h3>
-		<a href="/photos/{randomPhotoYear}" class="photos-preview">
-			<img
-				src={imageSrc}
-				alt="IOEA {randomPhotoYear}"
-				class="photos-thumb"
-				onerror={(e) => e.currentTarget.src = '/images/placeholder-photo.jpg'}
-			/>
-			<span class="photos-label">IOEA {randomPhotoYear}</span>
-		</a>
-		<a href="/community/photos" class="view-all-link">View all photos →</a>
-	</div>
+			<a href="/photos/{randomPhotoYear}" class="photos-preview">
+				<img
+					src={imageSrc}
+					alt="IOEA {randomPhotoYear}"
+					class="photos-thumb"
+					onerror={(e) => {
+						(e.currentTarget as HTMLImageElement).src = '/images/placeholder-photo.jpg';
+					}}
+				/>
+				<span class="photos-label">IOEA {randomPhotoYear}</span>
+			</a>
+			<a href="/community/photos" class="view-all-link">View all photos →</a>
+		</div>
 {/if}
 
 {#if showBrochure}
@@ -65,16 +67,17 @@
 		<a href={`/pdf/${config.brochure.name}`} target="_blank" class="brochure-preview">
 			<img
 				src={`/images/${config.brochure.imageName}`}
-				alt="IOEA Brochure {config.currentYear}"
-				class="brochure-image"
-				onerror={(e) => {
-					// Hide the widget if image doesn't exist
-					const widget = e.currentTarget.closest('.brochure-widget');
-					if (widget) {
-						(widget as HTMLElement).style.display = 'none';
-					}
-				}}
-			/>
+					alt="IOEA Brochure {config.currentYear}"
+					class="brochure-image"
+					onerror={(e) => {
+						const img = e.currentTarget as HTMLImageElement;
+						// Hide the widget if image doesn't exist
+						const widget = img.closest('.brochure-widget');
+						if (widget) {
+							(widget as HTMLElement).style.display = 'none';
+						}
+					}}
+				/>
 		</a>
 	</div>
 {/if}
@@ -230,4 +233,3 @@
 		letter-spacing: 0.025em;
 	}
 </style>
-

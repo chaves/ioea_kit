@@ -39,15 +39,17 @@
 				<div class="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-8">
 					{#each data.yearsWithPhotos as { year, photo }}
 						<a href="/photos/{year}" class="bg-white rounded-xl overflow-hidden border border-border transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl block group">
-							<div class="aspect-[4/3] overflow-hidden bg-bg-alt relative">
-								<img
-									src={photo ? `/images/photos/${year}/${photo}` : '/images/placeholder-year.jpg'}
-									alt="IOEA {year}"
-									class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-									onerror={(e) => { e.currentTarget.src = '/images/placeholder-year.jpg'; }}
-								/>
-								<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-							</div>
+								<div class="aspect-[4/3] overflow-hidden bg-bg-alt relative">
+									<img
+										src={photo ? `/images/photos/${year}/${photo}` : '/images/placeholder-year.jpg'}
+										alt="IOEA {year}"
+										class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+										onerror={(e) => {
+											(e.currentTarget as HTMLImageElement).src = '/images/placeholder-year.jpg';
+										}}
+									/>
+									<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+								</div>
 							<div class="p-5 text-center font-bold text-primary text-xl group-hover:text-secondary transition-colors">
 								IOEA {year}
 							</div>
@@ -62,4 +64,3 @@
 		</div>
 	</div>
 </section>
-

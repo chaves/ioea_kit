@@ -20,12 +20,19 @@
 </svelte:head>
 
 <div class="login-page">
-	<div class="login-container">
-		<div class="login-header">
-			<img src="/site-logo.png" alt="IOEA" class="login-logo" onerror={(e) => e.currentTarget.style.display = 'none'} />
-			<h1>Admin Login</h1>
-			<p>Access the IOEA administration panel</p>
-		</div>
+		<div class="login-container">
+			<div class="login-header">
+				<img
+					src="/site-logo.png"
+					alt="IOEA"
+					class="login-logo"
+					onerror={(e) => {
+						(e.currentTarget as HTMLImageElement).style.display = 'none';
+					}}
+				/>
+				<h1>Admin Login</h1>
+				<p>Access the IOEA administration panel</p>
+			</div>
 
 		{#if data.successMessage}
 			<div class="alert alert-success">
@@ -199,4 +206,3 @@
 		font-size: 0.9rem;
 	}
 </style>
-

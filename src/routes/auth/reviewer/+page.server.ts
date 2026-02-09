@@ -3,7 +3,7 @@ import type { PageServerLoad, Actions } from './$types';
 import { prisma } from '$lib/server/db';
 import { getSession, hasAnyRole } from '$lib/server/auth';
 
-export const load: PageServerLoad = async ({ cookies }) => {
+export const load: PageServerLoad = async ({ cookies, url }) => {
 	const session = await getSession(cookies);
 
 	if (!session || !hasAnyRole(session, ['admin', 'reviewer'])) {
@@ -41,6 +41,18 @@ export const load: PageServerLoad = async ({ cookies }) => {
 		orderBy: { last_name: 'asc' }
 	});
 
+	// Map nationality ids to country names for display.
+	const nationalityIds = Array.from(new Set(submissions.map((s) => s.nationality))).filter(
+		(id) => typeof id === 'number' && id > 0
+	);
+	const countries = nationalityIds.length
+		? await prisma.countries.findMany({
+				where: { id: { in: nationalityIds } },
+				select: { id: true, name: true }
+			})
+		: [];
+	const countryNameById = new Map<number, string>(countries.map((c) => [c.id, c.name]));
+
 	// Get existing notes from this reviewer
 	const existingNotes = await prisma.call_notes.findMany({
 		where: {
@@ -48,27 +60,52 @@ export const load: PageServerLoad = async ({ cookies }) => {
 		}
 	});
 
-	const proposalsWithNotes = submissions.map((p) => {
-		const note = existingNotes.find((n) => n.call_submission_id === p.id);
+	const noteBySubmissionId = new Map<string, number>();
+	for (const n of existingNotes) {
+		noteBySubmissionId.set(n.call_submission_id.toString(), n.note);
+	}
+
+	const proposalsAll = submissions.map((p) => {
+		const note = noteBySubmissionId.get(p.id.toString()) ?? null;
 
 		return {
-			id: p.id,
+			// Never return bigint to the client; SvelteKit can't serialize it.
+			id: p.id.toString(),
 			callYear: p.call_year,
 			firstName: p.first_name,
 			lastName: p.last_name,
 			email: p.email,
+			nationality: countryNameById.get(p.nationality) ?? null,
 			university: p.university,
 			phdTitle: p.title,
 			phdSummary: p.summary,
 			cv: p.cv,
 			paper: p.paper,
-			myNote: note?.note ?? null
+			myNote: note,
+			isRated: note !== null
 		};
 	});
 
+	const filter = url.searchParams.get('filter') ?? 'all';
+	const normalizedFilter = filter === 'rated' || filter === 'not_rated' || filter === 'all' ? filter : 'all';
+
+	const stats = {
+		total: proposalsAll.length,
+		rated: proposalsAll.filter((p) => p.isRated).length,
+		notRated: proposalsAll.filter((p) => !p.isRated).length
+	};
+
+	const proposals =
+		normalizedFilter === 'rated'
+			? proposalsAll.filter((p) => p.isRated)
+			: normalizedFilter === 'not_rated'
+				? proposalsAll.filter((p) => !p.isRated)
+				: proposalsAll;
+
 	return {
-		proposals: proposalsWithNotes,
-		reviewerId: reviewer.id
+		proposals,
+		stats,
+		filter: normalizedFilter
 	};
 };
 
@@ -92,8 +129,8 @@ export const actions: Actions = {
 		}
 
 		const formData = await request.formData();
-		const proposalIdStr = formData.get('proposalId') as string;
-		const noteValue = parseInt(formData.get('note') as string);
+		const proposalIdStr = String(formData.get('proposalId') ?? formData.get('proposal_id') ?? '');
+		const noteValue = parseInt(String(formData.get('note') ?? ''), 10);
 
 		if (!proposalIdStr || isNaN(noteValue) || noteValue < 1 || noteValue > 5) {
 			return fail(400, { error: 'Invalid rating' });

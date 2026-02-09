@@ -17,12 +17,19 @@
 </svelte:head>
 
 <div class="login-page">
-	<div class="login-container">
-		<div class="login-header">
-			<img src="/site-logo.png" alt="IOEA" class="login-logo" onerror={(e) => e.currentTarget.style.display = 'none'} />
-			<h1>Participant Login</h1>
-			<p>Access your IOEA student portal</p>
-		</div>
+		<div class="login-container">
+			<div class="login-header">
+				<img
+					src="/site-logo.png"
+					alt="IOEA"
+					class="login-logo"
+					onerror={(e) => {
+						(e.currentTarget as HTMLImageElement).style.display = 'none';
+					}}
+				/>
+				<h1>Participant Login</h1>
+				<p>Access your IOEA student portal</p>
+			</div>
 
 		{#if form?.error}
 			<div class="alert alert-error">
@@ -177,4 +184,3 @@
 		font-size: 0.9rem;
 	}
 </style>
-

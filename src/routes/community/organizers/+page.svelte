@@ -41,13 +41,20 @@
 				<!-- Director -->
 				<section class="mb-16">
 					<h2 class="text-primary text-2xl mb-8 pb-3 border-b-2 border-secondary font-bold">Director</h2>
-					<div class="flex gap-10 bg-white p-10 rounded-2xl border border-border shadow-md hover:shadow-2xl transition-all duration-300 group flex-col sm:flex-row sm:text-left text-center sm:items-start items-center">
-						<div class="flex-shrink-0 w-[180px] h-auto overflow-hidden rounded-xl shadow-lg transition-all duration-300 relative group-hover:scale-105 group-hover:shadow-2xl group-hover:ring-4 group-hover:ring-secondary/20">
-							<img src="/images/organizers/eric.jpg" alt="Eric Brousseau" class="w-full h-auto block" onerror={(e) => { e.currentTarget.style.display = 'none'; }} />
-						</div>
-						<div class="flex-1">
-							<h3 class="mb-4 text-primary text-3xl font-bold transition-colors duration-200 group-hover:text-secondary-dark">Eric Brousseau</h3>
-							<div class="text-base sm:text-lg leading-relaxed text-text space-y-4">
+						<div class="flex gap-10 bg-white p-10 rounded-2xl border border-border shadow-md hover:shadow-2xl transition-all duration-300 group flex-col sm:flex-row sm:text-left text-center sm:items-start items-center">
+							<div class="flex-shrink-0 w-[180px] h-auto overflow-hidden rounded-xl shadow-lg transition-all duration-300 relative group-hover:scale-105 group-hover:shadow-2xl group-hover:ring-4 group-hover:ring-secondary/20">
+								<img
+									src="/images/organizers/eric.jpg"
+									alt="Eric Brousseau"
+									class="w-full h-auto block"
+									onerror={(e) => {
+										(e.currentTarget as HTMLImageElement).style.display = 'none';
+									}}
+								/>
+							</div>
+							<div class="flex-1">
+								<h3 class="mb-4 text-primary text-3xl font-bold transition-colors duration-200 group-hover:text-secondary-dark">Eric Brousseau</h3>
+								<div class="text-base sm:text-lg leading-relaxed text-text space-y-4">
 								<p>
 									Professor of Economics and Management at the <a href="http://www.dauphine.fr/" class="text-link font-bold">University Paris-Dauphine</a>.
 									He is the scientific director of the <a href="http://chairgovreg.fondation-dauphine.fr/" class="text-link font-bold">Chair Governance and Regulation</a>
@@ -77,14 +84,21 @@
 						of those responsible for the organizational, administrative, and logistic coordination of the academy.
 					</p>
 					<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 mt-10">
-						{#each coordinators as coord}
-							<div class="text-center group">
-								<div class="w-[120px] h-[120px] mx-auto mb-4 bg-white rounded-full overflow-hidden shadow-md transition-all duration-300 border-4 border-white group-hover:border-secondary/30 group-hover:scale-110 group-hover:shadow-xl">
-									<img src={coord.photo} alt={coord.name} class="w-full h-full object-cover" onerror={(e) => { e.currentTarget.src = '/images/placeholder-person.jpg'; }} />
-								</div>
-								<div>
-									<strong class="block text-primary text-base font-bold transition-colors duration-200 group-hover:text-secondary-dark">{coord.name}</strong>
-									<span class="inline-block text-xs font-bold uppercase tracking-wider text-text-light mt-2 px-3 py-1 bg-bg-alt rounded-full border border-border">{coord.years}</span>
+							{#each coordinators as coord}
+								<div class="text-center group">
+									<div class="w-[120px] h-[120px] mx-auto mb-4 bg-white rounded-full overflow-hidden shadow-md transition-all duration-300 border-4 border-white group-hover:border-secondary/30 group-hover:scale-110 group-hover:shadow-xl">
+										<img
+											src={coord.photo}
+											alt={coord.name}
+											class="w-full h-full object-cover"
+											onerror={(e) => {
+												(e.currentTarget as HTMLImageElement).src = '/images/placeholder-person.jpg';
+											}}
+										/>
+									</div>
+									<div>
+										<strong class="block text-primary text-base font-bold transition-colors duration-200 group-hover:text-secondary-dark">{coord.name}</strong>
+										<span class="inline-block text-xs font-bold uppercase tracking-wider text-text-light mt-2 px-3 py-1 bg-bg-alt rounded-full border border-border">{coord.years}</span>
 								</div>
 							</div>
 						{/each}
@@ -117,16 +131,18 @@
 							{#each data.chairs as chair}
 								<div class="text-center group">
 									<div class="aspect-square overflow-hidden bg-bg-alt rounded-xl mb-3 shadow-sm border-2 border-transparent transition-all duration-300 group-hover:border-secondary group-hover:shadow-lg group-hover:-translate-y-1">
-										{#if chair.photo}
-											<img
-												src={`/images/semchairs/${chair.photo}`}
-												alt="{chair.firstName} {chair.lastName}"
-												class="w-full h-full object-cover"
-												onerror={(e) => { e.currentTarget.src = '/images/placeholder-person.jpg'; }}
-											/>
-										{:else}
-											<div class="w-full h-full flex items-center justify-center bg-primary text-white text-3xl font-bold">
-												{chair.firstName[0]}{chair.lastName[0]}
+											{#if chair.photo}
+												<img
+													src={`/images/semchairs/${chair.photo}`}
+													alt="{chair.firstName} {chair.lastName}"
+													class="w-full h-full object-cover"
+													onerror={(e) => {
+														(e.currentTarget as HTMLImageElement).src = '/images/placeholder-person.jpg';
+													}}
+												/>
+											{:else}
+												<div class="w-full h-full flex items-center justify-center bg-primary text-white text-3xl font-bold">
+													{chair.firstName[0]}{chair.lastName[0]}
 											</div>
 										{/if}
 									</div>
@@ -154,5 +170,4 @@
 		</div>
 	</div>
 </section>
-
 

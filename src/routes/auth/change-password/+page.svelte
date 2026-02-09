@@ -17,12 +17,19 @@
 </svelte:head>
 
 <div class="login-page">
-	<div class="login-container">
-		<div class="login-header">
-			<img src="/site-logo.png" alt="IOEA" class="login-logo" onerror={(e) => e.currentTarget.style.display = 'none'} />
-			<h1>Change Password</h1>
-			<p>You must change your password before continuing</p>
-		</div>
+		<div class="login-container">
+			<div class="login-header">
+				<img
+					src="/site-logo.png"
+					alt="IOEA"
+					class="login-logo"
+					onerror={(e) => {
+						(e.currentTarget as HTMLImageElement).style.display = 'none';
+					}}
+				/>
+				<h1>Change Password</h1>
+				<p>You must change your password before continuing</p>
+			</div>
 
 		{#if form?.error}
 			<div class="alert alert-error">

@@ -67,17 +67,19 @@
 							{#each data.chairs as chair}
 								<div class="bg-white rounded-lg border border-border overflow-hidden">
 									<div class="aspect-square overflow-hidden bg-bg-alt">
-										{#if chair.photo}
-											<img
-												src={`/images/semchairs/${chair.photo}`}
-												alt="{chair.firstName} {chair.lastName}"
-												class="w-full h-full object-cover"
-												onerror={(e) => e.currentTarget.src = '/images/placeholder-person.jpg'}
-											/>
-										{:else}
-											<div class="w-full h-full flex items-center justify-center bg-primary text-white text-3xl font-semibold">
-												{chair.firstName[0]}{chair.lastName[0]}
-											</div>
+											{#if chair.photo}
+												<img
+													src={`/images/semchairs/${chair.photo}`}
+													alt="{chair.firstName} {chair.lastName}"
+													class="w-full h-full object-cover"
+													onerror={(e) => {
+														(e.currentTarget as HTMLImageElement).src = '/images/placeholder-person.jpg';
+													}}
+												/>
+											{:else}
+												<div class="w-full h-full flex items-center justify-center bg-primary text-white text-3xl font-semibold">
+													{chair.firstName[0]}{chair.lastName[0]}
+												</div>
 										{/if}
 									</div>
 									<div class="p-4">
@@ -114,5 +116,4 @@
 		</div>
 	</div>
 </section>
-
 

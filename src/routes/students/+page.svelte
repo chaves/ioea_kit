@@ -10,16 +10,15 @@
 				lastName: string;
 				email: string;
 				university: string | null;
-				department: string | null;
 				photo: string | null;
-				paper: { title: string | null; abstract: string | null } | null;
-				group: number | null;
-				travel: {
-					arrivalDate: Date | null;
-					departureDate: Date | null;
-					arrivalTransfer: number | null;
-					departureTransfer: number | null;
-				} | null;
+			} | null;
+			groups: Array<{ groupId: number }>;
+			papers: Array<{ id: number; title: string | null; abstract: string | null }>;
+			travel: {
+				arrivalDate: Date | null;
+				departureDate: Date | null;
+				arrivalTransfer: number | null;
+				departureTransfer: number | null;
 			} | null;
 		};
 	}
@@ -347,4 +346,3 @@
 		}
 	}
 </style>
-

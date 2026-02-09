@@ -27,8 +27,12 @@
 
 	let { data }: Props = $props();
 
-	const fullName = `${data.student.firstName} ${data.student.lastName}`;
-	const seoDescription = $derived(data.paper?.abstract ? data.paper.abstract.substring(0, 160) : `Profile of ${fullName}, participant at IOEA ${data.year}.`);
+	const fullName = $derived(`${data.student.firstName} ${data.student.lastName}`);
+	const seoDescription = $derived(
+		data.paper?.abstract
+			? data.paper.abstract.substring(0, 160)
+			: `Profile of ${fullName}, participant at IOEA ${data.year}.`
+	);
 </script>
 
 <SEO
@@ -55,17 +59,19 @@
 				<div class="bg-white rounded-lg border border-border overflow-hidden">
 					<div class="flex flex-col sm:flex-row gap-8 p-8 border-b border-border">
 						<div class="flex-shrink-0 w-[180px] h-[180px] sm:w-[180px] sm:h-[180px] rounded-lg overflow-hidden bg-bg-alt mx-auto sm:mx-0">
-							{#if data.student.photo}
-								<img
-									src={`/images/students/${data.student.photo}`}
-									alt={fullName}
-									class="w-full h-full object-cover"
-									onerror={(e) => { e.currentTarget.src = '/images/placeholder-person.jpg'; }}
-								/>
-							{:else}
-								<div class="w-full h-full flex items-center justify-center bg-primary text-white text-5xl font-semibold">
-									{data.student.firstName[0]}{data.student.lastName[0]}
-								</div>
+								{#if data.student.photo}
+									<img
+										src={`/images/students/${data.student.photo}`}
+										alt={fullName}
+										class="w-full h-full object-cover"
+										onerror={(e) => {
+											(e.currentTarget as HTMLImageElement).src = '/images/placeholder-person.jpg';
+										}}
+									/>
+								{:else}
+									<div class="w-full h-full flex items-center justify-center bg-primary text-white text-5xl font-semibold">
+										{data.student.firstName[0]}{data.student.lastName[0]}
+									</div>
 							{/if}
 						</div>
 
@@ -150,5 +156,3 @@
 		</div>
 	</div>
 </section>
-
-

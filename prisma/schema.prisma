@@ -76,6 +76,7 @@ model users {
   must_change_password  Boolean?               @default(false)
   roles                 user_roles[]
   password_reset_tokens password_reset_tokens[]
+  sessions              sessions[]
 
   @@index([email], map: "idx_email")
 }
@@ -91,6 +92,17 @@ model password_reset_tokens {
 
   @@index([user_id], map: "idx_prt_user_id")
   @@index([token_hash], map: "idx_prt_token_hash")
+}
+
+model sessions {
+  token_hash String   @id @db.VarChar(64)
+  user_id    Int      @db.UnsignedInt
+  expires_at DateTime @db.DateTime(0)
+  created_at DateTime @default(now()) @db.DateTime(0)
+  user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "sessions_ibfk_1")
+
+  @@index([user_id], map: "idx_sessions_user_id")
+  @@index([expires_at], map: "idx_sessions_expires_at")
 }
 
 model roles {

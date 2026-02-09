@@ -54,7 +54,6 @@
 					class="form-input"
 					required
 					placeholder="Enter admin password"
-					autofocus
 				/>
 			</div>
 

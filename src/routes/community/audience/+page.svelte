@@ -66,14 +66,16 @@
 
 					<h2 class="text-primary mt-12 mb-6 pb-2 border-b-2 border-secondary text-2xl">Evolution of Participation</h2>
 
-					<div class="my-10 text-center">
-						<img
-							src="/images/graphiques/participation.jpg"
-							alt="Evolution of participants' and Faculty's nationalities"
-							class="max-w-full rounded-xl shadow-lg border border-border"
-							onerror={(e) => { e.currentTarget.style.display = 'none'; }}
-						/>
-					</div>
+						<div class="my-10 text-center">
+							<img
+								src="/images/graphiques/participation.jpg"
+								alt="Evolution of participants' and Faculty's nationalities"
+								class="max-w-full rounded-xl shadow-lg border border-border"
+								onerror={(e) => {
+									(e.currentTarget as HTMLImageElement).style.display = 'none';
+								}}
+							/>
+						</div>
 
 					<div class="grid grid-cols-2 sm:grid-cols-4 gap-6 mt-12">
 						<div class="bg-white p-8 rounded-xl border border-border text-center shadow-sm">
@@ -102,5 +104,4 @@
 		</div>
 	</div>
 </section>
-
 

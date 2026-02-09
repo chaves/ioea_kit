@@ -23,12 +23,19 @@
 </svelte:head>
 
 <div class="login-page">
-	<div class="login-container">
-		<div class="login-header">
-			<img src="/site-logo.png" alt="IOEA" class="login-logo" onerror={(e) => e.currentTarget.style.display = 'none'} />
-			<h1>Reset Password</h1>
-			<p>Enter your new password</p>
-		</div>
+		<div class="login-container">
+			<div class="login-header">
+				<img
+					src="/site-logo.png"
+					alt="IOEA"
+					class="login-logo"
+					onerror={(e) => {
+						(e.currentTarget as HTMLImageElement).style.display = 'none';
+					}}
+				/>
+				<h1>Reset Password</h1>
+				<p>Enter your new password</p>
+			</div>
 
 		{#if !data.valid && !form?.token}
 			<div class="alert alert-error">

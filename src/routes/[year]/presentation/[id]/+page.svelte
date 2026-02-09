@@ -9,8 +9,8 @@
 
 	let { data }: { data: PageData } = $props();
 
-	const typeLabel = data.presentation.type === 'lectures' ? 'Lecture' : 'Workshop';
-	const backUrl = `/${data.year}/${data.presentation.type}`;
+	const typeLabel = $derived(data.presentation.type === 'lectures' ? 'Lecture' : 'Workshop');
+	const backUrl = $derived(`/${data.year}/${data.presentation.type}`);
 
 	// Get file extension from link to determine icon type
 	function getFileExtension(link: string | null): 'pdf' | 'pptx' | null {
@@ -140,5 +140,3 @@
 		</div>
 	</div>
 </section>
-
-

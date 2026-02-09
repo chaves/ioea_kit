@@ -130,8 +130,8 @@
 					</div>
 				</div>
 
-				<div class="form-group">
-					<label class="form-label">Roles</label>
+				<fieldset class="form-group">
+					<legend class="form-label">Roles</legend>
 					<div class="checkbox-group">
 						{#each data.roles as role}
 							<label class="checkbox-label">
@@ -140,7 +140,7 @@
 							</label>
 						{/each}
 					</div>
-				</div>
+				</fieldset>
 
 				<div class="form-group">
 					<label class="checkbox-label">
@@ -172,43 +172,43 @@
 						<!-- Edit mode -->
 						<tr class="editing-row">
 							<td colspan="5">
-								<form method="POST" action="?/update" use:enhance={() => {
-									return async ({ update }) => {
-										await update();
-										if (form?.success && form?.action === 'update') {
-											editingUser = null;
-										}
-									};
-								}}>
-									<input type="hidden" name="userId" value={user.id} />
-									<div class="edit-form">
-										<div class="form-row">
-											<div class="form-group">
-												<label class="form-label">Name</label>
-												<input type="text" name="name" class="form-input" value={editingUser.name} required />
-											</div>
-											<div class="form-group">
-												<label class="form-label">Email</label>
-												<input type="email" name="email" class="form-input" value={editingUser.email} required />
-											</div>
-										</div>
-										<div class="form-row">
-											<div class="form-group">
-												<label class="form-label">Roles</label>
-												<div class="checkbox-group">
-													{#each data.roles as role}
-														<label class="checkbox-label">
-															<input type="checkbox" name="roles" value={role.name} checked={editingUser.roleNames.includes(role.name)} />
-															<span class="capitalize">{role.name}</span>
-														</label>
-													{/each}
+									<form method="POST" action="?/update" use:enhance={() => {
+										return async ({ update }) => {
+											await update();
+											if (form?.success && form?.action === 'update') {
+												editingUser = null;
+											}
+										};
+									}}>
+										<input type="hidden" name="userId" value={user.id} />
+										<div class="edit-form">
+											<div class="form-row">
+												<div class="form-group">
+													<label for={`edit-name-${user.id}`} class="form-label">Name</label>
+													<input id={`edit-name-${user.id}`} type="text" name="name" class="form-input" value={editingUser.name} required />
+												</div>
+												<div class="form-group">
+													<label for={`edit-email-${user.id}`} class="form-label">Email</label>
+													<input id={`edit-email-${user.id}`} type="email" name="email" class="form-input" value={editingUser.email} required />
 												</div>
 											</div>
-											<div class="form-group">
-												<label class="checkbox-label">
-													<input type="checkbox" name="active" checked={editingUser.active !== false} />
-													<span>Active</span>
-												</label>
+											<div class="form-row">
+												<fieldset class="form-group">
+													<legend class="form-label">Roles</legend>
+													<div class="checkbox-group">
+														{#each data.roles as role}
+															<label class="checkbox-label">
+																<input type="checkbox" name="roles" value={role.name} checked={editingUser.roleNames.includes(role.name)} />
+																<span class="capitalize">{role.name}</span>
+															</label>
+														{/each}
+													</div>
+												</fieldset>
+												<div class="form-group">
+													<label class="checkbox-label">
+														<input type="checkbox" name="active" checked={editingUser.active !== false} />
+														<span>Active</span>
+													</label>
 											</div>
 										</div>
 										<div class="edit-actions">

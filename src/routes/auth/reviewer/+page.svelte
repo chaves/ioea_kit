@@ -1,50 +1,26 @@
-<script lang="ts">
-	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
+	<script lang="ts">
+		import { enhance } from '$app/forms';
+		import { goto } from '$app/navigation';
+		import type { PageData } from './$types';
 
-	interface Props {
-		data: {
-			proposals: Array<{
-				id: number;
-				firstName: string;
-				lastName: string;
-				email: string;
-				nationality: string | null;
-				university: string | null;
-				phdTitle: string | null;
-				phdSummary: string | null;
-				cv: string | null;
-				paper: string | null;
-				myNote: number | null;
-				isRated: boolean;
-			}>;
-			stats: {
-				total: number;
-				rated: number;
-				notRated: number;
-			};
-			filter: string;
-		};
-	}
-
-	let { data }: Props = $props();
-	let expandedId = $state<number | null>(null);
+		let { data }: { data: PageData } = $props();
+		let expandedId = $state<string | null>(null);
 
 	function setFilter(filter: string) {
 		goto(`/auth/reviewer?filter=${filter}`);
 	}
 
-	function toggleExpand(id: number) {
-		expandedId = expandedId === id ? null : id;
-	}
-
-	function handleKeyDown(event: KeyboardEvent, id: number) {
-		if (event.key === 'Enter' || event.key === ' ') {
-			event.preventDefault();
-			toggleExpand(id);
+		function toggleExpand(id: string) {
+			expandedId = expandedId === id ? null : id;
 		}
-	}
-</script>
+
+		function handleKeyDown(event: KeyboardEvent, id: string) {
+			if (event.key === 'Enter' || event.key === ' ') {
+				event.preventDefault();
+				toggleExpand(id);
+			}
+		}
+	</script>
 
 <svelte:head>
 	<title>Review Applications | IOEA Admin</title>
@@ -144,21 +120,21 @@
 
 						<div class="rating-section">
 							<h4>Your Rating</h4>
-							<form
-								method="POST"
-								action="?/rate"
-								use:enhance={() => {
-									return async ({ update }) => {
-										await update();
-									};
-								}}
-								class="rating-form"
-							>
-								<input type="hidden" name="proposal_id" value={proposal.id} />
-								<div class="rating-buttons">
-									{#each [1, 2, 3, 4, 5] as score}
-										<button
-											type="submit"
+								<form
+									method="POST"
+									action="?/rate"
+									use:enhance={() => {
+										return async ({ update }) => {
+											await update();
+										};
+									}}
+									class="rating-form"
+								>
+									<input type="hidden" name="proposalId" value={proposal.id} />
+									<div class="rating-buttons">
+										{#each [1, 2, 3, 4, 5] as score}
+											<button
+												type="submit"
 											name="note"
 											value={score}
 											class="rating-btn"
@@ -438,4 +414,3 @@
 		}
 	}
 </style>
-

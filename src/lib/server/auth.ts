@@ -6,6 +6,11 @@ import crypto from 'crypto';
 const SESSION_COOKIE_NAME = 'ioea_session';
 const SESSION_EXPIRY_HOURS = 24;
 
+// Fallback only: if the DB isn't migrated/available, sessions will still work
+// for a single Node process (but won't survive restarts or scale horizontally).
+const memorySessions = new Map<string, Session>();
+let warnedDbSessionsUnavailable = false;
+
 // Session data structure
 export interface Session {
 	userId: number;
@@ -21,16 +26,29 @@ export interface Session {
 
 // Generate a random session ID
 function generateSessionId(): string {
-	const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	let result = '';
-	for (let i = 0; i < 64; i++) {
-		result += chars.charAt(Math.floor(Math.random() * chars.length));
-	}
-	return result;
+	// Use crypto-grade randomness; Math.random() is predictable.
+	return generateSecureToken();
 }
 
-// Session data stored in memory (for simplicity - in production use database)
-const sessions = new Map<string, Session>();
+async function getUserWithRolesById(userId: number) {
+	const user = await prisma.users.findUnique({
+		where: { id: userId },
+		include: {
+			roles: {
+				include: {
+					role: true
+				}
+			}
+		}
+	});
+
+	if (!user) return null;
+
+	return {
+		...user,
+		roleNames: user.roles.map((ur) => ur.role.name)
+	};
+}
 
 // Create a session
 export async function createSession(
@@ -45,32 +63,48 @@ export async function createSession(
 	}
 ): Promise<string> {
 	const sessionId = generateSessionId();
+	const sessionHash = hashToken(sessionId);
 	const expiresAt = new Date(Date.now() + SESSION_EXPIRY_HOURS * 60 * 60 * 1000);
 
-	// Determine legacy userType for backward compatibility
-	let userType: 'admin' | 'reviewer' | 'student' | 'program-admin' | undefined;
-	if (userData.roles.includes('admin')) {
-		userType = 'admin';
-	} else if (userData.roles.includes('reviewer')) {
-		userType = 'reviewer';
-	} else if (userData.roles.includes('student')) {
-		userType = 'student';
-	} else if (userData.roles.includes('program-admin')) {
-		userType = 'program-admin';
+	try {
+		await prisma.sessions.create({
+			data: {
+				token_hash: sessionHash,
+				user_id: userData.userId,
+				expires_at: expiresAt
+			}
+		});
+	} catch (err) {
+		if (!warnedDbSessionsUnavailable) {
+			warnedDbSessionsUnavailable = true;
+			console.warn('DB session storage unavailable; falling back to in-memory sessions.', err);
+		}
+
+		// Determine legacy userType for backward compatibility
+		let userType: 'admin' | 'reviewer' | 'student' | 'program-admin' | undefined;
+		if (userData.roles.includes('admin')) {
+			userType = 'admin';
+		} else if (userData.roles.includes('reviewer')) {
+			userType = 'reviewer';
+		} else if (userData.roles.includes('student')) {
+			userType = 'student';
+		} else if (userData.roles.includes('program-admin')) {
+			userType = 'program-admin';
+		}
+
+		const session: Session = {
+			userId: userData.userId,
+			email: userData.email,
+			name: userData.name,
+			roles: userData.roles,
+			expiresAt,
+			userType,
+			reviewerGroup: userData.reviewerGroup,
+			reviewerType: userData.reviewerType
+		};
+
+		memorySessions.set(sessionId, session);
 	}
-
-	const session: Session = {
-		userId: userData.userId,
-		email: userData.email,
-		name: userData.name,
-		roles: userData.roles,
-		expiresAt,
-		userType,
-		reviewerGroup: userData.reviewerGroup,
-		reviewerType: userData.reviewerType,
-	};
-
-	sessions.set(sessionId, session);
 
 	cookies.set(SESSION_COOKIE_NAME, sessionId, {
 		path: '/',
@@ -88,24 +122,88 @@ export async function getSession(cookies: Cookies): Promise<Session | null> {
 	const sessionId = cookies.get(SESSION_COOKIE_NAME);
 	if (!sessionId) return null;
 
-	const session = sessions.get(sessionId);
-	if (!session) return null;
+	// Fast path for fallback sessions.
+	const memorySession = memorySessions.get(sessionId);
+	if (memorySession) {
+		if (memorySession.expiresAt < new Date()) {
+			memorySessions.delete(sessionId);
+			cookies.delete(SESSION_COOKIE_NAME, { path: '/' });
+			return null;
+		}
+		return memorySession;
+	}
 
-	// Check if expired
-	if (session.expiresAt < new Date()) {
-		sessions.delete(sessionId);
+	const sessionHash = hashToken(sessionId);
+	let record: { user_id: number; expires_at: Date } | null = null;
+	try {
+		record = await prisma.sessions.findUnique({
+			where: { token_hash: sessionHash },
+			select: { user_id: true, expires_at: true }
+		});
+	} catch (err) {
+		if (!warnedDbSessionsUnavailable) {
+			warnedDbSessionsUnavailable = true;
+			console.warn('DB session lookup failed; users may be logged out until DB is migrated.', err);
+		}
 		cookies.delete(SESSION_COOKIE_NAME, { path: '/' });
 		return null;
 	}
 
-	return session;
+	// Check if expired
+	if (!record || record.expires_at < new Date()) {
+		if (record) {
+			await prisma.sessions.delete({ where: { token_hash: sessionHash } }).catch(() => {});
+		}
+		cookies.delete(SESSION_COOKIE_NAME, { path: '/' });
+		return null;
+	}
+
+	const user = await getUserWithRolesById(record.user_id);
+	if (!user || !user.active) {
+		await prisma.sessions.delete({ where: { token_hash: sessionHash } }).catch(() => {});
+		cookies.delete(SESSION_COOKIE_NAME, { path: '/' });
+		return null;
+	}
+
+	// Determine legacy userType for backward compatibility
+	let userType: 'admin' | 'reviewer' | 'student' | 'program-admin' | undefined;
+	if (user.roleNames.includes('admin')) {
+		userType = 'admin';
+	} else if (user.roleNames.includes('reviewer')) {
+		userType = 'reviewer';
+	} else if (user.roleNames.includes('student')) {
+		userType = 'student';
+	} else if (user.roleNames.includes('program-admin')) {
+		userType = 'program-admin';
+	}
+
+	// Determine reviewer type from roles
+	let reviewerType: string | undefined;
+	if (user.roleNames.includes('admin')) {
+		reviewerType = 'manager';
+	} else if (user.roleNames.includes('reviewer')) {
+		reviewerType = 'reviewer';
+	}
+
+	return {
+		userId: user.id,
+		email: user.email,
+		name: user.name,
+		roles: user.roleNames,
+		expiresAt: record.expires_at,
+		userType,
+		reviewerGroup: user.legacy_reviewer_group ?? undefined,
+		reviewerType
+	};
 }
 
 // Destroy session
 export async function destroySession(cookies: Cookies): Promise<void> {
 	const sessionId = cookies.get(SESSION_COOKIE_NAME);
 	if (sessionId) {
-		sessions.delete(sessionId);
+		memorySessions.delete(sessionId);
+		const sessionHash = hashToken(sessionId);
+		await prisma.sessions.delete({ where: { token_hash: sessionHash } }).catch(() => {});
 	}
 	cookies.delete(SESSION_COOKIE_NAME, { path: '/' });
 }

@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 
 	interface Submission {
-		id: number;
+		id: string;
 		callYear: number;
 		firstName: string;
 		lastName: string;
@@ -39,9 +39,9 @@
 
 	let { data }: Props = $props();
 
-	let expandedIds: Set<number> = $state(new Set());
+	let expandedIds: Set<string> = $state(new Set());
 
-	function toggleSummary(id: number) {
+	function toggleSummary(id: string) {
 		const next = new Set(expandedIds);
 		if (next.has(id)) {
 			next.delete(id);

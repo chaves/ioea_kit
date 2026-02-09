@@ -8,13 +8,23 @@ import { createServer } from 'http';
 // IMPORTANT: Set environment variables BEFORE importing the handler
 // The handler reads these at import time
 
+const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || '0.0.0.0';
+
 // Set body size limit for file uploads (12MB)
 process.env.BODY_SIZE_LIMIT = process.env.BODY_SIZE_LIMIT || '12582912';
 
-// Set ORIGIN for CSRF protection (required for form submissions in production)
-// This must match the actual domain users access the site from
+// Origin handling:
+// - In production, prefer letting SvelteKit derive the origin from trusted proxy headers.
+// - In dev, set a sensible default to avoid CSRF/URL issues when running locally.
 if (!process.env.ORIGIN) {
-	process.env.ORIGIN = 'https://www.ioea.eu';
+	if (process.env.NODE_ENV !== 'production') {
+		process.env.ORIGIN = `http://localhost:${PORT}`;
+	} else {
+		console.warn(
+			'Warning: ORIGIN is not set. Ensure proxy headers are correct, or set ORIGIN explicitly for your deployment.'
+		);
+	}
 }
 
 // For reverse proxy setups (AlwaysData), trust forwarded headers
@@ -23,9 +33,6 @@ process.env.HOST_HEADER = process.env.HOST_HEADER || 'x-forwarded-host';
 
 // Dynamic import AFTER env vars are set
 const { handler } = await import('./build/handler.js');
-
-const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || '0.0.0.0';
 
 // Create HTTP server
 const server = createServer(handler);

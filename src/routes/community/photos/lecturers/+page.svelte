@@ -38,16 +38,18 @@
 						{#each data.lecturers as lecturer}
 							<div class="bg-white rounded-xl overflow-hidden border border-border shadow-sm transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 group">
 								<div class="aspect-square overflow-hidden bg-bg-alt relative">
-									{#if lecturer.photo}
-										<img
-											src={`/images/lec/${lecturer.photo}`}
-											alt="{lecturer.firstName} {lecturer.lastName}"
-											class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-											onerror={(e) => { e.currentTarget.src = '/images/placeholder-person.jpg'; }}
-										/>
-									{:else}
-										<div class="w-full h-full flex items-center justify-center bg-primary text-white text-3xl font-bold">
-											{lecturer.firstName[0]}{lecturer.lastName[0]}
+										{#if lecturer.photo}
+											<img
+												src={`/images/lec/${lecturer.photo}`}
+												alt="{lecturer.firstName} {lecturer.lastName}"
+												class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+												onerror={(e) => {
+													(e.currentTarget as HTMLImageElement).src = '/images/placeholder-person.jpg';
+												}}
+											/>
+										{:else}
+											<div class="w-full h-full flex items-center justify-center bg-primary text-white text-3xl font-bold">
+												{lecturer.firstName[0]}{lecturer.lastName[0]}
 										</div>
 									{/if}
 									<div class="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -82,4 +84,3 @@
 		</div>
 	</div>
 </section>
-

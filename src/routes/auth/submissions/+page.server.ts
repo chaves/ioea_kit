@@ -21,19 +21,20 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	const countries = await prisma.countries.findMany();
 	const countryMap = new Map(countries.map((c) => [c.id, c.name]));
 
-	const allSubmissions = submissions.map((s) => {
-		const submissionNotes = notes.filter((n) => n.call_submission_id === s.id);
-		const avgNote =
-			submissionNotes.length > 0
-				? submissionNotes.reduce((sum, n) => sum + n.note, 0) / submissionNotes.length
-				: null;
+		const allSubmissions = submissions.map((s) => {
+			const submissionNotes = notes.filter((n) => n.call_submission_id === s.id);
+			const avgNote =
+				submissionNotes.length > 0
+					? submissionNotes.reduce((sum, n) => sum + n.note, 0) / submissionNotes.length
+					: null;
 
-		return {
-			id: Number(s.id),
-			callYear: s.call_year,
-			firstName: s.first_name,
-			lastName: s.last_name,
-			email: s.email,
+			return {
+				// Keep bigint IDs as strings to avoid precision loss in JS.
+				id: s.id.toString(),
+				callYear: s.call_year,
+				firstName: s.first_name,
+				lastName: s.last_name,
+				email: s.email,
 			nationality: countryMap.get(s.nationality) ?? null,
 			country: countryMap.get(s.country) ?? null,
 			university: s.university,
@@ -73,62 +74,66 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	};
 };
 
-export const actions: Actions = {
-	accept: async ({ locals, request }) => {
-		if (!locals.session || !hasAnyRole(locals.session, ['admin', 'program-admin'])) {
-			return fail(403, { error: 'Access denied' });
-		}
+	export const actions: Actions = {
+		accept: async ({ locals, request }) => {
+			if (!locals.session || !hasAnyRole(locals.session, ['admin', 'program-admin'])) {
+				return fail(403, { error: 'Access denied' });
+			}
 
-		const formData = await request.formData();
-		const submissionId = Number(formData.get('submission_id'));
-		const accepted = formData.get('accepted') === 'true';
+			const formData = await request.formData();
+			const submissionIdStr = String(formData.get('submission_id') ?? '');
+			const accepted = formData.get('accepted') === 'true';
 
-		if (!submissionId) {
-			return fail(400, { error: 'Invalid submission ID' });
-		}
+			if (!/^\d+$/.test(submissionIdStr)) {
+				return fail(400, { error: 'Invalid submission ID' });
+			}
 
-		await prisma.call_submissions.update({
-			where: { id: BigInt(submissionId) },
-			data: { accepted },
-		});
+			const submissionId = BigInt(submissionIdStr);
 
-		return { success: true };
-	},
+			await prisma.call_submissions.update({
+				where: { id: submissionId },
+				data: { accepted },
+			});
 
-	delete: async ({ locals, request }) => {
-		if (!locals.session || !hasRole(locals.session, 'admin')) {
-			return fail(403, { error: 'Admin access required' });
-		}
+			return { success: true };
+		},
 
-		const formData = await request.formData();
-		const submissionId = Number(formData.get('submission_id'));
+		delete: async ({ locals, request }) => {
+			if (!locals.session || !hasRole(locals.session, 'admin')) {
+				return fail(403, { error: 'Admin access required' });
+			}
 
-		if (!submissionId) {
-			return fail(400, { error: 'Invalid submission ID' });
-		}
+			const formData = await request.formData();
+			const submissionIdStr = String(formData.get('submission_id') ?? '');
 
-		// Fetch submission to get file paths
-		const submission = await prisma.call_submissions.findUnique({
-			where: { id: BigInt(submissionId) },
-		});
+			if (!/^\d+$/.test(submissionIdStr)) {
+				return fail(400, { error: 'Invalid submission ID' });
+			}
 
-		if (!submission) {
-			return fail(404, { error: 'Submission not found' });
-		}
+			const submissionId = BigInt(submissionIdStr);
 
-		// Delete related notes and comments first
-		await prisma.call_notes.deleteMany({
-			where: { call_submission_id: BigInt(submissionId) },
-		});
-		await prisma.call_comments.deleteMany({
-			where: { call_submission_id: BigInt(submissionId) },
-		});
-		await prisma.call_reviewer_call_submissions.deleteMany({
-			where: { call_submission_id: BigInt(submissionId) },
-		});
-		await prisma.call_submissions.delete({
-			where: { id: BigInt(submissionId) },
-		});
+			// Fetch submission to get file paths
+			const submission = await prisma.call_submissions.findUnique({
+				where: { id: submissionId },
+			});
+
+			if (!submission) {
+				return fail(404, { error: 'Submission not found' });
+			}
+
+			// Delete related notes and comments first
+			await prisma.call_notes.deleteMany({
+				where: { call_submission_id: submissionId },
+			});
+			await prisma.call_comments.deleteMany({
+				where: { call_submission_id: submissionId },
+			});
+			await prisma.call_reviewer_call_submissions.deleteMany({
+				where: { call_submission_id: submissionId },
+			});
+			await prisma.call_submissions.delete({
+				where: { id: submissionId },
+			});
 
 		// Delete uploaded files
 		const uploadDir = join('uploads', 'call', String(submission.call_year));
