@@ -262,6 +262,9 @@
 	.auth-header h1 {
 		margin: 0;
 		font-size: 1.75rem;
+		font-weight: 700;
+		color: var(--color-text);
+		letter-spacing: -0.02em;
 	}
 
 	.stats-grid {
@@ -287,7 +290,7 @@
 	}
 
 	.stat-label {
-		font-size: 0.85rem;
+		font-size: 0.9rem;
 		color: var(--color-text-light);
 	}
 
@@ -306,11 +309,12 @@
 	}
 
 	.filter-btn {
-		padding: 0.5rem 1rem;
+		padding: 0.55rem 1.1rem;
 		background: white;
 		border: 1px solid var(--color-border);
 		border-radius: 0.375rem;
 		cursor: pointer;
+		font-size: 0.95rem;
 		transition: all 0.2s ease;
 	}
 
@@ -327,14 +331,14 @@
 	.cards-container {
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: 1.25rem;
 	}
 
 	.submission-card {
 		background: white;
 		border: 1px solid var(--color-border);
 		border-radius: 0.5rem;
-		padding: 1.25rem 1.5rem;
+		padding: 1.5rem 1.75rem;
 		position: relative;
 		transition: border-color 0.2s ease;
 	}
@@ -345,8 +349,8 @@
 
 	.score-badge {
 		position: absolute;
-		top: 1rem;
-		right: 1rem;
+		top: 1.25rem;
+		right: 1.25rem;
 		width: 44px;
 		height: 44px;
 		border-radius: 50%;
@@ -354,7 +358,7 @@
 		align-items: center;
 		justify-content: center;
 		font-weight: 700;
-		font-size: 0.9rem;
+		font-size: 0.95rem;
 		color: white;
 	}
 
@@ -367,21 +371,25 @@
 	}
 
 	.card-line {
-		margin-bottom: 0.35rem;
-		font-size: 0.92rem;
+		margin-bottom: 0.5rem;
+		font-size: 1rem;
+		line-height: 1.55;
 		padding-right: 60px;
+		color: var(--color-text);
 	}
 
 	.card-line-main {
-		font-size: 1rem;
+		font-size: 1.05rem;
+		line-height: 1.5;
 	}
 
 	.card-line-main strong {
 		color: var(--color-primary);
+		font-weight: 600;
 	}
 
 	.sep {
-		margin: 0 0.35rem;
+		margin: 0 0.4rem;
 		color: var(--color-text-light);
 	}
 
@@ -391,14 +399,17 @@
 
 	.affiliation-label {
 		font-weight: 600;
-		margin-right: 0.25rem;
+		margin-right: 0.35rem;
+		color: var(--color-text);
 	}
 
 	.card-title {
+		font-size: 1.05rem;
 		font-weight: 600;
-		margin-top: 0.5rem;
-		margin-bottom: 0.75rem;
-		line-height: 1.4;
+		margin-top: 0.6rem;
+		margin-bottom: 0.85rem;
+		line-height: 1.5;
+		color: var(--color-text);
 	}
 
 	.card-actions {
@@ -415,12 +426,12 @@
 	}
 
 	.doc-btn {
-		padding: 0.35rem 0.75rem;
+		padding: 0.4rem 0.85rem;
 		background: var(--color-bg-alt, #f7f7f7);
 		border: 1px solid var(--color-border);
 		border-radius: 0.25rem;
 		cursor: pointer;
-		font-size: 0.82rem;
+		font-size: 0.9rem;
 		font-weight: 500;
 		color: var(--color-primary);
 		text-decoration: none;
@@ -440,11 +451,11 @@
 	}
 
 	.decision-btn {
-		padding: 0.4rem 1rem;
+		padding: 0.45rem 1rem;
 		border: none;
 		border-radius: 0.25rem;
 		cursor: pointer;
-		font-size: 0.85rem;
+		font-size: 0.9rem;
 		font-weight: 600;
 		transition: opacity 0.15s ease;
 	}
@@ -475,9 +486,9 @@
 	}
 
 	.status-badge {
-		padding: 0.3rem 0.75rem;
+		padding: 0.35rem 0.8rem;
 		border-radius: 9999px;
-		font-size: 0.78rem;
+		font-size: 0.82rem;
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.03em;
@@ -494,17 +505,17 @@
 	}
 
 	.card-summary {
-		margin-top: 1rem;
-		padding: 1rem;
+		margin-top: 1.25rem;
+		padding: 1.25rem;
 		background: var(--color-bg-alt, #f9f9f9);
 		border-radius: 0.375rem;
-		font-size: 0.9rem;
-		line-height: 1.6;
+		font-size: 1rem;
+		line-height: 1.65;
 		color: var(--color-text);
 	}
 
 	.card-summary p {
-		margin: 0 0 0.5rem;
+		margin: 0 0 0.65rem;
 	}
 
 	.card-summary p:last-child {
@@ -515,7 +526,8 @@
 		text-align: center;
 		padding: 3rem;
 		color: var(--color-text-light);
-		font-size: 1rem;
+		font-size: 1.05rem;
+		line-height: 1.5;
 	}
 
 	@media (max-width: 767px) {
