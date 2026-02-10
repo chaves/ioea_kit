@@ -19,7 +19,7 @@
 	{@render children()}
 {:else}
 	<div class="flex min-h-screen">
-		<aside class="w-[280px] min-w-[280px] bg-primary-dark text-white flex flex-col fixed top-0 left-0 bottom-0 shrink-0">
+		<aside class="w-[300px] min-w-[300px] bg-primary-dark text-white flex flex-col fixed top-0 left-0 bottom-0 shrink-0">
 			<div class="p-6 border-b border-white/10 flex items-center gap-4">
 				<a href="/" class="no-underline">
 					<img src="/site-logo.png" alt="IOEA" class="h-10 brightness-0 invert" onerror={(e) => e.currentTarget.outerHTML = 'IOEA'} />
@@ -30,7 +30,7 @@
 			<nav class="flex-1 py-6">
 				{#if data.session?.roles?.includes('admin')}
 					<div class="px-6 pb-2 pt-1 text-xs uppercase tracking-wider text-white/40 font-semibold">Admin</div>
-					<a href="/auth/manager/users" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/manager/users' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+					<a href="/auth/manager/users" class="flex items-center gap-3 pl-6 pr-8 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/manager/users' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 							<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
 							<circle cx="9" cy="7" r="4"></circle>
@@ -41,7 +41,7 @@
 					</a>
 				{/if}
 				{#if data.session?.roles?.includes('admin') || data.session?.roles?.includes('program-admin')}
-					<a href="/auth/submissions" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/submissions' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+					<a href="/auth/submissions" class="flex items-center gap-3 pl-6 pr-8 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/submissions' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="shrink-0">
 							<path d="M9 11l3 3L22 4"></path>
 							<path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
@@ -51,7 +51,7 @@
 				{/if}
 				{#if data.session?.roles?.includes('admin') || data.session?.roles?.includes('student')}
 					<div class="px-6 pb-2 pt-1 text-xs uppercase tracking-wider text-white/40 font-semibold">Student</div>
-					<a href="/auth/student" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/student' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+					<a href="/auth/student" class="flex items-center gap-3 pl-6 pr-8 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/student' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 							<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
 							<circle cx="12" cy="7" r="4"></circle>
@@ -79,7 +79,7 @@
 			</div>
 		</aside>
 
-		<main class="flex-1 ml-[280px] bg-bg min-h-screen">
+		<main class="flex-1 ml-[300px] bg-bg min-h-screen">
 			{@render children()}
 		</main>
 	</div>
