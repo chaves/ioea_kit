@@ -211,6 +211,45 @@ export function passwordResetEmail({
   };
 }
 
+// Email change verification
+export function emailChangeVerificationEmail({
+  name,
+  newEmail,
+  verifyUrl,
+}: {
+  name: string;
+  newEmail: string;
+  verifyUrl: string;
+}): EmailOptions {
+  return {
+    to: newEmail,
+    subject: "IOEA - Verify Your New Email Address",
+    html: `
+			<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+				<h2 style="color: #1a365d;">Verify Your New Email</h2>
+
+				<p>Dear ${name},</p>
+
+				<p>You requested to change your IOEA account email to this address.</p>
+
+				<p>Click the button below to confirm this change. This link will expire in 1 hour.</p>
+
+				<p>
+					<a href="${verifyUrl}" style="display: inline-block; background: #4c1d95; color: white; padding: 0.75rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: bold;">Verify Email</a>
+				</p>
+
+				<p style="font-size: 0.9rem; color: #718096;">If you didn't request this change, you can safely ignore this email.</p>
+
+				<hr style="margin-top: 30px; border: none; border-top: 1px solid #e2e8f0;">
+				<p style="font-size: 12px; color: #718096;">
+					Institutional and Organizational Economics Academy<br>
+					<a href="https://ioea.eu">https://ioea.eu</a>
+				</p>
+			</div>
+		`,
+  };
+}
+
 // Newsletter subscription confirmation
 export function newsletterConfirmationEmail(email: string): EmailOptions {
   return {

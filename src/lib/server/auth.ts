@@ -374,6 +374,54 @@ export async function consumeResetToken(rawToken: string): Promise<void> {
 	});
 }
 
+// --- Email Change Token functions ---
+
+export async function createEmailChangeToken(userId: number, newEmail: string): Promise<string> {
+	// Invalidate old unused tokens for this user
+	await prisma.email_change_tokens.updateMany({
+		where: { user_id: userId, used_at: null },
+		data: { used_at: new Date() },
+	});
+
+	const rawToken = generateSecureToken();
+	const tokenHash = hashToken(rawToken);
+	const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+	await prisma.email_change_tokens.create({
+		data: {
+			user_id: userId,
+			new_email: newEmail,
+			token_hash: tokenHash,
+			expires_at: expiresAt,
+		},
+	});
+
+	return rawToken;
+}
+
+export async function validateEmailChangeToken(rawToken: string): Promise<{ userId: number; newEmail: string } | null> {
+	const tokenHash = hashToken(rawToken);
+
+	const record = await prisma.email_change_tokens.findUnique({
+		where: { token_hash: tokenHash },
+	});
+
+	if (!record) return null;
+	if (record.used_at) return null;
+	if (record.expires_at < new Date()) return null;
+
+	return { userId: record.user_id, newEmail: record.new_email };
+}
+
+export async function consumeEmailChangeToken(rawToken: string): Promise<void> {
+	const tokenHash = hashToken(rawToken);
+
+	await prisma.email_change_tokens.update({
+		where: { token_hash: tokenHash },
+		data: { used_at: new Date() },
+	});
+}
+
 // --- User CRUD functions ---
 
 export async function createUser({

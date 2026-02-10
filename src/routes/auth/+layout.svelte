@@ -4,7 +4,7 @@
 	let { children, data } = $props();
 
 	// Don't show auth layout on standalone pages (login, forgot/reset/change password)
-	const isStandalonePage = $derived(['/auth/login', '/auth/forgot-password', '/auth/reset-password', '/auth/change-password'].includes($page.url.pathname));
+	const isStandalonePage = $derived(['/auth/login', '/auth/forgot-password', '/auth/reset-password', '/auth/change-password', '/auth/verify-email'].includes($page.url.pathname));
 
 	const userRoleLabel = $derived(() => {
 		const roles = data.session?.roles ?? [];

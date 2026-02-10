@@ -7,10 +7,13 @@
 				name: string;
 				email: string;
 			};
+			pendingEmail?: string | null;
 		};
 		form?: {
 			error?: string;
 			profileSuccess?: boolean;
+			emailPending?: boolean;
+			pendingEmail?: string;
 			passwordSuccess?: boolean;
 			passwordError?: string;
 			name?: string;
@@ -37,7 +40,13 @@
 			<h2>Personal Information</h2>
 
 			{#if form?.profileSuccess}
-				<div class="alert alert-success">Profile updated successfully.</div>
+				<div class="alert alert-success">Name updated successfully.</div>
+			{/if}
+
+			{#if form?.emailPending}
+				<div class="alert alert-info">
+					A verification email has been sent to <strong>{form.pendingEmail}</strong>. Please check your inbox and click the link to confirm the change.
+				</div>
 			{/if}
 
 			{#if form?.error}
@@ -77,7 +86,14 @@
 						required
 						value={form?.email ?? data.user.email}
 					/>
+					<span class="form-hint">Changing your email requires verification via a link sent to the new address.</span>
 				</div>
+
+				{#if data.pendingEmail}
+					<div class="alert alert-info">
+						Pending email change to <strong>{data.pendingEmail}</strong> — check your inbox.
+					</div>
+				{/if}
 
 				<button type="submit" class="btn btn-primary" disabled={loadingProfile}>
 					{#if loadingProfile}
@@ -164,6 +180,10 @@
 		padding: 2rem;
 	}
 
+	.auth-header {
+		margin-bottom: 1.5rem;
+	}
+
 	.profile-sections {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -189,6 +209,13 @@
 		margin-bottom: 1.25rem;
 	}
 
+	.form-hint {
+		display: block;
+		margin-top: 0.35rem;
+		font-size: 0.8rem;
+		color: var(--color-text-light);
+	}
+
 	.alert-success {
 		background: #f0fdf4;
 		border: 1px solid #bbf7d0;
@@ -203,6 +230,16 @@
 		background: #fef2f2;
 		border: 1px solid #fecaca;
 		color: #991b1b;
+		padding: 0.75rem 1rem;
+		border-radius: 0.5rem;
+		margin-bottom: 1.25rem;
+		font-size: 0.9rem;
+	}
+
+	.alert-info {
+		background: #eff6ff;
+		border: 1px solid #bfdbfe;
+		color: #1e40af;
 		padding: 0.75rem 1rem;
 		border-radius: 0.5rem;
 		margin-bottom: 1.25rem;
