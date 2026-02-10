@@ -41,7 +41,6 @@
 					</a>
 				{/if}
 				{#if data.session?.roles?.includes('admin') || data.session?.roles?.includes('program-admin')}
-					<div class="px-6 pb-2 pt-1 text-xs uppercase tracking-wider text-white/40 font-semibold">Program</div>
 					<a href="/auth/submissions" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/submissions' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="shrink-0">
 							<path d="M9 11l3 3L22 4"></path>
