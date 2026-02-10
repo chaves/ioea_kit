@@ -11,7 +11,7 @@
 	{@render children()}
 {:else}
 	<div class="flex min-h-screen">
-		<aside class="w-[260px] bg-primary-dark text-white flex flex-col fixed top-0 left-0 bottom-0">
+		<aside class="w-[280px] min-w-[280px] bg-primary-dark text-white flex flex-col fixed top-0 left-0 bottom-0 shrink-0">
 			<div class="p-6 border-b border-white/10 flex items-center gap-4">
 				<a href="/" class="no-underline">
 					<img src="/site-logo.png" alt="IOEA" class="h-10 brightness-0 invert" onerror={(e) => e.currentTarget.outerHTML = 'IOEA'} />
@@ -91,7 +91,7 @@
 			</div>
 		</aside>
 
-		<main class="flex-1 ml-[260px] bg-bg min-h-screen">
+		<main class="flex-1 ml-[280px] bg-bg min-h-screen">
 			{@render children()}
 		</main>
 	</div>
