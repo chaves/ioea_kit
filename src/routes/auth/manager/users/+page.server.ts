@@ -8,6 +8,8 @@ import {
 	generateRandomPassword,
 	createPasswordResetToken,
 	hashPassword,
+	createSession,
+	getUserWithRolesById,
 } from '$lib/server/auth';
 import { prisma } from '$lib/server/db';
 import { sendEmail, welcomeUserEmail, passwordResetEmail } from '$lib/server/email';
@@ -167,5 +169,39 @@ export const actions: Actions = {
 		await prisma.users.delete({ where: { id: userId } });
 
 		return { success: true, message: `User "${user.name}" deleted successfully.`, action: 'delete' };
+	},
+
+	loginAs: async ({ request, locals, cookies, url }) => {
+		if (!locals.session || !hasRole(locals.session, 'admin')) {
+			return fail(403, { error: 'Access denied.', action: 'loginAs' });
+		}
+
+		const formData = await request.formData();
+		const userId = parseInt(formData.get('userId') as string);
+
+		if (!userId) {
+			return fail(400, { error: 'Invalid user.', action: 'loginAs' });
+		}
+
+		if (userId === locals.session.userId) {
+			return fail(400, { error: 'Use normal logout/login to switch back to your account.', action: 'loginAs' });
+		}
+
+		const user = await getUserWithRolesById(userId);
+		if (!user || !user.active) {
+			return fail(404, { error: 'User not found or inactive.', action: 'loginAs' });
+		}
+
+		await createSession(cookies, {
+			userId: user.id,
+			email: user.email,
+			name: user.name,
+			roles: user.roleNames,
+			reviewerGroup: user.legacy_reviewer_group ?? undefined,
+			reviewerType: user.roleNames.includes('admin') ? 'manager' : user.roleNames.includes('reviewer') ? 'reviewer' : undefined,
+		});
+
+		const redirectTo = user.roleNames.includes('student') ? '/students' : '/auth';
+		throw redirect(303, redirectTo);
 	},
 };

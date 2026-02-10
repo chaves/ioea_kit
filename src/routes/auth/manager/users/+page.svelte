@@ -20,6 +20,7 @@
 		data: {
 			users: User[];
 			roles: Role[];
+			session?: { userId: number; roles: string[] };
 		};
 		form?: {
 			error?: string;
@@ -240,6 +241,12 @@
 							</td>
 							<td>
 								<div class="action-buttons">
+									{#if data.session?.roles?.includes('admin') && user.id !== data.session.userId}
+										<form method="POST" action="?/loginAs" use:enhance class="inline-form">
+											<input type="hidden" name="userId" value={user.id} />
+											<button type="submit" class="btn btn-login-as btn-sm">Login as</button>
+										</form>
+									{/if}
 									<button type="button" class="btn btn-secondary btn-sm" onclick={() => startEdit(user)}>Edit</button>
 									<form method="POST" action="?/resetPassword" use:enhance class="inline-form">
 										<input type="hidden" name="userId" value={user.id} />
@@ -500,6 +507,19 @@
 
 	.btn-danger:hover {
 		background: #fecaca;
+	}
+
+	.btn-login-as {
+		background: #e0e7ff;
+		color: #3730a3;
+		border: 1px solid #a5b4fc;
+		border-radius: 0.375rem;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+	.btn-login-as:hover {
+		background: #c7d2fe;
 	}
 
 	/* Edit form in table */

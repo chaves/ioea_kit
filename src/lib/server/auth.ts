@@ -30,7 +30,7 @@ function generateSessionId(): string {
 	return generateSecureToken();
 }
 
-async function getUserWithRolesById(userId: number) {
+export async function getUserWithRolesById(userId: number) {
 	const user = await prisma.users.findUnique({
 		where: { id: userId },
 		include: {
