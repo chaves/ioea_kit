@@ -21,14 +21,6 @@
 <div class="login-page">
 		<div class="login-container">
 			<div class="login-header">
-				<img
-					src="/site-logo.png"
-					alt="IOEA"
-					class="login-logo"
-					onerror={(e) => {
-						(e.currentTarget as HTMLImageElement).style.display = 'none';
-					}}
-				/>
 				<h1>Forgot Password</h1>
 				<p>Enter your email to receive a password reset link</p>
 			</div>
@@ -89,10 +81,10 @@
 	.login-page {
 		min-height: 100vh;
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: center;
 		background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-		padding: 2rem;
+		padding: 8vh 2rem 2rem;
 	}
 
 	.login-container {
@@ -107,11 +99,6 @@
 	.login-header {
 		text-align: center;
 		margin-bottom: 2rem;
-	}
-
-	.login-logo {
-		height: 50px;
-		margin-bottom: 1.5rem;
 	}
 
 	.login-header h1 {
