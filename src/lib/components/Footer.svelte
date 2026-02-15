@@ -95,7 +95,7 @@
 				© {new Date().getFullYear()} Institutional and Organizational Economics Academy.
 				All rights reserved.
 			</p>
-			<p class="my-6">
+			<p class="my-2">
 				Website & Extranet developed by Bruno Chaves Ferreira
 			</p>
 		</div>
