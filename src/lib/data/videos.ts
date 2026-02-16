@@ -321,16 +321,22 @@ export const videoSections: VideoSection[] = [
  * @param count Number of videos to return
  * @returns Array of random video testimonials
  */
-export function getRandomVideoTestimonials(count: number): Video[] {
+export function getRandomVideoTestimonials(count: number, recentYears: number = 0): Video[] {
   // Get all faculty videos (not participants)
-  const facultyVideos = videoSections
-    .filter(
-      (section) =>
-        section.title.includes("Faculties speak") ||
-        section.title.includes("faculties speak")
-    )
-    .flatMap((section) => section.videos);
+  let sections = videoSections.filter(
+    (section) =>
+      section.title.includes("Faculties speak") ||
+      section.title.includes("faculties speak")
+  );
 
+  // Limit to the most recent N years if specified
+  if (recentYears > 0) {
+    const years = [...new Set(sections.map((s) => s.year))].sort((a, b) => b - a);
+    const cutoffYears = years.slice(0, recentYears);
+    sections = sections.filter((s) => cutoffYears.includes(s.year));
+  }
+
+  const facultyVideos = sections.flatMap((section) => section.videos);
   const shuffled = [...facultyVideos].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
 }

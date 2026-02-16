@@ -7,7 +7,7 @@ export const load: PageServerLoad = async () => {
 	return {
 		currentYear: config.currentYear,
 		testimonials: getRandomTestimonials(2),
-		videoTestimonials: getRandomVideoTestimonials(2)
+		videoTestimonials: getRandomVideoTestimonials(4, 4)
 	};
 };
 

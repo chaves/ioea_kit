@@ -222,120 +222,121 @@
 					</a>
 				</div>
 
-			<!-- Testimonials Preview -->
-			<div class="mb-12">
-				<h2 class="mb-6">What Alumni & Faculty Say</h2>
-				<div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6 mb-6">
-					{#each combinedTestimonials as item, index}
-						{#if item.type === 'text'}
-							<div class="flex gap-6 bg-white p-6 rounded-lg border border-border shadow-[0_2px_8px_rgba(0,0,0,0.05)] flex-col text-center sm:flex-row sm:text-left">
-								<div class="overflow-hidden flex-shrink-0 mx-auto w-24 h-24 rounded-full sm:mx-0">
-									<img
-										src={item.photo}
-										alt={item.name}
-										class="object-cover w-full h-full"
-										onerror={(e) => {
-											const img = e.currentTarget as HTMLImageElement;
-											img.src = '/images/placeholder-person.jpg';
-										}}
-									/>
-								</div>
-								<div class="flex-1">
-									<blockquote class="italic text-text mb-2 m-0 p-0 text-[0.9rem] leading-relaxed">
-										"{getTruncatedQuote(item.quote, index)}"
-									</blockquote>
-									{#if item.quote.length > maxQuoteLength}
-										<button
-											type="button"
-											class="p-0 mb-3 text-xs font-semibold underline bg-transparent border-0 transition-colors duration-200 cursor-pointer text-secondary hover:text-secondary-dark"
-											onclick={() => toggleQuote(index)}
-										>
-											{expandedQuotes.has(index) ? 'Read less' : 'Read more'}
-										</button>
-									{/if}
-									<div class="flex flex-col gap-1">
-										<strong class="font-semibold text-primary">
-											{#if item.website}
-												<a href={item.website} target="_blank" rel="noopener" class="font-semibold text-primary hover:text-secondary">
-													{item.name}
-												</a>
-											{:else}
-												{item.name}
-											{/if}
-										</strong>
-										<span class="text-sm text-text-light">{item.position}</span>
-										<span class="text-xs text-text-light">{item.institution}</span>
+				<!-- Faculty Videos Preview -->
+				<div class="mb-12">
+					<h2 class="mb-6">Faculties speak about it!</h2>
+					<div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6">
+						{#each combinedTestimonials as item}
+							{#if item.type === 'video'}
+								<div class="flex flex-col gap-6 bg-white p-6 rounded-lg border border-border shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+									<div class="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.08)] bg-black">
+										{#if loadedVideos.has(item.videoId)}
+											<iframe
+												src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1`}
+												title={`${item.name} - ${item.institution}`}
+												frameborder="0"
+												allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+												allowfullscreen
+												class="absolute top-0 left-0 w-full h-full"
+											></iframe>
+										{:else}
+											<button
+												type="button"
+												class="flex absolute top-0 left-0 justify-center items-center p-0 w-full h-full bg-transparent border-0 transition-opacity duration-200 cursor-pointer hover:opacity-90"
+												onclick={() => loadVideo(item.videoId)}
+												aria-label="Play {item.name}"
+											>
+												<img
+													src={getThumbnailUrl(item.videoId)}
+													alt="{item.name}"
+													loading="lazy"
+													class="object-cover absolute top-0 left-0 w-full h-full"
+													onerror={(e) => {
+														const img = e.currentTarget as HTMLImageElement;
+														img.src = `https://img.youtube.com/vi/${item.videoId}/hqdefault.jpg`;
+													}}
+												/>
+												<div class="relative z-10 w-[68px] h-12 transition-transform duration-200 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:scale-110" aria-hidden="true">
+													<svg xmlns="http://www.w3.org/2000/svg" width="68" height="48" viewBox="0 0 68 48">
+														<path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.63-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"/>
+														<path d="M 45,24 27,14 27,34" fill="#fff"/>
+													</svg>
+												</div>
+											</button>
+										{/if}
+									</div>
+									<div class="flex-1">
+										<div class="flex flex-col gap-1">
+											<strong class="font-semibold text-primary">{item.name}</strong>
+											<span class="text-xs text-text-light">{item.institution}</span>
+										</div>
 									</div>
 								</div>
-							</div>
-						{/if}
-					{/each}
-				</div>
-				<div class="mt-8 text-center">
-					<a href="/community/testimonials" class="inline-flex gap-2 items-center px-6 py-3 text-base font-semibold text-white no-underline rounded-lg transition-all duration-200 bg-secondary hover:bg-secondary-dark hover:shadow-lg hover:-translate-y-0.5">
-						Read more testimonials →
-					</a>
+							{/if}
+						{/each}
+					</div>
+					<div class="mt-8 text-center">
+						<a href="/videos" class="inline-flex gap-2 items-center px-6 py-3 text-base font-semibold text-white no-underline rounded-lg transition-all duration-200 bg-secondary hover:bg-secondary-dark hover:shadow-lg hover:-translate-y-0.5">
+							Watch more faculty videos →
+						</a>
+					</div>
 				</div>
 
-				<div class="mt-9 grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6">
-					{#each combinedTestimonials as item}
-						{#if item.type === 'video'}
-							<div class="flex flex-col gap-6 bg-white p-6 rounded-lg border border-border shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
-								<div class="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.08)] bg-black">
-									{#if loadedVideos.has(item.videoId)}
-										<iframe
-											src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1`}
-											title={`${item.name} - ${item.institution}`}
-											frameborder="0"
-											allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-											allowfullscreen
-											class="absolute top-0 left-0 w-full h-full"
-										></iframe>
-									{:else}
-										<button
-											type="button"
-											class="flex absolute top-0 left-0 justify-center items-center p-0 w-full h-full bg-transparent border-0 transition-opacity duration-200 cursor-pointer hover:opacity-90"
-											onclick={() => loadVideo(item.videoId)}
-											aria-label="Play {item.name}"
-										>
-											<img
-												src={getThumbnailUrl(item.videoId)}
-												alt="{item.name}"
-												loading="lazy"
-												class="object-cover absolute top-0 left-0 w-full h-full"
-												onerror={(e) => {
-													// Fallback to hqdefault if maxresdefault doesn't exist
-													const img = e.currentTarget as HTMLImageElement;
-													img.src = `https://img.youtube.com/vi/${item.videoId}/hqdefault.jpg`;
-												}}
-											/>
-											<div class="relative z-10 w-[68px] h-12 transition-transform duration-200 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:scale-110" aria-hidden="true">
-												<svg xmlns="http://www.w3.org/2000/svg" width="68" height="48" viewBox="0 0 68 48">
-													<path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.63-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"/>
-													<path d="M 45,24 27,14 27,34" fill="#fff"/>
-												</svg>
-											</div>
-										</button>
-									{/if}
-								</div>
-								<div class="flex-1">
-									<div class="flex flex-col gap-1">
-										<strong class="font-semibold text-primary">{item.name}</strong>
-										<span class="text-xs text-text-light">{item.institution}</span>
-										<span class="text-sm text-text-light">Video testimonial</span>
+				<!-- Testimonials Preview -->
+				<div class="mb-12">
+					<h2 class="mb-6">What Alumni & Faculty Say</h2>
+					<div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6 mb-6">
+						{#each combinedTestimonials as item, index}
+							{#if item.type === 'text'}
+								<div class="flex gap-6 bg-white p-6 rounded-lg border border-border shadow-[0_2px_8px_rgba(0,0,0,0.05)] flex-col text-center sm:flex-row sm:text-left">
+									<div class="overflow-hidden flex-shrink-0 mx-auto w-24 h-24 rounded-full sm:mx-0">
+										<img
+											src={item.photo}
+											alt={item.name}
+											class="object-cover w-full h-full"
+											onerror={(e) => {
+												const img = e.currentTarget as HTMLImageElement;
+												img.src = '/images/placeholder-person.jpg';
+											}}
+										/>
 									</div>
-									<a class="inline-block mt-2 text-sm font-semibold no-underline text-secondary hover:text-secondary-dark" href="/videos">Watch more videos →</a>
+									<div class="flex-1">
+										<blockquote class="italic text-text mb-2 m-0 p-0 text-[0.9rem] leading-relaxed">
+											"{getTruncatedQuote(item.quote, index)}"
+										</blockquote>
+										{#if item.quote.length > maxQuoteLength}
+											<button
+												type="button"
+												class="p-0 mb-3 text-xs font-semibold underline bg-transparent border-0 transition-colors duration-200 cursor-pointer text-secondary hover:text-secondary-dark"
+												onclick={() => toggleQuote(index)}
+											>
+												{expandedQuotes.has(index) ? 'Read less' : 'Read more'}
+											</button>
+										{/if}
+										<div class="flex flex-col gap-1">
+											<strong class="font-semibold text-primary">
+												{#if item.website}
+													<a href={item.website} target="_blank" rel="noopener" class="font-semibold text-primary hover:text-secondary">
+														{item.name}
+													</a>
+												{:else}
+													{item.name}
+												{/if}
+											</strong>
+											<span class="text-sm text-text-light">{item.position}</span>
+											<span class="text-xs text-text-light">{item.institution}</span>
+										</div>
+									</div>
 								</div>
-							</div>
-						{/if}
-					{/each}
+							{/if}
+						{/each}
+					</div>
+					<div class="mt-8 text-center">
+						<a href="/community/testimonials" class="inline-flex gap-2 items-center px-6 py-3 text-base font-semibold text-white no-underline rounded-lg transition-all duration-200 bg-secondary hover:bg-secondary-dark hover:shadow-lg hover:-translate-y-0.5">
+							Read more testimonials →
+						</a>
+					</div>
 				</div>
-				<div class="mt-8 text-center">
-					<a href="/videos" class="inline-flex gap-2 items-center px-6 py-3 text-base font-semibold text-white no-underline rounded-lg transition-all duration-200 bg-secondary hover:bg-secondary-dark hover:shadow-lg hover:-translate-y-0.5">
-						Read more faculty videos →
-					</a>
-				</div>
-			</div>
 			</div>
 
 			<!-- Sidebar -->
