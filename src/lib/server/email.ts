@@ -118,7 +118,7 @@ export async function applicationReceiptEmail(applicant: {
 				<hr style="margin-top: 30px; border: none; border-top: 1px solid #e2e8f0;">
 				<p style="font-size: 12px; color: #718096;">
 					Institutional and Organizational Economics Academy<br>
-					<a href="https://ioea.eu">https://ioea.eu</a>
+					<a href="https://www.ioea.eu">https://www.ioea.eu</a>
 				</p>
 			</div>
 		`,
@@ -165,7 +165,7 @@ export function welcomeUserEmail({
 				<hr style="margin-top: 30px; border: none; border-top: 1px solid #e2e8f0;">
 				<p style="font-size: 12px; color: #718096;">
 					Institutional and Organizational Economics Academy<br>
-					<a href="https://ioea.eu">https://ioea.eu</a>
+					<a href="https://www.ioea.eu">https://www.ioea.eu</a>
 				</p>
 			</div>
 		`,
@@ -204,7 +204,7 @@ export function passwordResetEmail({
 				<hr style="margin-top: 30px; border: none; border-top: 1px solid #e2e8f0;">
 				<p style="font-size: 12px; color: #718096;">
 					Institutional and Organizational Economics Academy<br>
-					<a href="https://ioea.eu">https://ioea.eu</a>
+					<a href="https://www.ioea.eu">https://www.ioea.eu</a>
 				</p>
 			</div>
 		`,
@@ -243,7 +243,7 @@ export function emailChangeVerificationEmail({
 				<hr style="margin-top: 30px; border: none; border-top: 1px solid #e2e8f0;">
 				<p style="font-size: 12px; color: #718096;">
 					Institutional and Organizational Economics Academy<br>
-					<a href="https://ioea.eu">https://ioea.eu</a>
+					<a href="https://www.ioea.eu">https://www.ioea.eu</a>
 				</p>
 			</div>
 		`,
@@ -268,7 +268,7 @@ export function newsletterConfirmationEmail(email: string): EmailOptions {
 					<li>News and events from the community</li>
 				</ul>
 
-				<p>Visit our website to learn more about our program: <a href="https://ioea.eu">https://ioea.eu</a></p>
+				<p>Visit our website to learn more about our program: <a href="https://www.ioea.eu">https://www.ioea.eu</a></p>
 
 				<p>Best regards,<br>
 				The IOEA Team</p>
