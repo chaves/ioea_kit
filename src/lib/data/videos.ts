@@ -13,6 +13,57 @@ export interface VideoSection {
 
 export const videoSections: VideoSection[] = [
   {
+    year: 2025,
+    title: "IOEA 2025: Faculties speak about it!",
+    videos: [
+      {
+        id: "PjA56VrCc_w",
+        name: "Ricardo Dahis",
+        institution: "Monash University",
+      },
+      {
+        id: "w2Q8SNeAGzg",
+        name: "Alan Benson",
+        institution: "University of Minnesota",
+      },
+      {
+        id: "1etlwey5sds",
+        name: "Cary Coglianese",
+        institution: "Penn Carey Law",
+      },
+      {
+        id: "vt8gCCLa7A0",
+        name: "Joseph Emmens",
+        institution: "Barcelona School of Economics",
+      },
+      {
+        id: "5YdQY9iw5DA",
+        name: "Giorgio Zanarone",
+        institution: "University of Lausanne",
+      },
+      {
+        id: "Nn4vACJ3izk",
+        name: "Benjamin Marx",
+        institution: "Boston University",
+      },
+      {
+        id: "BH1GojY0vZQ",
+        name: "Elisabeth S. Clemens",
+        institution: "University of Chicago",
+      },
+      {
+        id: "PDyu6HmUHK4",
+        name: "Simon Porcher",
+        institution: "Paris Dauphine-PSL University",
+      },
+      {
+        id: "xbAEcBmzc_E",
+        name: "Jens Prüfer",
+        institution: "Tilburg University & University of East Anglia",
+      },
+    ],
+  },
+  {
     year: 2024,
     title: "IOEA 2024: Faculties speak about it!",
     videos: [
