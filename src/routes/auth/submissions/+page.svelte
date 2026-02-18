@@ -21,7 +21,7 @@
 		phdAdvisorName: string | null;
 		phdAdvisorEmail: string | null;
 		avgNote: number | null;
-		decision: 'pending' | 'accepted' | 'rejected' | 'review';
+		decision: 'pending' | 'accepted' | 'waitlisted' | 'rejected';
 	}
 
 	interface Props {
@@ -31,8 +31,8 @@
 					total: number;
 					pending: number;
 					accepted: number;
+					waitlisted: number;
 					rejected: number;
-					review: number;
 				};
 				filter: string;
 				isSuperAdmin: boolean;
@@ -106,13 +106,13 @@
 				<span class="stat-value">{data.stats.accepted}</span>
 				<span class="stat-label">Accepted</span>
 			</div>
+			<div class="stat-card stat-waitlisted">
+				<span class="stat-value">{data.stats.waitlisted}</span>
+				<span class="stat-label">In waiting list</span>
+			</div>
 			<div class="stat-card stat-danger">
 				<span class="stat-value">{data.stats.rejected}</span>
 				<span class="stat-label">Rejected</span>
-			</div>
-			<div class="stat-card stat-review">
-				<span class="stat-value">{data.stats.review}</span>
-				<span class="stat-label">Review</span>
 			</div>
 		</div>
 
@@ -127,11 +127,11 @@
 			<button class="filter-btn" class:active={data.filter === 'accepted'} onclick={() => setFilter('accepted')}>
 				Accepted ({data.stats.accepted})
 			</button>
+			<button class="filter-btn" class:active={data.filter === 'waitlisted'} onclick={() => setFilter('waitlisted')}>
+				In waiting list ({data.stats.waitlisted})
+			</button>
 			<button class="filter-btn" class:active={data.filter === 'rejected'} onclick={() => setFilter('rejected')}>
 				Rejected ({data.stats.rejected})
-			</button>
-			<button class="filter-btn" class:active={data.filter === 'review'} onclick={() => setFilter('review')}>
-				Review ({data.stats.review})
 			</button>
 		</div>
 
@@ -142,8 +142,8 @@
 					class="submission-card"
 					class:card-pending={sub.decision === 'pending'}
 					class:card-accepted={sub.decision === 'accepted'}
+					class:card-waitlisted={sub.decision === 'waitlisted'}
 					class:card-rejected={sub.decision === 'rejected'}
-					class:card-review={sub.decision === 'review'}
 				>
 				{#if sub.avgNote !== null}
 					<div class="score-badge" class:score-high={sub.avgNote >= 3} class:score-low={sub.avgNote < 3}>
@@ -166,10 +166,10 @@
 						{/if}
 							{#if sub.decision === 'accepted'}
 								<span class="status-pill status-accepted"><span class="status-dot dot-green"></span>Accepted</span>
+							{:else if sub.decision === 'waitlisted'}
+								<span class="status-pill status-waitlisted"><span class="status-dot dot-waitlisted"></span>In waiting list</span>
 							{:else if sub.decision === 'rejected'}
 								<span class="status-pill status-rejected"><span class="status-dot dot-red"></span>Rejected</span>
-							{:else if sub.decision === 'review'}
-								<span class="status-pill status-review"><span class="status-dot dot-review"></span>Review</span>
 							{:else}
 								<span class="status-pill status-pending"><span class="status-dot dot-pending"></span>Pending</span>
 							{/if}
@@ -222,10 +222,10 @@
 									Reject
 								</button>
 							</form>
-							<form method="POST" action="?/review">
+							<form method="POST" action="?/waitlist">
 								<input type="hidden" name="submission_id" value={sub.id} />
-								<button type="submit" class="decision-btn btn-review" disabled={sub.decision === 'review'}>
-									Review
+								<button type="submit" class="decision-btn btn-waitlist" disabled={sub.decision === 'waitlisted'}>
+									In waiting list
 								</button>
 							</form>
 								{#if data.isSuperAdmin}
@@ -339,7 +339,7 @@
 		color: #e53e3e;
 	}
 
-	.stat-review .stat-value {
+	.stat-waitlisted .stat-value {
 		color: #d97706;
 	}
 
@@ -396,7 +396,7 @@
 		border-left: 4px solid #111827;
 	}
 
-	.submission-card.card-review {
+	.submission-card.card-waitlisted {
 		border-left: 4px solid #d97706;
 	}
 
@@ -531,7 +531,7 @@
 		color: white;
 	}
 
-	.btn-review {
+	.btn-waitlist {
 		background: #d97706;
 		color: white;
 	}
@@ -556,12 +556,12 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 0.4rem;
-		padding: 0.35rem 0.8rem;
+		padding: 0.3rem 0.7rem;
 		border-radius: 9999px;
-		font-size: 0.82rem;
+		font-size: 0.78rem;
 		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.03em;
+		letter-spacing: 0.01em;
+		border: 1px solid transparent;
 	}
 
 	.status-dot {
@@ -580,32 +580,36 @@
 	}
 
 	.dot-pending {
-		background: white;
-		border: 2px solid #111827;
+		background: #ffffff;
+		border: 1.5px solid #64748b;
 	}
 
-	.dot-review {
+	.dot-waitlisted {
 		background: #d97706;
 	}
 
 	.status-accepted {
-		background: var(--color-accent-green);
-		color: white;
+		background: #e7f7ee;
+		border-color: #b8e7cb;
+		color: #166534;
 	}
 
 	.status-rejected {
-		background: #e53e3e;
-		color: white;
+		background: #fee9e9;
+		border-color: #f9c2c2;
+		color: #9f1239;
 	}
 
 	.status-pending {
-		background: #111827;
-		color: white;
+		background: #f8fafc;
+		border-color: #d5dbe4;
+		color: #1f2937;
 	}
 
-	.status-review {
-		background: #d97706;
-		color: white;
+	.status-waitlisted {
+		background: #fff5e8;
+		border-color: #ffd9a8;
+		color: #92400e;
 	}
 
 	.card-summary {

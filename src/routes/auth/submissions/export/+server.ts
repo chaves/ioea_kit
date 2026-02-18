@@ -25,16 +25,16 @@ export const GET: RequestHandler = async ({ locals }) => {
 
 	function getSubmissionState(s: { accepted: boolean; waitlisted: boolean }): {
 		processed: 'Yes' | 'No';
-		decision: 'Accepted' | 'Rejected' | 'Review' | 'Not processed';
+		decision: 'Accepted' | 'In waiting list' | 'Rejected' | 'Not processed';
 	} {
 		if (s.accepted && s.waitlisted) {
-			return { processed: 'Yes', decision: 'Review' };
+			return { processed: 'Yes', decision: 'Rejected' };
 		}
 		if (s.accepted) {
 			return { processed: 'Yes', decision: 'Accepted' };
 		}
 		if (s.waitlisted) {
-			return { processed: 'Yes', decision: 'Rejected' };
+			return { processed: 'Yes', decision: 'In waiting list' };
 		}
 		return { processed: 'No', decision: 'Not processed' };
 	}

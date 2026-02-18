@@ -5,7 +5,7 @@ import { hasAnyRole, hasRole } from '$lib/server/auth';
 import { unlink } from 'fs/promises';
 import { join } from 'path';
 
-type Decision = 'pending' | 'accepted' | 'rejected' | 'review';
+type Decision = 'pending' | 'accepted' | 'waitlisted' | 'rejected';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!locals.session || !hasAnyRole(locals.session, ['admin', 'program-admin'])) {
@@ -13,12 +13,13 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	}
 
 	const rawFilter = url.searchParams.get('filter') ?? 'all';
+	const normalizedFilter = rawFilter === 'review' ? 'waitlisted' : rawFilter;
 	const filter: 'all' | Decision =
-		rawFilter === 'pending' ||
-		rawFilter === 'accepted' ||
-		rawFilter === 'rejected' ||
-		rawFilter === 'review'
-			? rawFilter
+		normalizedFilter === 'pending' ||
+		normalizedFilter === 'accepted' ||
+		normalizedFilter === 'waitlisted' ||
+		normalizedFilter === 'rejected'
+			? normalizedFilter
 			: 'all';
 
 	const submissions = await prisma.call_submissions.findMany({
@@ -38,14 +39,14 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 				: null;
 
 		// State encoding using existing columns only (no DB migration):
-		// 00 = pending, 10 = accepted, 01 = rejected, 11 = review.
+		// 00 = pending, 10 = accepted, 01 = waitlisted, 11 = rejected.
 		const decision: Decision =
 			s.accepted && s.waitlisted
-				? 'review'
+				? 'rejected'
 				: s.accepted
 					? 'accepted'
 					: s.waitlisted
-						? 'rejected'
+						? 'waitlisted'
 						: 'pending';
 
 		return {
@@ -77,8 +78,8 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		total: allSubmissions.length,
 		pending: allSubmissions.filter((s) => s.decision === 'pending').length,
 		accepted: allSubmissions.filter((s) => s.decision === 'accepted').length,
-		rejected: allSubmissions.filter((s) => s.decision === 'rejected').length,
-		review: allSubmissions.filter((s) => s.decision === 'review').length
+		waitlisted: allSubmissions.filter((s) => s.decision === 'waitlisted').length,
+		rejected: allSubmissions.filter((s) => s.decision === 'rejected').length
 	};
 
 	let filtered = allSubmissions;
@@ -137,7 +138,7 @@ export const actions: Actions = {
 		await prisma.call_submissions.update({
 			where: { id: submissionId },
 			data: {
-				accepted: false,
+				accepted: true,
 				waitlisted: true
 			}
 		});
@@ -145,7 +146,7 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
-	review: async ({ locals, request }) => {
+	waitlist: async ({ locals, request }) => {
 		if (!locals.session || !hasAnyRole(locals.session, ['admin', 'program-admin'])) {
 			return fail(403, { error: 'Access denied' });
 		}
@@ -162,7 +163,7 @@ export const actions: Actions = {
 		await prisma.call_submissions.update({
 			where: { id: submissionId },
 			data: {
-				accepted: true,
+				accepted: false,
 				waitlisted: true
 			}
 		});
