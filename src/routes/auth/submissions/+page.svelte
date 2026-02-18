@@ -138,16 +138,9 @@
 					</div>
 				{/if}
 
-				<!-- Line 1: Name + status badge - PhD Student - Gender/Age - Nationality -->
+				<!-- Line 1: Name - PhD Student - Gender/Age - Nationality - status badge at end -->
 				<div class="card-line card-line-main">
 					<strong>{sub.lastName}, {sub.firstName}</strong>
-					{#if sub.accepted}
-						<span class="status-badge badge-accepted">Accepted</span>
-					{:else if sub.waitlisted}
-						<span class="status-badge badge-waitlist">Liste d'attente</span>
-					{:else}
-						<span class="status-badge badge-rejected">Rejected</span>
-					{/if}
 					<span class="sep">-</span>
 					<span>{getStatusLabel(sub.status)}</span>
 					{#if sub.gender || sub.age}
@@ -157,6 +150,13 @@
 					{#if sub.nationality}
 						<span class="sep">-</span>
 						<span class="text-muted">{sub.nationality}</span>
+					{/if}
+					{#if sub.accepted}
+						<span class="status-badge badge-accepted">Accepted</span>
+					{:else if sub.waitlisted}
+						<span class="status-badge badge-waitlist">Liste d'attente</span>
+					{:else}
+						<span class="status-badge badge-rejected">Rejected</span>
 					{/if}
 				</div>
 
@@ -427,6 +427,10 @@
 		gap: 0 0.4rem;
 		font-size: 1.05rem;
 		line-height: 1.5;
+	}
+
+	.card-line-main .status-badge {
+		margin-left: auto;
 	}
 
 	.card-line-main strong {
