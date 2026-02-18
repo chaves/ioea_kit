@@ -22,6 +22,7 @@
 		phdAdvisorEmail: string | null;
 		avgNote: number | null;
 		accepted: boolean;
+		waitlisted: boolean;
 	}
 
 	interface Props {
@@ -31,6 +32,7 @@
 				total: number;
 				accepted: number;
 				rejected: number;
+				waitlisted: number;
 			};
 			filter: string;
 			isAdmin: boolean;
@@ -100,6 +102,10 @@
 			<span class="stat-value">{data.stats.accepted}</span>
 			<span class="stat-label">Accepted</span>
 		</div>
+		<div class="stat-card stat-waitlist">
+			<span class="stat-value">{data.stats.waitlisted}</span>
+			<span class="stat-label">Liste d'attente</span>
+		</div>
 		<div class="stat-card stat-danger">
 			<span class="stat-value">{data.stats.rejected}</span>
 			<span class="stat-label">Rejected</span>
@@ -114,6 +120,9 @@
 		<button class="filter-btn" class:active={data.filter === 'accepted'} onclick={() => setFilter('accepted')}>
 			Accepted ({data.stats.accepted})
 		</button>
+		<button class="filter-btn" class:active={data.filter === 'waitlist'} onclick={() => setFilter('waitlist')}>
+			Liste d'attente ({data.stats.waitlisted})
+		</button>
 		<button class="filter-btn" class:active={data.filter === 'rejected'} onclick={() => setFilter('rejected')}>
 			Rejected ({data.stats.rejected})
 		</button>
@@ -122,7 +131,7 @@
 	<!-- Submission Cards -->
 	<div class="cards-container">
 		{#each data.submissions as sub (sub.id)}
-			<div class="submission-card" class:card-accepted={sub.accepted}>
+			<div class="submission-card" class:card-accepted={sub.accepted} class:card-waitlisted={sub.waitlisted && !sub.accepted}>
 				<!-- Score badge -->
 				{#if sub.avgNote !== null}
 					<div class="score-badge" class:score-high={sub.avgNote >= 3} class:score-low={sub.avgNote < 3}>
@@ -182,13 +191,35 @@
 					<div class="card-decision">
 						{#if sub.accepted}
 							<span class="status-badge badge-accepted">Accepted</span>
+							<form method="POST" action="?/setWaitlist">
+								<input type="hidden" name="submission_id" value={sub.id} />
+								<input type="hidden" name="waitlisted" value="true" />
+								<button type="submit" class="decision-btn btn-waitlist">Liste d'attente</button>
+							</form>
 							<form method="POST" action="?/accept">
 								<input type="hidden" name="submission_id" value={sub.id} />
 								<input type="hidden" name="accepted" value="false" />
 								<button type="submit" class="decision-btn btn-reject">Reject</button>
 							</form>
+						{:else if sub.waitlisted}
+							<span class="status-badge badge-waitlist">Liste d'attente</span>
+							<form method="POST" action="?/accept">
+								<input type="hidden" name="submission_id" value={sub.id} />
+								<input type="hidden" name="accepted" value="true" />
+								<button type="submit" class="decision-btn btn-accept">Accept</button>
+							</form>
+							<form method="POST" action="?/setWaitlist">
+								<input type="hidden" name="submission_id" value={sub.id} />
+								<input type="hidden" name="waitlisted" value="false" />
+								<button type="submit" class="decision-btn btn-reject">Reject</button>
+							</form>
 						{:else}
 							<span class="status-badge badge-rejected">Rejected</span>
+							<form method="POST" action="?/setWaitlist">
+								<input type="hidden" name="submission_id" value={sub.id} />
+								<input type="hidden" name="waitlisted" value="true" />
+								<button type="submit" class="decision-btn btn-waitlist">Liste d'attente</button>
+							</form>
 							<form method="POST" action="?/accept">
 								<input type="hidden" name="submission_id" value={sub.id} />
 								<input type="hidden" name="accepted" value="true" />
@@ -269,7 +300,7 @@
 
 	.stats-grid {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 		gap: 1rem;
 		margin-bottom: 2rem;
 	}
@@ -296,6 +327,10 @@
 
 	.stat-success .stat-value {
 		color: var(--color-accent-green);
+	}
+
+	.stat-waitlist .stat-value {
+		color: #d97706;
 	}
 
 	.stat-danger .stat-value {
@@ -345,6 +380,10 @@
 
 	.submission-card.card-accepted {
 		border-left: 4px solid var(--color-accent-green);
+	}
+
+	.submission-card.card-waitlisted {
+		border-left: 4px solid #d97706;
 	}
 
 	.score-badge {
@@ -469,6 +508,11 @@
 		color: white;
 	}
 
+	.btn-waitlist {
+		background: #d97706;
+		color: white;
+	}
+
 	.btn-reject {
 		background: #e53e3e;
 		color: white;
@@ -496,6 +540,11 @@
 
 	.badge-accepted {
 		background: var(--color-accent-green);
+		color: white;
+	}
+
+	.badge-waitlist {
+		background: #d97706;
 		color: white;
 	}
 
@@ -532,7 +581,7 @@
 
 	@media (max-width: 767px) {
 		.stats-grid {
-			grid-template-columns: 1fr;
+			grid-template-columns: repeat(2, 1fr);
 		}
 
 		.card-actions {

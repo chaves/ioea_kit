@@ -55,6 +55,7 @@ model call_submissions {
   cv            String    @db.VarChar(255)
   paper         String    @db.VarChar(255)
   accepted      Boolean   @default(false)
+  waitlisted    Boolean   @default(false)
   call_group_id BigInt?   @db.UnsignedBigInt
   created_at    DateTime? @db.Timestamp(0)
   updated_at    DateTime? @db.Timestamp(0)

@@ -49,21 +49,26 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 			phdAdvisorName: s.phd_ad_name || null,
 			phdAdvisorEmail: s.phd_ad_mail || null,
 			avgNote,
-			accepted: s.accepted,
+			// Mutually exclusive: accepted | waitlisted | rejected (normalize if DB inconsistent)
+			accepted: s.accepted ?? false,
+			waitlisted: s.accepted ? false : (s.waitlisted ?? false),
 		};
 	});
 
 	const stats = {
 		total: allSubmissions.length,
 		accepted: allSubmissions.filter((s) => s.accepted).length,
-		rejected: allSubmissions.filter((s) => !s.accepted).length,
+		rejected: allSubmissions.filter((s) => !s.accepted && !s.waitlisted).length,
+		waitlisted: allSubmissions.filter((s) => s.waitlisted).length,
 	};
 
 	let filtered = allSubmissions;
 	if (filter === 'accepted') {
 		filtered = allSubmissions.filter((s) => s.accepted);
 	} else if (filter === 'rejected') {
-		filtered = allSubmissions.filter((s) => !s.accepted);
+		filtered = allSubmissions.filter((s) => !s.accepted && !s.waitlisted);
+	} else if (filter === 'waitlist') {
+		filtered = allSubmissions.filter((s) => s.waitlisted);
 	}
 
 	return {
@@ -92,7 +97,31 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
 			await prisma.call_submissions.update({
 				where: { id: submissionId },
-				data: { accepted },
+				data: { accepted, waitlisted: false },
+			});
+
+			return { success: true };
+		},
+
+		setWaitlist: async ({ locals, request }) => {
+			if (!locals.session || !hasAnyRole(locals.session, ['admin', 'program-admin'])) {
+				return fail(403, { error: 'Access denied' });
+			}
+
+			const formData = await request.formData();
+			const submissionIdStr = String(formData.get('submission_id') ?? '');
+			const waitlisted = formData.get('waitlisted') === 'true';
+
+			if (!/^\d+$/.test(submissionIdStr)) {
+				return fail(400, { error: 'Invalid submission ID' });
+			}
+
+			const submissionId = BigInt(submissionIdStr);
+
+			// One state only: accepted | waitlisted | rejected (mutually exclusive)
+			await prisma.call_submissions.update({
+				where: { id: submissionId },
+				data: { waitlisted, accepted: false },
 			});
 
 			return { success: true };

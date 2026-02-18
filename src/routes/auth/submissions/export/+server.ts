@@ -41,6 +41,7 @@ export const GET: RequestHandler = async ({ locals }) => {
 		'Title': s.title,
 		'Abstract': s.summary,
 		'Accepted': s.accepted ? 'Yes' : 'No',
+		'Liste d\'attente': s.waitlisted ? 'Yes' : 'No',
 	}));
 
 	const wb = XLSX.utils.book_new();
