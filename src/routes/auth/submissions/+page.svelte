@@ -104,7 +104,7 @@
 		</div>
 		<div class="stat-card stat-waitlist">
 			<span class="stat-value">{data.stats.waitlisted}</span>
-			<span class="stat-label">Liste d'attente</span>
+			<span class="stat-label">Waitlist</span>
 		</div>
 		<div class="stat-card stat-danger">
 			<span class="stat-value">{data.stats.rejected}</span>
@@ -121,7 +121,7 @@
 			Accepted ({data.stats.accepted})
 		</button>
 		<button class="filter-btn" class:active={data.filter === 'waitlist'} onclick={() => setFilter('waitlist')}>
-			Liste d'attente ({data.stats.waitlisted})
+			Waitlist ({data.stats.waitlisted})
 		</button>
 		<button class="filter-btn" class:active={data.filter === 'rejected'} onclick={() => setFilter('rejected')}>
 			Rejected ({data.stats.rejected})
@@ -154,7 +154,7 @@
 					{#if sub.accepted}
 						<span class="status-badge badge-accepted">Accepted</span>
 					{:else if sub.waitlisted}
-						<span class="status-badge badge-waitlist">Liste d'attente</span>
+						<span class="status-badge badge-waitlist">Waitlist</span>
 					{:else}
 						<span class="status-badge badge-rejected">Rejected</span>
 					{/if}
@@ -199,7 +199,7 @@
 							<form method="POST" action="?/setWaitlist">
 								<input type="hidden" name="submission_id" value={sub.id} />
 								<input type="hidden" name="waitlisted" value="true" />
-								<button type="submit" class="decision-btn btn-waitlist">Liste d'attente</button>
+								<button type="submit" class="decision-btn btn-waitlist">Waitlist</button>
 							</form>
 							<form method="POST" action="?/accept">
 								<input type="hidden" name="submission_id" value={sub.id} />
@@ -221,7 +221,7 @@
 							<form method="POST" action="?/setWaitlist">
 								<input type="hidden" name="submission_id" value={sub.id} />
 								<input type="hidden" name="waitlisted" value="true" />
-								<button type="submit" class="decision-btn btn-waitlist">Liste d'attente</button>
+								<button type="submit" class="decision-btn btn-waitlist">Waitlist</button>
 							</form>
 							<form method="POST" action="?/accept">
 								<input type="hidden" name="submission_id" value={sub.id} />
