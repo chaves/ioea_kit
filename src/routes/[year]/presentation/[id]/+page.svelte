@@ -98,9 +98,9 @@
 					{/if}
 
 					{#if data.presentation.abstract}
-						<div class="mb-8">
+						<div class="mb-8 abstract-markdown">
 							<h3 class="mb-4 text-xl text-primary">Abstract</h3>
-							<div class="text-text leading-relaxed text-[1.05rem]">{@html data.presentation.abstract}</div>
+							<div class="abstract-content text-text leading-relaxed text-[1.05rem]">{@html abstractHtml}</div>
 						</div>
 					{/if}
 
@@ -140,3 +140,77 @@
 		</div>
 	</div>
 </section>
+
+<style>
+	.abstract-content :global(p) {
+		margin: 0 0 1em;
+	}
+
+	.abstract-content :global(p:last-child) {
+		margin-bottom: 0;
+	}
+
+	.abstract-content :global(ul),
+	.abstract-content :global(ol) {
+		margin: 0 0 1em;
+		padding-left: 1.5em;
+	}
+
+	.abstract-content :global(li) {
+		margin-bottom: 0.35em;
+	}
+
+	.abstract-content :global(strong) {
+		font-weight: 600;
+	}
+
+	.abstract-content :global(em) {
+		font-style: italic;
+	}
+
+	.abstract-content :global(code) {
+		font-size: 0.9em;
+		background: var(--color-bg-alt, #f3f1f5);
+		padding: 0.15em 0.4em;
+		border-radius: 0.25rem;
+	}
+
+	.abstract-content :global(pre) {
+		overflow-x: auto;
+		background: var(--color-bg-alt, #f3f1f5);
+		padding: 1rem;
+		border-radius: 0.375rem;
+		margin: 0 0 1em;
+	}
+
+	.abstract-content :global(pre code) {
+		background: none;
+		padding: 0;
+	}
+
+	.abstract-content :global(a) {
+		color: var(--color-primary);
+		text-decoration: underline;
+		text-underline-offset: 0.15em;
+	}
+
+	.abstract-content :global(a:hover) {
+		color: var(--color-secondary);
+	}
+
+	.abstract-content :global(h1),
+	.abstract-content :global(h2),
+	.abstract-content :global(h3) {
+		font-size: 1.1em;
+		font-weight: 600;
+		margin: 1em 0 0.5em;
+		color: var(--color-text);
+	}
+
+	.abstract-content :global(blockquote) {
+		border-left: 4px solid var(--color-primary);
+		margin: 0 0 1em;
+		padding-left: 1rem;
+		color: var(--color-text-light);
+	}
+</style>
