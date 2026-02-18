@@ -132,16 +132,22 @@
 	<div class="cards-container">
 		{#each data.submissions as sub (sub.id)}
 			<div class="submission-card" class:card-accepted={sub.accepted} class:card-waitlisted={sub.waitlisted && !sub.accepted}>
-				<!-- Score badge -->
 				{#if sub.avgNote !== null}
 					<div class="score-badge" class:score-high={sub.avgNote >= 3} class:score-low={sub.avgNote < 3}>
 						{sub.avgNote.toFixed(1)}
 					</div>
 				{/if}
 
-				<!-- Line 1: Name - Status - Gender/Age - Nationality -->
+				<!-- Line 1: Name + status badge - PhD Student - Gender/Age - Nationality -->
 				<div class="card-line card-line-main">
 					<strong>{sub.lastName}, {sub.firstName}</strong>
+					{#if sub.accepted}
+						<span class="status-badge badge-accepted">Accepted</span>
+					{:else if sub.waitlisted}
+						<span class="status-badge badge-waitlist">Liste d'attente</span>
+					{:else}
+						<span class="status-badge badge-rejected">Rejected</span>
+					{/if}
 					<span class="sep">-</span>
 					<span>{getStatusLabel(sub.status)}</span>
 					{#if sub.gender || sub.age}
@@ -190,7 +196,6 @@
 					</div>
 					<div class="card-decision">
 						{#if sub.accepted}
-							<span class="status-badge badge-accepted">Accepted</span>
 							<form method="POST" action="?/setWaitlist">
 								<input type="hidden" name="submission_id" value={sub.id} />
 								<input type="hidden" name="waitlisted" value="true" />
@@ -202,7 +207,6 @@
 								<button type="submit" class="decision-btn btn-reject">Reject</button>
 							</form>
 						{:else if sub.waitlisted}
-							<span class="status-badge badge-waitlist">Liste d'attente</span>
 							<form method="POST" action="?/accept">
 								<input type="hidden" name="submission_id" value={sub.id} />
 								<input type="hidden" name="accepted" value="true" />
@@ -214,7 +218,6 @@
 								<button type="submit" class="decision-btn btn-reject">Reject</button>
 							</form>
 						{:else}
-							<span class="status-badge badge-rejected">Rejected</span>
 							<form method="POST" action="?/setWaitlist">
 								<input type="hidden" name="submission_id" value={sub.id} />
 								<input type="hidden" name="waitlisted" value="true" />
@@ -413,11 +416,15 @@
 		margin-bottom: 0.5rem;
 		font-size: 1rem;
 		line-height: 1.55;
-		padding-right: 60px;
 		color: var(--color-text);
+		padding-right: 52px;
 	}
 
 	.card-line-main {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 0 0.4rem;
 		font-size: 1.05rem;
 		line-height: 1.5;
 	}
