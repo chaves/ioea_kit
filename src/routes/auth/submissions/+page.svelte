@@ -429,10 +429,6 @@
 		line-height: 1.5;
 	}
 
-	.card-line-main .status-badge {
-		margin-left: auto;
-	}
-
 	.card-line-main strong {
 		color: var(--color-primary);
 		font-weight: 600;
