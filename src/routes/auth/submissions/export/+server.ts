@@ -23,26 +23,45 @@ export const GET: RequestHandler = async ({ locals }) => {
 		4: 'Other'
 	};
 
-	const data = submissions.map((s) => ({
-		'Last Name': s.last_name,
-		'First Name': s.first_name,
-		'Email': s.email,
-		'Gender': s.gender,
-		'Age': s.age,
-		'Status': statusLabels[s.status] ?? '',
-		'Nationality': countryMap.get(s.nationality) ?? '',
-		'University': s.university,
-		'Department': s.department,
-		'Country': countryMap.get(s.country) ?? '',
-		'Domain': s.domain,
-		'Diploma': s.diploma,
-		'PhD Advisor': s.phd_ad_name ?? '',
-		'PhD Advisor Email': s.phd_ad_mail ?? '',
-		'Title': s.title,
-		'Abstract': s.summary,
-		'Accepted': s.accepted ? 'Yes' : 'No',
-		'Waitlist': s.waitlisted ? 'Yes' : 'No',
-	}));
+	function getSubmissionState(s: { accepted: boolean; waitlisted: boolean }): {
+		processed: 'Yes' | 'No';
+		decision: 'Accepted' | 'Rejected' | 'Review' | 'Not processed';
+	} {
+		if (s.accepted && s.waitlisted) {
+			return { processed: 'Yes', decision: 'Review' };
+		}
+		if (s.accepted) {
+			return { processed: 'Yes', decision: 'Accepted' };
+		}
+		if (s.waitlisted) {
+			return { processed: 'Yes', decision: 'Rejected' };
+		}
+		return { processed: 'No', decision: 'Not processed' };
+	}
+
+	const data = submissions.map((s) => {
+		const state = getSubmissionState(s);
+		return {
+			'Processed': state.processed,
+			'Decision': state.decision,
+			'Last Name': s.last_name,
+			'First Name': s.first_name,
+			'Email': s.email,
+			'Gender': s.gender,
+			'Age': s.age,
+			'Status': statusLabels[s.status] ?? '',
+			'Nationality': countryMap.get(s.nationality) ?? '',
+			'University': s.university,
+			'Department': s.department,
+			'Country': countryMap.get(s.country) ?? '',
+			'Domain': s.domain,
+			'Diploma': s.diploma,
+			'PhD Advisor': s.phd_ad_name ?? '',
+			'PhD Advisor Email': s.phd_ad_mail ?? '',
+			'Title': s.title,
+			'Abstract': s.summary
+		};
+	});
 
 	const wb = XLSX.utils.book_new();
 	const ws = XLSX.utils.json_to_sheet(data);

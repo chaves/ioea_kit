@@ -21,23 +21,23 @@
 		phdAdvisorName: string | null;
 		phdAdvisorEmail: string | null;
 		avgNote: number | null;
-		accepted: boolean;
-		waitlisted: boolean;
+		decision: 'pending' | 'accepted' | 'rejected' | 'review';
 	}
 
 	interface Props {
 		data: {
 			submissions: Submission[];
-			stats: {
-				total: number;
-				accepted: number;
-				rejected: number;
-				waitlisted: number;
+				stats: {
+					total: number;
+					pending: number;
+					accepted: number;
+					rejected: number;
+					review: number;
+				};
+				filter: string;
+				isSuperAdmin: boolean;
 			};
-			filter: string;
-			isAdmin: boolean;
-		};
-	}
+		}
 
 	let { data }: Props = $props();
 
@@ -93,45 +93,58 @@
 	</header>
 
 	<!-- Stats -->
-	<div class="stats-grid">
-		<div class="stat-card">
-			<span class="stat-value">{data.stats.total}</span>
-			<span class="stat-label">Total</span>
+		<div class="stats-grid">
+			<div class="stat-card">
+				<span class="stat-value">{data.stats.total}</span>
+				<span class="stat-label">Total</span>
+			</div>
+			<div class="stat-card stat-pending">
+				<span class="stat-value">{data.stats.pending}</span>
+				<span class="stat-label">Pending</span>
+			</div>
+			<div class="stat-card stat-success">
+				<span class="stat-value">{data.stats.accepted}</span>
+				<span class="stat-label">Accepted</span>
+			</div>
+			<div class="stat-card stat-danger">
+				<span class="stat-value">{data.stats.rejected}</span>
+				<span class="stat-label">Rejected</span>
+			</div>
+			<div class="stat-card stat-review">
+				<span class="stat-value">{data.stats.review}</span>
+				<span class="stat-label">Review</span>
+			</div>
 		</div>
-		<div class="stat-card stat-success">
-			<span class="stat-value">{data.stats.accepted}</span>
-			<span class="stat-label">Accepted</span>
-		</div>
-		<div class="stat-card stat-waitlist">
-			<span class="stat-value">{data.stats.waitlisted}</span>
-			<span class="stat-label">Waitlist</span>
-		</div>
-		<div class="stat-card stat-danger">
-			<span class="stat-value">{data.stats.rejected}</span>
-			<span class="stat-label">Rejected</span>
-		</div>
-	</div>
 
 	<!-- Filters -->
-	<div class="filters">
-		<button class="filter-btn" class:active={data.filter === 'all'} onclick={() => setFilter('all')}>
-			All ({data.stats.total})
-		</button>
-		<button class="filter-btn" class:active={data.filter === 'accepted'} onclick={() => setFilter('accepted')}>
-			Accepted ({data.stats.accepted})
-		</button>
-		<button class="filter-btn" class:active={data.filter === 'waitlist'} onclick={() => setFilter('waitlist')}>
-			Waitlist ({data.stats.waitlisted})
-		</button>
-		<button class="filter-btn" class:active={data.filter === 'rejected'} onclick={() => setFilter('rejected')}>
-			Rejected ({data.stats.rejected})
-		</button>
-	</div>
+		<div class="filters">
+			<button class="filter-btn" class:active={data.filter === 'all'} onclick={() => setFilter('all')}>
+				All ({data.stats.total})
+			</button>
+			<button class="filter-btn" class:active={data.filter === 'pending'} onclick={() => setFilter('pending')}>
+				Pending ({data.stats.pending})
+			</button>
+			<button class="filter-btn" class:active={data.filter === 'accepted'} onclick={() => setFilter('accepted')}>
+				Accepted ({data.stats.accepted})
+			</button>
+			<button class="filter-btn" class:active={data.filter === 'rejected'} onclick={() => setFilter('rejected')}>
+				Rejected ({data.stats.rejected})
+			</button>
+			<button class="filter-btn" class:active={data.filter === 'review'} onclick={() => setFilter('review')}>
+				Review ({data.stats.review})
+			</button>
+		</div>
 
 	<!-- Submission Cards -->
-	<div class="cards-container">
-		{#each data.submissions as sub (sub.id)}
-			<div class="submission-card" class:card-accepted={sub.accepted} class:card-waitlisted={sub.waitlisted && !sub.accepted}>
+		<div class="cards-container">
+			{#each data.submissions as sub (sub.id)}
+				<div
+					class="submission-card"
+					class:card-pending={sub.decision === 'pending'}
+					class:card-accepted={sub.decision === 'accepted'}
+					class:card-rejected={sub.decision === 'rejected'}
+					class:card-review={sub.decision === 'review'}
+				>
 				{#if sub.avgNote !== null}
 					<div class="score-badge" class:score-high={sub.avgNote >= 3} class:score-low={sub.avgNote < 3}>
 						{sub.avgNote.toFixed(1)}
@@ -139,26 +152,28 @@
 				{/if}
 
 				<!-- Line 1: Name - PhD Student - Gender/Age - Nationality - status badge at end -->
-				<div class="card-line card-line-main">
-					<strong>{sub.lastName}, {sub.firstName}</strong>
+					<div class="card-line card-line-main">
+						<strong>{sub.lastName}, {sub.firstName}</strong>
 					<span class="sep">-</span>
 					<span>{getStatusLabel(sub.status)}</span>
 					{#if sub.gender || sub.age}
 						<span class="sep">-</span>
 						<span class="text-muted">({getGenderLabel(sub.gender)}{sub.gender && sub.age ? ', ' : ''}{sub.age ?? ''})</span>
 					{/if}
-					{#if sub.nationality}
-						<span class="sep">-</span>
-						<span class="text-muted">{sub.nationality}</span>
-					{/if}
-					{#if sub.accepted}
-						<span class="status-badge badge-accepted">Accepted</span>
-					{:else if sub.waitlisted}
-						<span class="status-badge badge-waitlist">Waitlist</span>
-					{:else}
-						<span class="status-badge badge-rejected">Rejected</span>
-					{/if}
-				</div>
+						{#if sub.nationality}
+							<span class="sep">-</span>
+							<span class="text-muted">{sub.nationality}</span>
+						{/if}
+							{#if sub.decision === 'accepted'}
+								<span class="status-pill status-accepted"><span class="status-dot dot-green"></span>Accepted</span>
+							{:else if sub.decision === 'rejected'}
+								<span class="status-pill status-rejected"><span class="status-dot dot-red"></span>Rejected</span>
+							{:else if sub.decision === 'review'}
+								<span class="status-pill status-review"><span class="status-dot dot-review"></span>Review</span>
+							{:else}
+								<span class="status-pill status-pending"><span class="status-dot dot-pending"></span>Pending</span>
+							{/if}
+					</div>
 
 				<!-- Line 2: Affiliation -->
 				{#if sub.university || sub.department || sub.country}
@@ -193,48 +208,32 @@
 						<button class="doc-btn" onclick={() => toggleSummary(sub.id)}>
 							{expandedIds.has(sub.id) ? '- Summary' : '+ Summary'}
 						</button>
-					</div>
-					<div class="card-decision">
-						{#if sub.accepted}
-							<form method="POST" action="?/setWaitlist">
-								<input type="hidden" name="submission_id" value={sub.id} />
-								<input type="hidden" name="waitlisted" value="true" />
-								<button type="submit" class="decision-btn btn-waitlist">Waitlist</button>
-							</form>
+						</div>
+						<div class="card-decision">
 							<form method="POST" action="?/accept">
 								<input type="hidden" name="submission_id" value={sub.id} />
-								<input type="hidden" name="accepted" value="false" />
-								<button type="submit" class="decision-btn btn-reject">Reject</button>
+								<button type="submit" class="decision-btn btn-accept" disabled={sub.decision === 'accepted'}>
+									Accept
+								</button>
 							</form>
-						{:else if sub.waitlisted}
-							<form method="POST" action="?/accept">
+							<form method="POST" action="?/reject">
 								<input type="hidden" name="submission_id" value={sub.id} />
-								<input type="hidden" name="accepted" value="true" />
-								<button type="submit" class="decision-btn btn-accept">Accept</button>
+								<button type="submit" class="decision-btn btn-reject" disabled={sub.decision === 'rejected'}>
+									Reject
+								</button>
 							</form>
-							<form method="POST" action="?/setWaitlist">
+							<form method="POST" action="?/review">
 								<input type="hidden" name="submission_id" value={sub.id} />
-								<input type="hidden" name="waitlisted" value="false" />
-								<button type="submit" class="decision-btn btn-reject">Reject</button>
+								<button type="submit" class="decision-btn btn-review" disabled={sub.decision === 'review'}>
+									Review
+								</button>
 							</form>
-						{:else}
-							<form method="POST" action="?/setWaitlist">
-								<input type="hidden" name="submission_id" value={sub.id} />
-								<input type="hidden" name="waitlisted" value="true" />
-								<button type="submit" class="decision-btn btn-waitlist">Waitlist</button>
-							</form>
-							<form method="POST" action="?/accept">
-								<input type="hidden" name="submission_id" value={sub.id} />
-								<input type="hidden" name="accepted" value="true" />
-								<button type="submit" class="decision-btn btn-accept">Accept</button>
-							</form>
-						{/if}
-						{#if data.isAdmin}
-							<form method="POST" action="?/delete" onsubmit={(e) => { if (!confirm(`Delete submission by ${sub.lastName}, ${sub.firstName}?`)) e.preventDefault(); }}>
-								<input type="hidden" name="submission_id" value={sub.id} />
-								<button type="submit" class="decision-btn btn-delete">Delete</button>
-							</form>
-						{/if}
+								{#if data.isSuperAdmin}
+									<form method="POST" action="?/delete" onsubmit={(e) => { if (!confirm(`Delete submission by ${sub.lastName}, ${sub.firstName}?`)) e.preventDefault(); }}>
+										<input type="hidden" name="submission_id" value={sub.id} />
+									<button type="submit" class="decision-btn btn-delete">Delete</button>
+								</form>
+							{/if}
 					</div>
 				</div>
 
@@ -303,7 +302,7 @@
 
 	.stats-grid {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(5, 1fr);
 		gap: 1rem;
 		margin-bottom: 2rem;
 	}
@@ -332,12 +331,16 @@
 		color: var(--color-accent-green);
 	}
 
-	.stat-waitlist .stat-value {
-		color: #d97706;
+	.stat-pending .stat-value {
+		color: #111827;
 	}
 
 	.stat-danger .stat-value {
 		color: #e53e3e;
+	}
+
+	.stat-review .stat-value {
+		color: #d97706;
 	}
 
 	.filters {
@@ -385,7 +388,15 @@
 		border-left: 4px solid var(--color-accent-green);
 	}
 
-	.submission-card.card-waitlisted {
+	.submission-card.card-rejected {
+		border-left: 4px solid #e53e3e;
+	}
+
+	.submission-card.card-pending {
+		border-left: 4px solid #111827;
+	}
+
+	.submission-card.card-review {
 		border-left: 4px solid #d97706;
 	}
 
@@ -515,14 +526,19 @@
 		color: white;
 	}
 
-	.btn-waitlist {
+	.btn-reject {
+		background: #e53e3e;
+		color: white;
+	}
+
+	.btn-review {
 		background: #d97706;
 		color: white;
 	}
 
-	.btn-reject {
-		background: #e53e3e;
-		color: white;
+	.decision-btn:disabled {
+		opacity: 0.55;
+		cursor: default;
 	}
 
 	.btn-delete {
@@ -536,7 +552,10 @@
 		color: white;
 	}
 
-	.status-badge {
+	.status-pill {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
 		padding: 0.35rem 0.8rem;
 		border-radius: 9999px;
 		font-size: 0.82rem;
@@ -545,18 +564,47 @@
 		letter-spacing: 0.03em;
 	}
 
-	.badge-accepted {
+	.status-dot {
+		width: 0.6rem;
+		height: 0.6rem;
+		border-radius: 50%;
+		display: inline-block;
+	}
+
+	.dot-green {
+		background: var(--color-accent-green);
+	}
+
+	.dot-red {
+		background: #e53e3e;
+	}
+
+	.dot-pending {
+		background: white;
+		border: 2px solid #111827;
+	}
+
+	.dot-review {
+		background: #d97706;
+	}
+
+	.status-accepted {
 		background: var(--color-accent-green);
 		color: white;
 	}
 
-	.badge-waitlist {
-		background: #d97706;
+	.status-rejected {
+		background: #e53e3e;
 		color: white;
 	}
 
-	.badge-rejected {
-		background: #e53e3e;
+	.status-pending {
+		background: #111827;
+		color: white;
+	}
+
+	.status-review {
+		background: #d97706;
 		color: white;
 	}
 
