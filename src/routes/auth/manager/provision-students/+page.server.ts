@@ -4,6 +4,25 @@ import { prisma } from '$lib/server/db';
 import { hasRole, createUser, generateRandomPassword } from '$lib/server/auth';
 import { sendEmail, welcomeUserEmail } from '$lib/server/email';
 import { config } from '$lib/config';
+import type { call_submissions } from '@prisma/client';
+
+async function upsertStudentRecord(sub: call_submissions) {
+	const existing = await prisma.students.findFirst({ where: { email: sub.email } });
+	const data = {
+		first_name: sub.first_name,
+		last_name: sub.last_name,
+		email: sub.email,
+		nationality: sub.nationality,
+		gender: sub.gender.slice(0, 2),
+		university: sub.university,
+		residence: sub.country,
+	};
+	if (existing) {
+		await prisma.students.update({ where: { id: existing.id }, data });
+	} else {
+		await prisma.students.create({ data });
+	}
+}
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.session || !hasRole(locals.session, 'admin')) {
@@ -93,6 +112,7 @@ export const actions: Actions = {
 					roleNames: ['student'],
 					grantedBy: locals.session.userId,
 				});
+				await upsertStudentRecord(sub);
 				await sendEmail(welcomeUserEmail({ name, email: sub.email, temporaryPassword: password, loginUrl }));
 				created++;
 			} catch (err) {
@@ -146,6 +166,7 @@ export const actions: Actions = {
 			roleNames: ['student'],
 			grantedBy: locals.session.userId,
 		});
+		await upsertStudentRecord(sub);
 
 		const loginUrl = `${url.origin}/auth/login`;
 		await sendEmail(welcomeUserEmail({ name, email: sub.email, temporaryPassword: password, loginUrl }));
