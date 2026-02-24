@@ -39,6 +39,14 @@
 						</svg>
 						Users
 					</a>
+					<a href="/auth/manager/provision-students" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/manager/provision-students' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+							<circle cx="12" cy="7" r="4"></circle>
+							<polyline points="16 11 18 13 22 9"></polyline>
+						</svg>
+						Provision Students
+					</a>
 				{/if}
 				{#if data.session?.roles?.includes('admin') || data.session?.roles?.includes('program-admin')}
 					<a href="/auth/submissions" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/submissions' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
