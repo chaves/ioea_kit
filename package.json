@@ -23,7 +23,6 @@
 		"@types/nodemailer": "^7.0.4",
 		"autoprefixer": "^10.4.22",
 		"postcss": "^8.5.6",
-		"sharp": "^0.34.5",
 		"svelte": "^5.43.8",
 		"svelte-check": "^4.3.4",
 		"tailwindcss": "^3.4.17",
@@ -31,7 +30,13 @@
 		"typescript": "^5.9.3",
 		"vite": "^7.2.2"
 	},
+	"optionalDependencies": {
+		"@img/sharp-linux-x64": "^0.34.0",
+		"@img/sharp-darwin-arm64": "^0.34.0",
+		"@img/sharp-darwin-x64": "^0.34.0"
+	},
 	"dependencies": {
+		"sharp": "^0.34.5",
 		"@prisma/adapter-mariadb": "^7.0.1",
 		"@prisma/client": "^6.19.0",
 		"@types/bcryptjs": "^2.4.6",
