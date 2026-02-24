@@ -13,13 +13,44 @@
 		if (roles.includes('student')) return 'Student';
 		return 'User';
 	});
+
+	let mobileOpen = $state(false);
+
+	// Close sidebar on route change
+	$effect(() => {
+		$page.url.pathname;
+		mobileOpen = false;
+	});
 </script>
 
 {#if isStandalonePage}
 	{@render children()}
 {:else}
 	<div class="flex min-h-screen">
-		<aside class="w-[280px] min-w-[280px] bg-primary-dark text-white flex flex-col fixed top-0 left-0 bottom-0 shrink-0">
+		<!-- Mobile top bar -->
+		<div class="md:hidden fixed top-0 left-0 right-0 z-40 bg-primary-dark text-white flex items-center justify-between px-4 h-14 border-b border-white/10">
+			<span class="font-semibold text-sm">IOEA — {userRoleLabel()}</span>
+			<button
+				type="button"
+				class="p-2 rounded-md hover:bg-white/10 transition-colors"
+				onclick={() => mobileOpen = !mobileOpen}
+				aria-label="Toggle menu"
+			>
+				{#if mobileOpen}
+					<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+				{:else}
+					<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+				{/if}
+			</button>
+		</div>
+
+		<!-- Backdrop (mobile) -->
+		{#if mobileOpen}
+			<!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+			<div class="md:hidden fixed inset-0 z-40 bg-black/50" onclick={() => mobileOpen = false}></div>
+		{/if}
+
+		<aside class="w-[280px] min-w-[280px] bg-primary-dark text-white flex flex-col fixed top-0 left-0 bottom-0 shrink-0 z-50 transition-transform duration-300 {mobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0">
 			<div class="p-6 border-b border-white/10 flex items-center gap-4">
 				<a href="/" class="no-underline">
 					<img src="/site-logo.png" alt="IOEA" class="h-10 brightness-0 invert" onerror={(e) => e.currentTarget.outerHTML = 'IOEA'} />
@@ -94,7 +125,7 @@
 			</div>
 		</aside>
 
-		<main class="flex-1 ml-[280px] bg-bg min-h-screen">
+		<main class="flex-1 md:ml-[280px] bg-bg min-h-screen pt-14 md:pt-0">
 			{@render children()}
 		</main>
 	</div>
