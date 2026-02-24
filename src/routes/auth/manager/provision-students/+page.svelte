@@ -21,6 +21,7 @@
 
 	let { data, form }: Props = $props();
 	let loading = $state(false);
+	let loadingSync = $state(false);
 </script>
 
 <svelte:head>
@@ -92,6 +93,28 @@
 			</div>
 		{/if}
 
+		<div class="sync-action">
+			<form
+				method="POST"
+				action="?/syncStudents"
+				use:enhance={() => {
+					loadingSync = true;
+					return async ({ update }) => {
+						await update();
+						loadingSync = false;
+					};
+				}}
+			>
+				<button type="submit" class="btn btn-secondary" disabled={loadingSync}>
+					{loadingSync ? 'Syncing…' : 'Sync students table'}
+				</button>
+			</form>
+			<p class="hint">
+				Prefills / updates the <code>students</code> table from accepted submissions for all {data.stats.total} accepted students,
+				regardless of account status. Run this if you provisioned accounts before this feature was added.
+			</p>
+		</div>
+
 		<table class="data-table">
 			<thead>
 				<tr>
@@ -152,6 +175,25 @@
 
 	.stat-value.pending {
 		color: #d97706;
+	}
+
+	.sync-action {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+		padding: 1rem 1.5rem;
+		background: #f8faff;
+		border: 1px solid var(--color-border);
+		border-radius: 0.5rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.sync-action code {
+		font-family: monospace;
+		font-size: 0.85em;
+		background: #e8edf5;
+		padding: 0.1em 0.35em;
+		border-radius: 3px;
 	}
 
 	.bulk-action {

@@ -173,4 +173,33 @@ export const actions: Actions = {
 
 		return { success: true, message: `Account created for ${name}. Welcome email sent to ${sub.email}.` };
 	},
+
+	syncStudents: async ({ locals }) => {
+		if (!locals.session || !hasRole(locals.session, 'admin')) {
+			return fail(403, { error: 'Access denied.' });
+		}
+
+		const accepted = await prisma.call_submissions.findMany({
+			where: { call_year: config.currentYear, accepted: true, waitlisted: false },
+		});
+
+		let synced = 0;
+		const errors: string[] = [];
+
+		for (const sub of accepted) {
+			try {
+				await upsertStudentRecord(sub);
+				synced++;
+			} catch (err) {
+				errors.push(sub.email);
+				console.error(`Failed to sync students record for ${sub.email}:`, err);
+			}
+		}
+
+		const msg = `${synced} student record${synced !== 1 ? 's' : ''} synced to the students table.`;
+		return {
+			success: true,
+			message: errors.length > 0 ? `${msg} Errors on: ${errors.join(', ')}.` : msg,
+		};
+	},
 };
