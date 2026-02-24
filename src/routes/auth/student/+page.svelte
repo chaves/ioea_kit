@@ -303,14 +303,23 @@
 					>
 				</div>
 				<div class="form-group">
-					<label for="paperFile" class="form-label">
-						Paper PDF
-						{#if data.paper.hasFile}
-							<span class="file-badge">File uploaded</span>
-						{/if}
+					<label class="form-label">Paper PDF</label>
+					{#if data.paper.hasFile}
+						<div class="paper-current">
+							<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+								<polyline points="14 2 14 8 20 8"></polyline>
+							</svg>
+							<a href="/auth/student/paper" target="_blank" class="paper-download-link">
+								Download your current paper
+							</a>
+						</div>
+					{/if}
+					<label for="paperFile" class="upload-label">
+						{data.paper.hasFile ? 'Upload a new version' : 'Upload your paper'}
 					</label>
 					<input type="file" id="paperFile" name="paperFile" class="form-input" accept=".pdf" />
-					<p class="photo-hint">PDF only · max 5 MB · replaces previous upload</p>
+					<p class="photo-hint">PDF only · max 5 MB{data.paper.hasFile ? ' · replaces the current file' : ''}</p>
 				</div>
 				<button type="submit" class="btn btn-primary" disabled={loadingPaper}>
 					{loadingPaper ? 'Saving…' : 'Save paper'}
@@ -565,6 +574,37 @@
 	}
 
 	/* Paper */
+	.paper-current {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.6rem 1rem;
+		background: #f0fdf4;
+		border: 1px solid #bbf7d0;
+		border-radius: 0.375rem;
+		margin-bottom: 1rem;
+		color: #166534;
+	}
+
+	.paper-download-link {
+		font-weight: 600;
+		color: #166534;
+		text-decoration: underline;
+		text-underline-offset: 2px;
+	}
+
+	.paper-download-link:hover {
+		color: #14532d;
+	}
+
+	.upload-label {
+		display: block;
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: var(--color-text, #374151);
+		margin-bottom: 0.4rem;
+	}
+
 	.file-badge {
 		display: inline-block;
 		margin-left: 0.5rem;
