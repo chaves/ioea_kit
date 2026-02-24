@@ -3,7 +3,7 @@ import type { PageServerLoad, Actions } from './$types';
 import { prisma } from '$lib/server/db';
 import { hasAnyRole } from '$lib/server/auth';
 import { config } from '$lib/config';
-import { writeFile, mkdir } from 'fs/promises';
+import { writeFile, mkdir, copyFile, access } from 'fs/promises';
 import { join } from 'path';
 import sharp from 'sharp';
 
@@ -291,6 +291,39 @@ export const actions: Actions = {
 	validatePaper: async ({ locals }) => {
 		if (!locals.session || !hasAnyRole(locals.session, ['admin', 'student'])) {
 			return fail(403, { error: 'Access denied.', action: 'validatePaper' });
+		}
+
+		// If the student has not re-uploaded their paper, copy the original call
+		// submission file into the student files directory.
+		const submission = await prisma.call_submissions.findFirst({
+			where: { email: locals.session.email, call_year: config.currentYear, accepted: true, waitlisted: false },
+			select: { id: true, paper: true },
+		});
+
+		if (submission?.paper) {
+			const slug = slugify(locals.session.email);
+			const studentFilename = `${slug}-paper.pdf`;
+			const studentPath = join(PAPERS_DIR, studentFilename);
+
+			try {
+				await access(studentPath);
+				// File already in student directory — nothing to copy
+			} catch {
+				// Not in student directory — try to copy from call directory
+				const callPath = join('uploads', 'call', String(config.currentYear), submission.paper);
+				try {
+					await access(callPath);
+					await mkdir(PAPERS_DIR, { recursive: true });
+					await copyFile(callPath, studentPath);
+					// Update submission to point to the slug-based student filename
+					await prisma.call_submissions.update({
+						where: { id: submission.id },
+						data: { paper: studentFilename },
+					});
+				} catch {
+					// Source file not found — leave as-is
+				}
+			}
 		}
 
 		await prisma.students_validations.upsert({
