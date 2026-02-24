@@ -3,10 +3,22 @@ import type { PageServerLoad, Actions } from './$types';
 import { prisma } from '$lib/server/db';
 import { hasAnyRole } from '$lib/server/auth';
 import { config } from '$lib/config';
+import { writeFile, mkdir } from 'fs/promises';
+import { join } from 'path';
+import sharp from 'sharp';
+
+const PHOTOS_DIR = join('uploads', 'students', 'photos');
+const PAPERS_DIR = join('uploads', 'students', String(config.currentYear));
+const MAX_PHOTO_SIZE = 8 * 1024 * 1024; // 8 MB input
+const MAX_PAPER_SIZE = 5 * 1024 * 1024; // 5 MB
 
 function formatDateForInput(dt: Date | null): string {
 	if (!dt || isNaN(dt.getTime()) || dt.getFullYear() < 100) return '';
 	return dt.toISOString().slice(0, 10);
+}
+
+function slugify(email: string): string {
+	return email.replace(/[@.]/g, '-').replace(/[^a-z0-9-]/gi, '');
 }
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -19,14 +31,13 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	const submission = await prisma.call_submissions.findFirst({
 		where: { email: session.email, call_year: currentYear, accepted: true, waitlisted: false },
-		select: {
-			first_name: true,
-			last_name: true,
-			email: true,
-			university: true,
-			title: true,
-			summary: true,
-		},
+		select: { title: true, summary: true, paper: true },
+	});
+
+	// students record holds editable profile fields
+	const studentRecord = await prisma.students.findFirst({
+		where: { email: session.email },
+		select: { id: true, first_name: true, last_name: true, university: true, photo: true },
 	});
 
 	const travel = await prisma.students_travels.findFirst({
@@ -35,14 +46,19 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	return {
 		year: currentYear,
-		submission: submission
+		hasSubmission: !!submission,
+		profile: {
+			firstName: studentRecord?.first_name ?? session.name.split(' ')[0] ?? '',
+			lastName: studentRecord?.last_name ?? session.name.split(' ').slice(1).join(' ') ?? '',
+			email: session.email,
+			university: studentRecord?.university ?? '',
+			photo: studentRecord?.photo ?? null,
+		},
+		paper: submission
 			? {
-					firstName: submission.first_name,
-					lastName: submission.last_name,
-					email: submission.email,
-					university: submission.university ?? '',
 					title: submission.title ?? '',
 					summary: submission.summary ?? '',
+					hasFile: !!(submission.paper && submission.paper.length > 0),
 				}
 			: null,
 		travel: travel
@@ -67,6 +83,76 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
+	updateProfile: async ({ locals, request }) => {
+		if (!locals.session || !hasAnyRole(locals.session, ['admin', 'student'])) {
+			return fail(403, { error: 'Access denied.', action: 'updateProfile' });
+		}
+
+		const formData = await request.formData();
+		const firstName = (formData.get('firstName') as string)?.trim() ?? '';
+		const lastName = (formData.get('lastName') as string)?.trim() ?? '';
+		const university = (formData.get('university') as string)?.trim() ?? '';
+		const photoFile = formData.get('photo') as File | null;
+
+		if (!firstName || !lastName) {
+			return fail(400, { error: 'First and last name are required.', action: 'updateProfile' });
+		}
+
+		const studentRecord = await prisma.students.findFirst({
+			where: { email: locals.session.email },
+		});
+
+		if (!studentRecord) {
+			return fail(404, { error: 'Student record not found. Please contact the coordinator.', action: 'updateProfile' });
+		}
+
+		const updateData: { first_name: string; last_name: string; university: string; photo?: string } = {
+			first_name: firstName,
+			last_name: lastName,
+			university,
+		};
+
+		// Handle photo upload
+		if (photoFile && photoFile.size > 0) {
+			if (photoFile.size > MAX_PHOTO_SIZE) {
+				return fail(400, { error: 'Photo must be less than 8 MB.', action: 'updateProfile' });
+			}
+
+			const type = photoFile.type;
+			if (!['image/jpeg', 'image/png', 'image/webp'].includes(type)) {
+				return fail(400, { error: 'Photo must be JPEG, PNG, or WebP.', action: 'updateProfile' });
+			}
+
+			await mkdir(PHOTOS_DIR, { recursive: true });
+
+			const slug = slugify(locals.session.email);
+			const filename = `${slug}.jpg`;
+			const outputPath = join(PHOTOS_DIR, filename);
+
+			const buffer = Buffer.from(await photoFile.arrayBuffer());
+			const processed = await sharp(buffer)
+				.resize(600, 600, { fit: 'inside', withoutEnlargement: true })
+				.jpeg({ quality: 85 })
+				.toBuffer();
+
+			await writeFile(outputPath, processed);
+			updateData.photo = filename;
+		}
+
+		await prisma.students.update({
+			where: { id: studentRecord.id },
+			data: updateData,
+		});
+
+		// Keep users.name in sync
+		await prisma.users.update({
+			where: { id: locals.session.userId },
+			data: { name: `${firstName} ${lastName}` },
+		});
+
+		return { success: true, message: 'Profile saved.', action: 'updateProfile' };
+	},
+
 	updatePaper: async ({ locals, request }) => {
 		if (!locals.session || !hasAnyRole(locals.session, ['admin', 'student'])) {
 			return fail(403, { error: 'Access denied.', action: 'updatePaper' });
@@ -75,23 +161,39 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const title = (formData.get('title') as string)?.trim() ?? '';
 		const summary = (formData.get('summary') as string)?.trim() ?? '';
+		const paperFile = formData.get('paperFile') as File | null;
 
 		const submission = await prisma.call_submissions.findFirst({
-			where: {
-				email: locals.session.email,
-				call_year: config.currentYear,
-				accepted: true,
-				waitlisted: false,
-			},
+			where: { email: locals.session.email, call_year: config.currentYear, accepted: true, waitlisted: false },
 		});
 
 		if (!submission) {
-			return fail(404, { error: 'No accepted submission found for your account.', action: 'updatePaper' });
+			return fail(404, { error: 'No accepted submission found.', action: 'updatePaper' });
+		}
+
+		const updateData: { title: string; summary: string; paper?: string } = { title, summary };
+
+		if (paperFile && paperFile.size > 0) {
+			if (paperFile.size > MAX_PAPER_SIZE) {
+				return fail(400, { error: 'Paper file must be less than 5 MB.', action: 'updatePaper' });
+			}
+			if (!paperFile.name.toLowerCase().endsWith('.pdf')) {
+				return fail(400, { error: 'Paper must be a PDF file.', action: 'updatePaper' });
+			}
+
+			await mkdir(PAPERS_DIR, { recursive: true });
+
+			const slug = slugify(locals.session.email);
+			const filename = `${slug}-paper.pdf`;
+			const buffer = Buffer.from(await paperFile.arrayBuffer());
+			await writeFile(join(PAPERS_DIR, filename), buffer);
+
+			updateData.paper = filename;
 		}
 
 		await prisma.call_submissions.update({
 			where: { id: submission.id },
-			data: { title, summary },
+			data: updateData,
 		});
 
 		return { success: true, message: 'Paper information saved.', action: 'updatePaper' };
@@ -125,18 +227,13 @@ export const actions: Actions = {
 			const existing = await prisma.students_travels.findFirst({
 				where: { student_id: String(locals.session.userId) },
 			});
-
 			if (existing) {
-				await prisma.students_travels.update({
-					where: { id: existing.id },
-					data: travelData,
-				});
+				await prisma.students_travels.update({ where: { id: existing.id }, data: travelData });
 			} else {
 				await prisma.students_travels.create({
 					data: { ...travelData, student_id: String(locals.session.userId) },
 				});
 			}
-
 			return { success: true, message: 'Travel information saved.', action: 'updateTravel' };
 		} catch (err) {
 			console.error('Error saving travel:', err);
