@@ -45,7 +45,10 @@ export const actions: Actions = {
 
 		// Redirect based on role
 		if (hasAnyRole(session, ['admin'])) {
-			throw redirect(303, '/auth/manager');
+			throw redirect(303, '/auth/manager/users');
+		}
+		if (hasAnyRole(session, ['student'])) {
+			throw redirect(303, '/auth/student');
 		}
 		throw redirect(303, '/auth/reviewer');
 	},
