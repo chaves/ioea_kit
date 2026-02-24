@@ -21,6 +21,12 @@ function slugify(email: string): string {
 	return email.replace(/[@.]/g, '-').replace(/[^a-z0-9-]/gi, '');
 }
 
+async function clearValidation(email: string, year: number, section: string) {
+	await prisma.students_validations.deleteMany({
+		where: { student_email: email, call_year: year, section },
+	});
+}
+
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.session || !hasAnyRole(locals.session, ['admin', 'student'])) {
 		throw redirect(302, '/auth/login');
@@ -43,6 +49,12 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const travel = await prisma.students_travels.findFirst({
 		where: { student_id: String(session.userId) },
 	});
+
+	const validations = await prisma.students_validations.findMany({
+		where: { student_email: session.email, call_year: currentYear },
+		select: { section: true },
+	});
+	const validatedSections = validations.map((v) => v.section);
 
 	return {
 		year: currentYear,
@@ -75,6 +87,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 					departureTransfer: travel.departure_transfer,
 				}
 			: null,
+		validatedSections,
 		transportOptions: config.travel.transport,
 		locationOptions: config.travel.locations,
 		arrivalTransferOptions: config.transfer.arrival,
@@ -150,6 +163,9 @@ export const actions: Actions = {
 			data: { name: `${firstName} ${lastName}` },
 		});
 
+		// Clear profile validation — student must re-validate after changes
+		await clearValidation(locals.session.email, config.currentYear, 'profile');
+
 		return { success: true, message: 'Profile saved.', action: 'updateProfile' };
 	},
 
@@ -175,10 +191,10 @@ export const actions: Actions = {
 
 		if (paperFile && paperFile.size > 0) {
 			if (paperFile.size > MAX_PAPER_SIZE) {
-				return fail(400, { error: 'Paper file must be less than 5 MB.', action: 'updatePaper' });
+				return fail(400, { error: 'File must be less than 5 MB.', action: 'updatePaper' });
 			}
 			if (!paperFile.name.toLowerCase().endsWith('.pdf')) {
-				return fail(400, { error: 'Paper must be a PDF file.', action: 'updatePaper' });
+				return fail(400, { error: 'File must be a PDF.', action: 'updatePaper' });
 			}
 
 			await mkdir(PAPERS_DIR, { recursive: true });
@@ -195,6 +211,9 @@ export const actions: Actions = {
 			where: { id: submission.id },
 			data: updateData,
 		});
+
+		// Clear paper validation — student must re-validate after changes
+		await clearValidation(locals.session.email, config.currentYear, 'paper');
 
 		return { success: true, message: 'Paper information saved.', action: 'updatePaper' };
 	},
@@ -234,10 +253,86 @@ export const actions: Actions = {
 					data: { ...travelData, student_id: String(locals.session.userId) },
 				});
 			}
+
+			// Clear travel validation — student must re-validate after changes
+			await clearValidation(locals.session.email, config.currentYear, 'travel');
+
 			return { success: true, message: 'Travel information saved.', action: 'updateTravel' };
 		} catch (err) {
 			console.error('Error saving travel:', err);
 			return fail(500, { error: 'Failed to save travel information.', action: 'updateTravel' });
 		}
+	},
+
+	validateProfile: async ({ locals }) => {
+		if (!locals.session || !hasAnyRole(locals.session, ['admin', 'student'])) {
+			return fail(403, { error: 'Access denied.', action: 'validateProfile' });
+		}
+
+		await prisma.students_validations.upsert({
+			where: {
+				student_email_call_year_section: {
+					student_email: locals.session.email,
+					call_year: config.currentYear,
+					section: 'profile',
+				},
+			},
+			create: {
+				student_email: locals.session.email,
+				call_year: config.currentYear,
+				section: 'profile',
+			},
+			update: { validated_at: new Date() },
+		});
+
+		return { success: true, message: 'Profile validated.', action: 'validateProfile' };
+	},
+
+	validatePaper: async ({ locals }) => {
+		if (!locals.session || !hasAnyRole(locals.session, ['admin', 'student'])) {
+			return fail(403, { error: 'Access denied.', action: 'validatePaper' });
+		}
+
+		await prisma.students_validations.upsert({
+			where: {
+				student_email_call_year_section: {
+					student_email: locals.session.email,
+					call_year: config.currentYear,
+					section: 'paper',
+				},
+			},
+			create: {
+				student_email: locals.session.email,
+				call_year: config.currentYear,
+				section: 'paper',
+			},
+			update: { validated_at: new Date() },
+		});
+
+		return { success: true, message: 'Paper validated.', action: 'validatePaper' };
+	},
+
+	validateTravel: async ({ locals }) => {
+		if (!locals.session || !hasAnyRole(locals.session, ['admin', 'student'])) {
+			return fail(403, { error: 'Access denied.', action: 'validateTravel' });
+		}
+
+		await prisma.students_validations.upsert({
+			where: {
+				student_email_call_year_section: {
+					student_email: locals.session.email,
+					call_year: config.currentYear,
+					section: 'travel',
+				},
+			},
+			create: {
+				student_email: locals.session.email,
+				call_year: config.currentYear,
+				section: 'travel',
+			},
+			update: { validated_at: new Date() },
+		});
+
+		return { success: true, message: 'Travel information validated.', action: 'validateTravel' };
 	},
 };

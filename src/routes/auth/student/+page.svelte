@@ -36,6 +36,7 @@
 			profile: Profile;
 			paper: Paper | null;
 			travel: Travel | null;
+			validatedSections: string[];
 			transportOptions: string[];
 			locationOptions: Record<number, string>;
 			arrivalTransferOptions: Record<number, string>;
@@ -50,8 +51,28 @@
 	let loadingProfile = $state(false);
 	let loadingPaper = $state(false);
 	let loadingTravel = $state(false);
+	let loadingValidate = $state('');
 
-	// Photo crop state
+	// Optimistic validation state — synced from server on each load
+	let validatedSections = $state<string[]>([...data.validatedSections]);
+
+	$effect(() => {
+		validatedSections = [...data.validatedSections];
+	});
+
+	// Update optimistically on form results
+	$effect(() => {
+		if (form?.success) {
+			if (form.action === 'validateProfile') validatedSections = [...validatedSections, 'profile'].filter((v, i, a) => a.indexOf(v) === i);
+			if (form.action === 'validatePaper') validatedSections = [...validatedSections, 'paper'].filter((v, i, a) => a.indexOf(v) === i);
+			if (form.action === 'validateTravel') validatedSections = [...validatedSections, 'travel'].filter((v, i, a) => a.indexOf(v) === i);
+			if (form.action === 'updateProfile') validatedSections = validatedSections.filter(s => s !== 'profile');
+			if (form.action === 'updatePaper') validatedSections = validatedSections.filter(s => s !== 'paper');
+			if (form.action === 'updateTravel') validatedSections = validatedSections.filter(s => s !== 'travel');
+		}
+	});
+
+	// Photo crop state — declared early so canValidateProfile can reference croppedPreviewUrl
 	let cropperLoaded = $state(false);
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let cropperInstance: any = null;
@@ -60,6 +81,29 @@
 	let selectedImageUrl = $state('');
 	let croppedBlob: Blob | null = null;
 	let croppedPreviewUrl = $state('');
+
+	const profileValidated = $derived(validatedSections.includes('profile'));
+	const paperValidated = $derived(validatedSections.includes('paper'));
+	const travelValidated = $derived(validatedSections.includes('travel'));
+
+	// Profile is only validatable if a photo exists or was just cropped
+	const canValidateProfile = $derived(
+		!!(data.profile.photo || croppedPreviewUrl)
+	);
+
+	// Paper is validatable if title is set and a file exists
+	const canValidatePaper = $derived(
+		!!(data.paper && data.paper.title && data.paper.hasFile)
+	);
+
+	// Travel is validatable if at least an arrival date is set
+	const canValidateTravel = $derived(
+		!!(data.travel && data.travel.arrivalDate)
+	);
+
+	const allValidated = $derived(
+		profileValidated && (data.paper === null || paperValidated) && travelValidated
+	);
 	let photoFileInput: HTMLInputElement | null = null;
 
 	const photoUrl = $derived(
@@ -94,7 +138,6 @@
 
 	$effect(() => {
 		if (showCropModal && cropImgEl && cropperLoaded && selectedImageUrl) {
-			// Tiny delay to ensure the img src has rendered
 			setTimeout(() => {
 				cropperInstance?.destroy();
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -147,7 +190,7 @@
 	<header class="auth-header">
 		<div>
 			<h1>Student Area — IOEA {data.year}</h1>
-			<p class="subtitle">Please complete all sections before the deadline.</p>
+			<p class="subtitle">Complete all sections and validate each one before the deadline.</p>
 		</div>
 	</header>
 
@@ -165,9 +208,177 @@
 		</div>
 	{/if}
 
+	<!-- ── DASHBOARD ───────────────────────────────────────── -->
+	<div class="dashboard">
+		{#if allValidated}
+			<div class="dashboard-complete">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+					<polyline points="22 4 12 14.01 9 11.01"></polyline>
+				</svg>
+				All sections validated — thank you!
+			</div>
+		{/if}
+
+		<!-- Profile card -->
+		<div class="dash-card {profileValidated ? 'validated' : ''}">
+			<div class="dash-card-icon">
+				{#if photoUrl}
+					<img src={photoUrl} alt="" class="dash-avatar" />
+				{:else}
+					<div class="dash-avatar-placeholder">{initials}</div>
+				{/if}
+			</div>
+			<div class="dash-card-body">
+				<div class="dash-card-title">
+					Profile
+					{#if profileValidated}
+						<span class="badge-validated">
+							<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+							Validated
+						</span>
+					{:else}
+						<span class="badge-pending">Pending</span>
+					{/if}
+				</div>
+				<p class="dash-card-desc">
+					{data.profile.firstName} {data.profile.lastName}
+					{#if data.profile.university} · {data.profile.university}{/if}
+					{#if !data.profile.photo && !croppedPreviewUrl}
+						<span class="hint-missing"> · Photo required</span>
+					{/if}
+				</p>
+			</div>
+			<div class="dash-card-actions">
+				<a href="#profile" class="btn btn-secondary btn-sm">Edit</a>
+				{#if !profileValidated}
+					<form method="POST" action="?/validateProfile" use:enhance={() => {
+						loadingValidate = 'profile';
+						return async ({ update }) => { await update(); loadingValidate = ''; };
+					}}>
+						<button
+							type="submit"
+							class="btn btn-validate btn-sm"
+							disabled={!canValidateProfile || loadingValidate === 'profile'}
+							title={!canValidateProfile ? 'Upload a photo first' : ''}
+						>
+							{loadingValidate === 'profile' ? '…' : 'Validate'}
+						</button>
+					</form>
+				{/if}
+			</div>
+		</div>
+
+		<!-- Paper card -->
+		{#if data.paper !== null}
+			<div class="dash-card {paperValidated ? 'validated' : ''}">
+				<div class="dash-card-icon">
+					<div class="dash-icon-wrap {paperValidated ? 'icon-green' : 'icon-gray'}">
+						<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+							<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+							<polyline points="14 2 14 8 20 8"></polyline>
+						</svg>
+					</div>
+				</div>
+				<div class="dash-card-body">
+					<div class="dash-card-title">
+						Paper / Project
+						{#if paperValidated}
+							<span class="badge-validated">
+								<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+								Validated
+							</span>
+						{:else}
+							<span class="badge-pending">Pending</span>
+						{/if}
+					</div>
+					<p class="dash-card-desc">
+						{#if data.paper.title}
+							{data.paper.title}
+						{:else}
+							<span class="hint-missing">No title yet</span>
+						{/if}
+						{#if !data.paper.hasFile}
+							<span class="hint-missing"> · No file uploaded</span>
+						{/if}
+					</p>
+				</div>
+				<div class="dash-card-actions">
+					<a href="#paper" class="btn btn-secondary btn-sm">Edit</a>
+					{#if !paperValidated}
+						<form method="POST" action="?/validatePaper" use:enhance={() => {
+							loadingValidate = 'paper';
+							return async ({ update }) => { await update(); loadingValidate = ''; };
+						}}>
+							<button
+								type="submit"
+								class="btn btn-validate btn-sm"
+								disabled={!canValidatePaper || loadingValidate === 'paper'}
+								title={!canValidatePaper ? 'Add a title and upload a file first' : ''}
+							>
+								{loadingValidate === 'paper' ? '…' : 'Validate'}
+							</button>
+						</form>
+					{/if}
+				</div>
+			</div>
+		{/if}
+
+		<!-- Travel card -->
+		<div class="dash-card {travelValidated ? 'validated' : ''}">
+			<div class="dash-card-icon">
+				<div class="dash-icon-wrap {travelValidated ? 'icon-green' : 'icon-gray'}">
+					<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+						<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.1 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16v.92"></path>
+					</svg>
+				</div>
+			</div>
+			<div class="dash-card-body">
+				<div class="dash-card-title">
+					Travel
+					{#if travelValidated}
+						<span class="badge-validated">
+							<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+							Validated
+						</span>
+					{:else}
+						<span class="badge-pending">Pending</span>
+					{/if}
+				</div>
+				<p class="dash-card-desc">
+					{#if data.travel?.arrivalDate}
+						Arrival {data.travel.arrivalDate}
+						{#if data.travel.departureDate} · Departure {data.travel.departureDate}{/if}
+					{:else}
+						<span class="hint-missing">No travel info yet</span>
+					{/if}
+				</p>
+			</div>
+			<div class="dash-card-actions">
+				<a href="#travel" class="btn btn-secondary btn-sm">Edit</a>
+				{#if !travelValidated}
+					<form method="POST" action="?/validateTravel" use:enhance={() => {
+						loadingValidate = 'travel';
+						return async ({ update }) => { await update(); loadingValidate = ''; };
+					}}>
+						<button
+							type="submit"
+							class="btn btn-validate btn-sm"
+							disabled={!canValidateTravel || loadingValidate === 'travel'}
+							title={!canValidateTravel ? 'Fill in your arrival date first' : ''}
+						>
+							{loadingValidate === 'travel' ? '…' : 'Validate'}
+						</button>
+					</form>
+				{/if}
+			</div>
+		</div>
+	</div>
+
 	<!-- ── PROFILE ────────────────────────────────────────── -->
-	<section class="section-card">
+	<section id="profile" class="section-card">
 		<h2 class="section-title">Profile</h2>
+		<p class="section-desc">Your photo is required to validate this section.</p>
 
 		{#if form?.action === 'updateProfile'}
 			<div class="alert {form.success ? 'alert-success' : 'alert-error'}">
@@ -215,6 +426,9 @@
 						onchange={onPhotoSelected}
 					/>
 					<p class="photo-hint">JPEG / PNG / WebP · resized to 600 px</p>
+					{#if !data.profile.photo && !croppedPreviewUrl}
+						<p class="photo-required">Photo required to validate</p>
+					{/if}
 				</div>
 
 				<!-- Fields column -->
@@ -270,9 +484,9 @@
 
 	<!-- ── PAPER ─────────────────────────────────────────── -->
 	{#if data.paper !== null}
-		<section class="section-card">
-			<h2 class="section-title">Paper</h2>
-			<p class="section-desc">Title and abstract will appear in the program booklet.</p>
+		<section id="paper" class="section-card">
+			<h2 class="section-title">Paper / Project</h2>
+			<p class="section-desc">Title and abstract will appear in the program booklet. Upload your PDF to validate.</p>
 
 			{#if form?.action === 'updatePaper'}
 				<div class="alert {form.success ? 'alert-success' : 'alert-error'}">
@@ -303,7 +517,7 @@
 					>
 				</div>
 				<div class="form-group">
-					<label class="form-label">Paper PDF</label>
+					<label class="form-label">Paper or project file</label>
 					{#if data.paper.hasFile}
 						<div class="paper-current">
 							<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -311,12 +525,12 @@
 								<polyline points="14 2 14 8 20 8"></polyline>
 							</svg>
 							<a href="/auth/student/paper" target="_blank" class="paper-download-link">
-								Download your current paper
+								Download your current file
 							</a>
 						</div>
 					{/if}
 					<label for="paperFile" class="upload-label">
-						{data.paper.hasFile ? 'Upload a new version' : 'Upload your paper'}
+						{data.paper.hasFile ? 'Upload a new version' : 'Upload your file'}
 					</label>
 					<input type="file" id="paperFile" name="paperFile" class="form-input" accept=".pdf" />
 					<p class="photo-hint">PDF only · max 5 MB{data.paper.hasFile ? ' · replaces the current file' : ''}</p>
@@ -329,7 +543,7 @@
 	{/if}
 
 	<!-- ── TRAVEL ─────────────────────────────────────────── -->
-	<section class="section-card">
+	<section id="travel" class="section-card">
 		<h2 class="section-title">Travel Information</h2>
 		<p class="section-desc">Arrival and departure details for transfer organisation.</p>
 
@@ -486,12 +700,162 @@
 
 	.notice-card p { margin: 0.25rem 0 0; font-size: 0.9rem; }
 
+	/* ── Dashboard ── */
+	.dashboard {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		margin-bottom: 2rem;
+	}
+
+	.dashboard-complete {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.875rem 1.25rem;
+		background: #f0fdf4;
+		border: 1px solid #86efac;
+		border-radius: 0.5rem;
+		color: #166534;
+		font-weight: 600;
+		font-size: 0.95rem;
+	}
+
+	.dash-card {
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+		padding: 1.1rem 1.5rem;
+		background: white;
+		border: 2px solid var(--color-border);
+		border-radius: 0.5rem;
+		transition: border-color 0.2s;
+	}
+
+	.dash-card.validated {
+		border-color: #86efac;
+		background: #f0fdf4;
+	}
+
+	.dash-card-icon {
+		flex-shrink: 0;
+	}
+
+	.dash-avatar {
+		width: 52px;
+		height: 52px;
+		border-radius: 50%;
+		object-fit: cover;
+		border: 2px solid var(--color-border);
+	}
+
+	.dash-avatar-placeholder {
+		width: 52px;
+		height: 52px;
+		border-radius: 50%;
+		background: var(--color-primary);
+		color: white;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.3rem;
+		font-weight: 700;
+	}
+
+	.dash-icon-wrap {
+		width: 52px;
+		height: 52px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.icon-green { background: #dcfce7; color: #166534; }
+	.icon-gray { background: #f3f4f6; color: #6b7280; }
+
+	.dash-card-body {
+		flex: 1;
+		min-width: 0;
+	}
+
+	.dash-card-title {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-weight: 700;
+		font-size: 1rem;
+		color: var(--color-text, #111827);
+		margin-bottom: 0.2rem;
+	}
+
+	.dash-card-desc {
+		font-size: 0.875rem;
+		color: var(--color-text-muted, #6b7280);
+		margin: 0;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.dash-card-actions {
+		display: flex;
+		gap: 0.5rem;
+		flex-shrink: 0;
+	}
+
+	.badge-validated {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		padding: 0.15rem 0.6rem;
+		background: #dcfce7;
+		color: #166534;
+		border-radius: 9999px;
+		font-size: 0.75rem;
+		font-weight: 700;
+	}
+
+	.badge-pending {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.15rem 0.6rem;
+		background: #f3f4f6;
+		color: #6b7280;
+		border-radius: 9999px;
+		font-size: 0.75rem;
+		font-weight: 600;
+	}
+
+	.hint-missing {
+		color: #dc2626;
+		font-style: italic;
+	}
+
+	.btn-validate {
+		background: var(--color-primary);
+		color: white;
+		border: none;
+		cursor: pointer;
+	}
+
+	.btn-validate:hover:not(:disabled) {
+		background: var(--color-primary-dark, #4a3860);
+	}
+
+	.btn-validate:disabled {
+		opacity: 0.45;
+		cursor: not-allowed;
+	}
+
+	/* ── Section cards ── */
 	.section-card {
 		background: white;
 		border: 1px solid var(--color-border);
 		border-radius: 0.5rem;
 		padding: 2rem;
 		margin-bottom: 1.5rem;
+		scroll-margin-top: 1.5rem;
 	}
 
 	.section-title {
@@ -563,6 +927,14 @@
 		margin: 0;
 	}
 
+	.photo-required {
+		font-size: 0.75rem;
+		color: #dc2626;
+		text-align: center;
+		margin: 0;
+		font-weight: 600;
+	}
+
 	.fields-col {
 		flex: 1;
 	}
@@ -603,17 +975,6 @@
 		font-weight: 600;
 		color: var(--color-text, #374151);
 		margin-bottom: 0.4rem;
-	}
-
-	.file-badge {
-		display: inline-block;
-		margin-left: 0.5rem;
-		padding: 0.1rem 0.5rem;
-		background: #dcfce7;
-		color: #166534;
-		border-radius: 9999px;
-		font-size: 0.75rem;
-		font-weight: 600;
 	}
 
 	textarea.form-input {
@@ -720,6 +1081,8 @@
 	}
 
 	@media (max-width: 768px) {
+		.dash-card { flex-wrap: wrap; }
+		.dash-card-actions { width: 100%; justify-content: flex-end; }
 		.profile-layout { flex-direction: column; align-items: stretch; }
 		.avatar-col { width: 100%; flex-direction: row; gap: 1rem; align-items: center; }
 		.travel-grid, .form-row { grid-template-columns: 1fr; }
