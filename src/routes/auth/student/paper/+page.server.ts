@@ -63,8 +63,8 @@ export const actions: Actions = {
 			return fail(404, { error: 'No accepted submission found.' });
 		}
 
-		if (!title) {
-			return fail(400, { error: 'Title is required.' });
+		if (!title || !summary) {
+			return fail(400, { error: 'Title and abstract are required.' });
 		}
 
 		const updateData: { title: string; summary: string; paper?: string } = { title, summary };

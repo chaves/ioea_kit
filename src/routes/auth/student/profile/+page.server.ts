@@ -55,8 +55,8 @@ export const actions: Actions = {
 		const university = (formData.get('university') as string)?.trim() ?? '';
 		const photoFile = formData.get('photo') as File | null;
 
-		if (!firstName || !lastName) {
-			return fail(400, { error: 'First and last name are required.' });
+		if (!firstName || !lastName || !university) {
+			return fail(400, { error: 'All fields are required.' });
 		}
 
 		const studentRecord = await prisma.students.findFirst({

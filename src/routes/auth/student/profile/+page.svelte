@@ -170,7 +170,7 @@
 					</div>
 					<div class="form-group">
 						<label for="university" class="form-label">University / Institution</label>
-						<input type="text" id="university" name="university" class="form-input" value={data.profile.university} />
+						<input type="text" id="university" name="university" class="form-input" value={data.profile.university} required />
 					</div>
 				</div>
 			</div>

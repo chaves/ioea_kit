@@ -44,12 +44,12 @@
 		>
 			<div class="form-group">
 				<label for="title" class="form-label">Paper title</label>
-				<input type="text" id="title" name="title" class="form-input" value={data.paper.title} />
+				<input type="text" id="title" name="title" class="form-input" value={data.paper.title} required />
 			</div>
 
 			<div class="form-group">
 				<label for="summary" class="form-label">Abstract</label>
-				<textarea id="summary" name="summary" class="form-input" rows="7">{data.paper.summary}</textarea>
+				<textarea id="summary" name="summary" class="form-input" rows="7" required>{data.paper.summary}</textarea>
 			</div>
 
 			<div class="form-group">

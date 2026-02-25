@@ -57,23 +57,33 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const arrivalDate = formData.get('arrivalDate') as string;
 
-		if (!arrivalDate) {
-			return fail(400, { error: 'Arrival date is required to validate.' });
+		const departureDate = formData.get('departureDate') as string;
+		const arrivalTransport = (formData.get('arrivalTransport') as string) || '';
+		const arrivalLocation = (formData.get('arrivalLocation') as string) || '';
+		const arrivalFlight = (formData.get('arrivalFlight') as string) || '';
+		const arrivalTransfer = (formData.get('arrivalTransfer') as string) || '';
+		const departureTransport = (formData.get('departureTransport') as string) || '';
+		const departureLocation = (formData.get('departureLocation') as string) || '';
+		const departureFlight = (formData.get('departureFlight') as string) || '';
+		const departureTransfer = (formData.get('departureTransfer') as string) || '';
+
+		if (!arrivalDate || !departureDate || !arrivalTransport || !arrivalLocation ||
+			!arrivalFlight || !arrivalTransfer || !departureTransport || !departureLocation ||
+			!departureFlight || !departureTransfer) {
+			return fail(400, { error: 'All fields are required.' });
 		}
 
 		const travelData = {
 			arrival_date_time: new Date(arrivalDate),
-			arrival_transport: (formData.get('arrivalTransport') as string) || '',
-			arrival_location: (formData.get('arrivalLocation') as string) || '',
-			arrival_flight: (formData.get('arrivalFlight') as string) || '',
-			arrival_transfer: parseInt((formData.get('arrivalTransfer') as string) || '0') || 0,
-			departure_date_time: formData.get('departureDate')
-				? new Date(formData.get('departureDate') as string)
-				: new Date(0),
-			departure_transport: (formData.get('departureTransport') as string) || '',
-			departure_location: (formData.get('departureLocation') as string) || '',
-			departure_flight: (formData.get('departureFlight') as string) || '',
-			departure_transfer: parseInt((formData.get('departureTransfer') as string) || '0') || 0,
+			arrival_transport: arrivalTransport,
+			arrival_location: arrivalLocation,
+			arrival_flight: arrivalFlight,
+			arrival_transfer: parseInt(arrivalTransfer) || 0,
+			departure_date_time: new Date(departureDate),
+			departure_transport: departureTransport,
+			departure_location: departureLocation,
+			departure_flight: departureFlight,
+			departure_transfer: parseInt(departureTransfer) || 0,
 		};
 
 		const existing = await prisma.students_travels.findFirst({

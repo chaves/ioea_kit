@@ -55,20 +55,22 @@
 							name="arrivalDate"
 							class="form-input"
 							bind:value={arrivalDate}
+							required
 						/>
 					</div>
 					<div class="form-row">
 						<div class="form-group">
 							<label for="arrivalTransport" class="form-label">Transport</label>
-							<select id="arrivalTransport" name="arrivalTransport" class="form-input">
-								{#each data.transportOptions as opt}
-									<option value={opt} selected={data.travel?.arrivalTransport === opt}>{opt || '—'}</option>
+							<select id="arrivalTransport" name="arrivalTransport" class="form-input" required>
+								<option value="">—</option>
+								{#each data.transportOptions.filter(o => o) as opt}
+									<option value={opt} selected={data.travel?.arrivalTransport === opt}>{opt}</option>
 								{/each}
 							</select>
 						</div>
 						<div class="form-group">
 							<label for="arrivalLocation" class="form-label">Port / Airport</label>
-							<select id="arrivalLocation" name="arrivalLocation" class="form-input">
+							<select id="arrivalLocation" name="arrivalLocation" class="form-input" required>
 								<option value="">—</option>
 								{#each Object.entries(data.locationOptions) as [k, v]}
 									<option value={k} selected={data.travel?.arrivalLocation === k}>{v}</option>
@@ -78,11 +80,11 @@
 					</div>
 					<div class="form-group">
 						<label for="arrivalFlight" class="form-label">Flight / Boat number</label>
-						<input type="text" id="arrivalFlight" name="arrivalFlight" class="form-input" placeholder="e.g. AF1234" value={data.travel?.arrivalFlight ?? ''} />
+						<input type="text" id="arrivalFlight" name="arrivalFlight" class="form-input" placeholder="e.g. AF1234" value={data.travel?.arrivalFlight ?? ''} required />
 					</div>
 					<div class="form-group">
 						<label for="arrivalTransfer" class="form-label">Transfer to Cargèse</label>
-						<select id="arrivalTransfer" name="arrivalTransfer" class="form-input">
+						<select id="arrivalTransfer" name="arrivalTransfer" class="form-input" required>
 							<option value="">—</option>
 							{#each Object.entries(data.arrivalTransferOptions) as [k, v]}
 								<option value={k} selected={data.travel?.arrivalTransfer === parseInt(k)}>{v}</option>
@@ -95,20 +97,21 @@
 					<legend>Departure</legend>
 					<div class="form-group">
 						<label for="departureDate" class="form-label">Departure date</label>
-						<input type="date" id="departureDate" name="departureDate" class="form-input" value={data.travel?.departureDate ?? ''} />
+						<input type="date" id="departureDate" name="departureDate" class="form-input" value={data.travel?.departureDate ?? ''} required />
 					</div>
 					<div class="form-row">
 						<div class="form-group">
 							<label for="departureTransport" class="form-label">Transport</label>
-							<select id="departureTransport" name="departureTransport" class="form-input">
-								{#each data.transportOptions as opt}
-									<option value={opt} selected={data.travel?.departureTransport === opt}>{opt || '—'}</option>
+							<select id="departureTransport" name="departureTransport" class="form-input" required>
+								<option value="">—</option>
+								{#each data.transportOptions.filter(o => o) as opt}
+									<option value={opt} selected={data.travel?.departureTransport === opt}>{opt}</option>
 								{/each}
 							</select>
 						</div>
 						<div class="form-group">
 							<label for="departureLocation" class="form-label">Port / Airport</label>
-							<select id="departureLocation" name="departureLocation" class="form-input">
+							<select id="departureLocation" name="departureLocation" class="form-input" required>
 								<option value="">—</option>
 								{#each Object.entries(data.locationOptions) as [k, v]}
 									<option value={k} selected={data.travel?.departureLocation === k}>{v}</option>
@@ -118,11 +121,11 @@
 					</div>
 					<div class="form-group">
 						<label for="departureFlight" class="form-label">Flight / Boat number</label>
-						<input type="text" id="departureFlight" name="departureFlight" class="form-input" placeholder="e.g. AF1234" value={data.travel?.departureFlight ?? ''} />
+						<input type="text" id="departureFlight" name="departureFlight" class="form-input" placeholder="e.g. AF1234" value={data.travel?.departureFlight ?? ''} required />
 					</div>
 					<div class="form-group">
 						<label for="departureTransfer" class="form-label">Transfer from Cargèse</label>
-						<select id="departureTransfer" name="departureTransfer" class="form-input">
+						<select id="departureTransfer" name="departureTransfer" class="form-input" required>
 							<option value="">—</option>
 							{#each Object.entries(data.departureTransferOptions) as [k, v]}
 								<option value={k} selected={data.travel?.departureTransfer === parseInt(k)}>{v}</option>
