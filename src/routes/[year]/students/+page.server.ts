@@ -102,7 +102,8 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 		chairs,
 		groups,
 		isCurrentYear,
-		showGroups: config.studentsGroupOpen
+		showGroups: config.studentsGroupOpen,
+		showParticipants: config.showParticipants,
 	};
 };
 
