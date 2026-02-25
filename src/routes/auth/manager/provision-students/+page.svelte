@@ -83,8 +83,8 @@
 					</button>
 				</form>
 				<p class="hint">
-					Creates student accounts with random temporary passwords and sends welcome emails.
-					Students must change their password on first login.
+					Creates student login accounts. No email is sent — communicate login
+					instructions manually. Students can use "Forgot password" to set their password.
 				</p>
 			</div>
 		{:else}

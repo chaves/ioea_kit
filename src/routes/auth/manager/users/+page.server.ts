@@ -201,7 +201,14 @@ export const actions: Actions = {
 			reviewerType: user.roleNames.includes('admin') ? 'manager' : user.roleNames.includes('reviewer') ? 'reviewer' : undefined,
 		});
 
-		const redirectTo = user.roleNames.includes('student') ? '/students' : '/auth';
+		let redirectTo = '/auth/login';
+		if (user.roleNames.includes('admin') || user.roleNames.includes('program-admin')) {
+			redirectTo = '/auth/submissions';
+		} else if (user.roleNames.includes('student')) {
+			redirectTo = '/auth/student';
+		} else if (user.roleNames.includes('reviewer')) {
+			redirectTo = '/auth/reviewer';
+		}
 		throw redirect(303, redirectTo);
 	},
 };

@@ -2,7 +2,6 @@ import { redirect, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { prisma } from '$lib/server/db';
 import { hasRole, createUser, generateRandomPassword } from '$lib/server/auth';
-import { sendEmail, welcomeUserEmail } from '$lib/server/email';
 import { config } from '$lib/config';
 import type { call_submissions } from '@prisma/client';
 
@@ -69,7 +68,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	provisionAll: async ({ locals, url }) => {
+	provisionAll: async ({ locals }) => {
 		if (!locals.session || !hasRole(locals.session, 'admin')) {
 			return fail(403, { error: 'Access denied.' });
 		}
@@ -97,7 +96,6 @@ export const actions: Actions = {
 			return { success: true, message: 'All accepted students already have accounts.' };
 		}
 
-		const loginUrl = `${url.origin}/auth/login`;
 		let created = 0;
 		const errors: string[] = [];
 
@@ -113,7 +111,6 @@ export const actions: Actions = {
 					grantedBy: locals.session.userId,
 				});
 				await upsertStudentRecord(sub);
-				await sendEmail(welcomeUserEmail({ name, email: sub.email, temporaryPassword: password, loginUrl }));
 				created++;
 			} catch (err) {
 				errors.push(sub.email);
@@ -121,14 +118,14 @@ export const actions: Actions = {
 			}
 		}
 
-		const msg = `${created} student account${created !== 1 ? 's' : ''} created and welcome emails sent.`;
+		const msg = `${created} student account${created !== 1 ? 's' : ''} created.`;
 		return {
 			success: true,
 			message: errors.length > 0 ? `${msg} Errors on: ${errors.join(', ')}.` : msg,
 		};
 	},
 
-	provision: async ({ locals, request, url }) => {
+	provision: async ({ locals, request }) => {
 		if (!locals.session || !hasRole(locals.session, 'admin')) {
 			return fail(403, { error: 'Access denied.' });
 		}
@@ -168,10 +165,7 @@ export const actions: Actions = {
 		});
 		await upsertStudentRecord(sub);
 
-		const loginUrl = `${url.origin}/auth/login`;
-		await sendEmail(welcomeUserEmail({ name, email: sub.email, temporaryPassword: password, loginUrl }));
-
-		return { success: true, message: `Account created for ${name}. Welcome email sent to ${sub.email}.` };
+		return { success: true, message: `Account created for ${name}.` };
 	},
 
 	syncStudents: async ({ locals }) => {
