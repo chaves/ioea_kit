@@ -44,35 +44,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	validate: async ({ locals }) => {
-		if (!locals.session || !hasAnyRole(locals.session, ['admin', 'student'])) {
-			return fail(403, { error: 'Access denied.', action: 'validate' });
-		}
-
-		const studentRecord = await prisma.students.findFirst({
-			where: { email: locals.session.email },
-			select: { photo: true },
-		});
-
-		if (!studentRecord?.photo) {
-			return fail(400, { error: 'Upload a photo first.', action: 'validate' });
-		}
-
-		await prisma.students_validations.upsert({
-			where: {
-				student_email_call_year_section: {
-					student_email: locals.session.email,
-					call_year: config.currentYear,
-					section: 'profile',
-				},
-			},
-			create: { student_email: locals.session.email, call_year: config.currentYear, section: 'profile' },
-			update: { validated_at: new Date() },
-		});
-
-		return { success: true, message: 'Profile validated.', action: 'validate' };
-	},
-
 	default: async ({ locals, request }) => {
 		if (!locals.session || !hasAnyRole(locals.session, ['admin', 'student'])) {
 			return fail(403, { error: 'Access denied.' });
@@ -134,11 +105,24 @@ export const actions: Actions = {
 			data: { name: `${firstName} ${lastName}` },
 		});
 
-		// Clear validation — must re-validate after changes
-		await prisma.students_validations.deleteMany({
-			where: { student_email: locals.session.email, call_year: config.currentYear, section: 'profile' },
+		// Photo required to validate
+		const photoNow = updateData.photo ?? studentRecord.photo;
+		if (!photoNow) {
+			return fail(400, { error: 'A photo is required. Please upload one before validating.' });
+		}
+
+		await prisma.students_validations.upsert({
+			where: {
+				student_email_call_year_section: {
+					student_email: locals.session.email,
+					call_year: config.currentYear,
+					section: 'profile',
+				},
+			},
+			create: { student_email: locals.session.email, call_year: config.currentYear, section: 'profile' },
+			update: { validated_at: new Date() },
 		});
 
-		return { success: true, message: 'Profile saved.' };
+		throw redirect(303, '/auth/student');
 	},
 };

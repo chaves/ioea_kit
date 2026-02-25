@@ -45,57 +45,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	validate: async ({ locals }) => {
-		if (!locals.session || !hasAnyRole(locals.session, ['admin', 'student'])) {
-			return fail(403, { error: 'Access denied.', action: 'validate' });
-		}
-
-		const submission = await prisma.call_submissions.findFirst({
-			where: { email: locals.session.email, call_year: config.currentYear, accepted: true, waitlisted: false },
-			select: { id: true, title: true, paper: true },
-		});
-
-		if (!submission?.title || !submission?.paper) {
-			return fail(400, { error: 'Add a title and upload a file first.', action: 'validate' });
-		}
-
-		// Copy from call dir to student dir if not already there
-		const slug = slugify(locals.session.email);
-		const studentFilename = `${slug}-paper.pdf`;
-		const studentPath = join(PAPERS_DIR, studentFilename);
-
-		try {
-			await access(studentPath);
-		} catch {
-			const callPath = join('uploads', 'call', String(config.currentYear), submission.paper);
-			try {
-				await access(callPath);
-				await mkdir(PAPERS_DIR, { recursive: true });
-				await copyFile(callPath, studentPath);
-				await prisma.call_submissions.update({
-					where: { id: submission.id },
-					data: { paper: studentFilename },
-				});
-			} catch {
-				// Source not found — leave as-is
-			}
-		}
-
-		await prisma.students_validations.upsert({
-			where: {
-				student_email_call_year_section: {
-					student_email: locals.session.email,
-					call_year: config.currentYear,
-					section: 'paper',
-				},
-			},
-			create: { student_email: locals.session.email, call_year: config.currentYear, section: 'paper' },
-			update: { validated_at: new Date() },
-		});
-
-		return { success: true, message: 'Paper validated.', action: 'validate' };
-	},
-
 	default: async ({ locals, request }) => {
 		if (!locals.session || !hasAnyRole(locals.session, ['admin', 'student'])) {
 			return fail(403, { error: 'Access denied.' });
@@ -112,6 +61,10 @@ export const actions: Actions = {
 
 		if (!submission) {
 			return fail(404, { error: 'No accepted submission found.' });
+		}
+
+		if (!title) {
+			return fail(400, { error: 'Title is required.' });
 		}
 
 		const updateData: { title: string; summary: string; paper?: string } = { title, summary };
@@ -137,11 +90,45 @@ export const actions: Actions = {
 			data: updateData,
 		});
 
-		// Clear validation — must re-validate after changes
-		await prisma.students_validations.deleteMany({
-			where: { student_email: locals.session.email, call_year: config.currentYear, section: 'paper' },
+		// Paper file required to validate
+		const paperNow = updateData.paper ?? submission.paper;
+		if (!paperNow) {
+			return fail(400, { error: 'A paper file is required. Please upload a PDF before validating.' });
+		}
+
+		// Copy from call dir to student dir if not already there
+		const slug = slugify(locals.session.email);
+		const studentFilename = `${slug}-paper.pdf`;
+		const studentPath = join(PAPERS_DIR, studentFilename);
+		try {
+			await access(studentPath);
+		} catch {
+			const callPath = join('uploads', 'call', String(config.currentYear), paperNow);
+			try {
+				await access(callPath);
+				await mkdir(PAPERS_DIR, { recursive: true });
+				await copyFile(callPath, studentPath);
+				await prisma.call_submissions.update({
+					where: { id: submission.id },
+					data: { paper: studentFilename },
+				});
+			} catch {
+				// Source not found — leave as-is
+			}
+		}
+
+		await prisma.students_validations.upsert({
+			where: {
+				student_email_call_year_section: {
+					student_email: locals.session.email,
+					call_year: config.currentYear,
+					section: 'paper',
+				},
+			},
+			create: { student_email: locals.session.email, call_year: config.currentYear, section: 'paper' },
+			update: { validated_at: new Date() },
 		});
 
-		return { success: true, message: 'Paper information saved.' };
+		throw redirect(303, '/auth/student');
 	},
 };

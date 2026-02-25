@@ -49,17 +49,43 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-	validate: async ({ locals }) => {
+	default: async ({ locals, request }) => {
 		if (!locals.session || !hasAnyRole(locals.session, ['admin', 'student'])) {
-			return fail(403, { error: 'Access denied.', action: 'validate' });
+			return fail(403, { error: 'Access denied.' });
 		}
 
-		const travel = await prisma.students_travels.findFirst({
+		const formData = await request.formData();
+		const arrivalDate = formData.get('arrivalDate') as string;
+
+		if (!arrivalDate) {
+			return fail(400, { error: 'Arrival date is required to validate.' });
+		}
+
+		const travelData = {
+			arrival_date_time: new Date(arrivalDate),
+			arrival_transport: (formData.get('arrivalTransport') as string) || '',
+			arrival_location: (formData.get('arrivalLocation') as string) || '',
+			arrival_flight: (formData.get('arrivalFlight') as string) || '',
+			arrival_transfer: parseInt((formData.get('arrivalTransfer') as string) || '0') || 0,
+			departure_date_time: formData.get('departureDate')
+				? new Date(formData.get('departureDate') as string)
+				: new Date(0),
+			departure_transport: (formData.get('departureTransport') as string) || '',
+			departure_location: (formData.get('departureLocation') as string) || '',
+			departure_flight: (formData.get('departureFlight') as string) || '',
+			departure_transfer: parseInt((formData.get('departureTransfer') as string) || '0') || 0,
+		};
+
+		const existing = await prisma.students_travels.findFirst({
 			where: { student_id: String(locals.session.userId) },
 		});
 
-		if (!travel || travel.arrival_date_time.getFullYear() < 100) {
-			return fail(400, { error: 'Fill in your arrival date first.', action: 'validate' });
+		if (existing) {
+			await prisma.students_travels.update({ where: { id: existing.id }, data: travelData });
+		} else {
+			await prisma.students_travels.create({
+				data: { ...travelData, student_id: String(locals.session.userId) },
+			});
 		}
 
 		await prisma.students_validations.upsert({
@@ -74,54 +100,6 @@ export const actions: Actions = {
 			update: { validated_at: new Date() },
 		});
 
-		return { success: true, message: 'Travel information validated.', action: 'validate' };
-	},
-
-	default: async ({ locals, request }) => {
-		if (!locals.session || !hasAnyRole(locals.session, ['admin', 'student'])) {
-			return fail(403, { error: 'Access denied.' });
-		}
-
-		const formData = await request.formData();
-
-		const travelData = {
-			arrival_date_time: formData.get('arrivalDate')
-				? new Date(formData.get('arrivalDate') as string)
-				: new Date(0),
-			arrival_transport: (formData.get('arrivalTransport') as string) || '',
-			arrival_location: (formData.get('arrivalLocation') as string) || '',
-			arrival_flight: (formData.get('arrivalFlight') as string) || '',
-			arrival_transfer: parseInt((formData.get('arrivalTransfer') as string) || '0') || 0,
-			departure_date_time: formData.get('departureDate')
-				? new Date(formData.get('departureDate') as string)
-				: new Date(0),
-			departure_transport: (formData.get('departureTransport') as string) || '',
-			departure_location: (formData.get('departureLocation') as string) || '',
-			departure_flight: (formData.get('departureFlight') as string) || '',
-			departure_transfer: parseInt((formData.get('departureTransfer') as string) || '0') || 0,
-		};
-
-		try {
-			const existing = await prisma.students_travels.findFirst({
-				where: { student_id: String(locals.session.userId) },
-			});
-			if (existing) {
-				await prisma.students_travels.update({ where: { id: existing.id }, data: travelData });
-			} else {
-				await prisma.students_travels.create({
-					data: { ...travelData, student_id: String(locals.session.userId) },
-				});
-			}
-
-			// Clear validation — must re-validate after changes
-			await prisma.students_validations.deleteMany({
-				where: { student_email: locals.session.email, call_year: config.currentYear, section: 'travel' },
-			});
-
-			return { success: true, message: 'Travel information saved.' };
-		} catch (err) {
-			console.error('Error saving travel:', err);
-			return fail(500, { error: 'Failed to save travel information.' });
-		}
+		throw redirect(303, '/auth/student');
 	},
 };

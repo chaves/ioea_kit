@@ -5,7 +5,6 @@
 	let { data, form } = $props();
 
 	let loading = $state(false);
-	let loadingValidate = $state(false);
 
 	// Photo crop state — declared before canValidate so croppedPreviewUrl is in scope
 	let cropperLoaded = $state(false);
@@ -115,16 +114,8 @@
 		{/if}
 	</header>
 
-	{#if form?.success && form.action !== 'validate'}
-		<div class="alert alert-success">{form.message}</div>
-	{:else if form?.error && form.action !== 'validate'}
+	{#if form?.error}
 		<div class="alert alert-error">{form.error}</div>
-	{/if}
-
-	{#if data.validated}
-		<div class="info-bar">
-			Your profile is validated. Saving changes will reset the validation and require you to re-validate from the overview.
-		</div>
 	{/if}
 
 	<div class="form-card">
@@ -157,8 +148,8 @@
 						onchange={onPhotoSelected}
 					/>
 					<p class="hint">JPEG / PNG / WebP · max 600 px</p>
-					{#if !data.profile.photo && !croppedPreviewUrl}
-						<p class="hint required">Photo required to validate</p>
+					{#if !canValidate}
+						<p class="hint required">Photo required</p>
 					{/if}
 				</div>
 
@@ -184,46 +175,16 @@
 				</div>
 			</div>
 
-			<button type="submit" class="btn btn-primary" disabled={loading}>
-				{loading ? 'Saving…' : 'Save profile'}
-			</button>
+			<div class="form-footer">
+				<button type="submit" class="btn btn-validate" disabled={!canValidate || loading}>
+					{loading ? 'Saving…' : 'Validate profile'}
+				</button>
+				{#if !canValidate}
+					<span class="footer-hint">Upload a photo first</span>
+				{/if}
+			</div>
 		</form>
 	</div>
-
-	<!-- Validate -->
-	{#if !data.validated || form?.action === 'validate'}
-		<div class="validate-box">
-			{#if form?.action === 'validate' && form.success}
-				<div class="alert alert-success">{form.message}</div>
-			{:else if form?.action === 'validate' && form.error}
-				<div class="alert alert-error">{form.error}</div>
-			{/if}
-			<div class="validate-row">
-				<div>
-					<strong>Validate your profile</strong>
-					<p>Confirm that your information is correct and complete.</p>
-				</div>
-				<form method="POST" action="?/validate" use:enhance={() => {
-					loadingValidate = true;
-					return async ({ update }) => { await update(); loadingValidate = false; };
-				}}>
-					<button
-						type="submit"
-						class="btn btn-validate"
-						disabled={!canValidate || loadingValidate}
-						title={!canValidate ? 'Upload a photo first' : ''}
-					>
-						{loadingValidate ? '…' : 'Validate profile'}
-					</button>
-				</form>
-			</div>
-		</div>
-	{:else}
-		<div class="validated-box">
-			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-			Profile validated. Edit above to make changes — you will need to re-validate.
-		</div>
-	{/if}
 </div>
 
 {#if showCropModal}
@@ -305,16 +266,6 @@
 		font-size: 0.8rem;
 		font-weight: 600;
 		white-space: nowrap;
-	}
-
-	.info-bar {
-		padding: 0.75rem 1rem;
-		background: #fefce8;
-		border: 1px solid #fde047;
-		border-radius: 0.375rem;
-		font-size: 0.85rem;
-		color: #854d0e;
-		margin-bottom: 1.25rem;
 	}
 
 	.form-card {
@@ -401,6 +352,33 @@
 
 	.btn-sm { padding: 0.35rem 0.8rem; font-size: 0.8rem; }
 
+	.form-footer {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding-top: 0.5rem;
+		border-top: 1px solid var(--color-border);
+	}
+
+	.footer-hint {
+		font-size: 0.8rem;
+		color: #dc2626;
+	}
+
+	.btn-validate {
+		background: var(--color-primary);
+		color: white;
+		border: none;
+		cursor: pointer;
+		padding: 0.6rem 1.5rem;
+		border-radius: 0.375rem;
+		font-size: 0.9rem;
+		font-weight: 600;
+	}
+
+	.btn-validate:hover:not(:disabled) { background: var(--color-primary-dark, #4a3860); }
+	.btn-validate:disabled { opacity: 0.45; cursor: not-allowed; }
+
 	/* Crop modal */
 	.modal-backdrop {
 		position: fixed;
@@ -467,53 +445,11 @@
 		border-top: 1px solid var(--color-border);
 	}
 
-	/* Validate section */
-	.validate-box {
-		margin-top: 1.5rem;
-		padding: 1.5rem;
-		background: white;
-		border: 1px solid var(--color-border);
-		border-radius: 0.5rem;
-	}
-
-	.validate-row {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1.5rem;
-	}
-
-	.validate-row strong { font-size: 1rem; }
-	.validate-row p { margin: 0.2rem 0 0; font-size: 0.85rem; color: var(--color-text-muted, #6b7280); }
-
-	.btn-validate {
-		background: var(--color-primary);
-		color: white;
-		border: none;
-		cursor: pointer;
-		white-space: nowrap;
-	}
-
-	.btn-validate:hover:not(:disabled) { background: var(--color-primary-dark, #4a3860); }
-	.btn-validate:disabled { opacity: 0.45; cursor: not-allowed; }
-
-	.validated-box {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		margin-top: 1.5rem;
-		padding: 1rem 1.5rem;
-		background: #f0fdf4;
-		border: 1px solid #86efac;
-		border-radius: 0.5rem;
-		color: #166534;
-		font-size: 0.9rem;
-	}
-
 	@media (max-width: 640px) {
 		.admin-page { padding: 1.25rem; }
 		.profile-layout { flex-direction: column; align-items: stretch; }
 		.avatar-col { width: 100%; flex-direction: row; gap: 1rem; align-items: center; }
 		.form-row { grid-template-columns: 1fr; }
+		.form-footer { flex-direction: column; align-items: flex-start; }
 	}
 </style>

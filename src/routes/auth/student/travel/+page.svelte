@@ -4,9 +4,9 @@
 	let { data, form } = $props();
 
 	let loading = $state(false);
-	let loadingValidate = $state(false);
 
-	const canValidate = $derived(!!(data.travel && data.travel.arrivalDate));
+	let arrivalDate = $state(data.travel?.arrivalDate ?? '');
+	const canValidate = $derived(!!arrivalDate);
 </script>
 
 <svelte:head>
@@ -32,16 +32,8 @@
 		{/if}
 	</header>
 
-	{#if form?.success && form.action !== 'validate'}
-		<div class="alert alert-success">{form.message}</div>
-	{:else if form?.error && form.action !== 'validate'}
+	{#if form?.error}
 		<div class="alert alert-error">{form.error}</div>
-	{/if}
-
-	{#if data.validated}
-		<div class="info-bar">
-			Your travel info is validated. Saving changes will reset the validation and require you to re-validate.
-		</div>
 	{/if}
 
 	<div class="form-card">
@@ -56,8 +48,14 @@
 				<fieldset class="travel-section">
 					<legend>Arrival</legend>
 					<div class="form-group">
-						<label for="arrivalDate" class="form-label">Arrival date</label>
-						<input type="date" id="arrivalDate" name="arrivalDate" class="form-input" value={data.travel?.arrivalDate ?? ''} />
+						<label for="arrivalDate" class="form-label">Arrival date <span class="required-star">*</span></label>
+						<input
+							type="date"
+							id="arrivalDate"
+							name="arrivalDate"
+							class="form-input"
+							bind:value={arrivalDate}
+						/>
 					</div>
 					<div class="form-row">
 						<div class="form-group">
@@ -134,49 +132,16 @@
 				</fieldset>
 			</div>
 
-			<button type="submit" class="btn btn-primary" disabled={loading}>
-				{loading ? 'Saving…' : 'Save travel info'}
-			</button>
+			<div class="form-footer">
+				<button type="submit" class="btn btn-validate" disabled={!canValidate || loading}>
+					{loading ? 'Saving…' : 'Validate travel'}
+				</button>
+				{#if !canValidate}
+					<span class="footer-hint">Fill in your arrival date first</span>
+				{/if}
+			</div>
 		</form>
 	</div>
-
-	<!-- Validate -->
-	{#if !data.validated || form?.action === 'validate'}
-		<div class="validate-box">
-			{#if form?.action === 'validate' && form.success}
-				<div class="alert alert-success">{form.message}</div>
-			{:else if form?.action === 'validate' && form.error}
-				<div class="alert alert-error">{form.error}</div>
-			{/if}
-			<div class="validate-row">
-				<div>
-					<strong>Validate your travel information</strong>
-					<p>Confirm that your arrival and departure details are complete and correct.</p>
-					{#if !canValidate}
-						<p class="missing">Fill in your arrival date first.</p>
-					{/if}
-				</div>
-				<form method="POST" action="?/validate" use:enhance={() => {
-					loadingValidate = true;
-					return async ({ update }) => { await update(); loadingValidate = false; };
-				}}>
-					<button
-						type="submit"
-						class="btn btn-validate"
-						disabled={!canValidate || loadingValidate}
-						title={!canValidate ? 'Fill in your arrival date first' : ''}
-					>
-						{loadingValidate ? '…' : 'Validate travel'}
-					</button>
-				</form>
-			</div>
-		</div>
-	{:else}
-		<div class="validated-box">
-			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-			Travel information validated. Edit above to make changes — you will need to re-validate.
-		</div>
-	{/if}
 </div>
 
 <style>
@@ -242,16 +207,6 @@
 		white-space: nowrap;
 	}
 
-	.info-bar {
-		padding: 0.75rem 1rem;
-		background: #fefce8;
-		border: 1px solid #fde047;
-		border-radius: 0.375rem;
-		font-size: 0.85rem;
-		color: #854d0e;
-		margin-bottom: 1.25rem;
-	}
-
 	.form-card {
 		background: white;
 		border: 1px solid var(--color-border);
@@ -289,25 +244,20 @@
 		gap: 1rem;
 	}
 
-	/* Validate section */
-	.validate-box {
-		margin-top: 1.5rem;
-		padding: 1.5rem;
-		background: white;
-		border: 1px solid var(--color-border);
-		border-radius: 0.5rem;
-	}
+	.required-star { color: #dc2626; }
 
-	.validate-row {
+	.form-footer {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
-		gap: 1.5rem;
+		gap: 1rem;
+		padding-top: 0.5rem;
+		border-top: 1px solid var(--color-border);
 	}
 
-	.validate-row strong { font-size: 1rem; }
-	.validate-row p { margin: 0.2rem 0 0; font-size: 0.85rem; color: var(--color-text-muted, #6b7280); }
-	.validate-row p.missing { color: #dc2626; font-weight: 600; }
+	.footer-hint {
+		font-size: 0.8rem;
+		color: #dc2626;
+	}
 
 	.btn-validate {
 		background: var(--color-primary);
@@ -315,27 +265,18 @@
 		border: none;
 		cursor: pointer;
 		white-space: nowrap;
+		padding: 0.6rem 1.5rem;
+		border-radius: 0.375rem;
+		font-size: 0.9rem;
+		font-weight: 600;
 	}
 
 	.btn-validate:hover:not(:disabled) { background: var(--color-primary-dark, #4a3860); }
 	.btn-validate:disabled { opacity: 0.45; cursor: not-allowed; }
 
-	.validated-box {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		margin-top: 1.5rem;
-		padding: 1rem 1.5rem;
-		background: #f0fdf4;
-		border: 1px solid #86efac;
-		border-radius: 0.5rem;
-		color: #166534;
-		font-size: 0.9rem;
-	}
-
 	@media (max-width: 768px) {
 		.admin-page { padding: 1.25rem; }
 		.travel-grid, .form-row { grid-template-columns: 1fr; }
-		.validate-row { flex-direction: column; align-items: flex-start; }
+		.form-footer { flex-direction: column; align-items: flex-start; }
 	}
 </style>
