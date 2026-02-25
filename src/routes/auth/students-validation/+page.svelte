@@ -9,7 +9,7 @@
 </svelte:head>
 
 <div class="page">
-	<header class="page-header">
+	<header class="sv-header">
 		<h1>Students Validation</h1>
 		<p class="subtitle">IOEA {data.year} — {data.stats.total} accepted students</p>
 	</header>
@@ -111,11 +111,11 @@
 		max-width: 1100px;
 	}
 
-	.page-header {
+	.sv-header {
 		margin-bottom: 2rem;
 	}
 
-	.page-header h1 {
+	.sv-header h1 {
 		font-size: 1.6rem;
 		font-weight: 700;
 		color: var(--color-primary);
