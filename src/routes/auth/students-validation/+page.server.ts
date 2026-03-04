@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 	const emails = accepted.map((s) => s.email);
 
-	const [validations, studentRecords, userRecords] = await Promise.all([
+	const [validations, studentRecords, userRecords, allCountries] = await Promise.all([
 		prisma.students_validations.findMany({
 			where: { student_email: { in: emails }, call_year: currentYear },
 			select: { student_email: true, section: true, validated_at: true },
@@ -38,7 +38,13 @@ export const load: PageServerLoad = async ({ locals }) => {
 			where: { email: { in: emails } },
 			select: { id: true, email: true },
 		}),
+		prisma.countries.findMany({ select: { id: true, name: true } }),
 	]);
+
+	const countryMap = new Map<number, string>();
+	for (const c of allCountries) {
+		countryMap.set(c.id, c.name);
+	}
 
 	// Map email → userId for travel lookup
 	const emailToUserId = new Map<string, string>();
@@ -88,11 +94,11 @@ export const load: PageServerLoad = async ({ locals }) => {
 			email: s.email,
 			university: s.university ?? '',
 			department: s.department ?? '',
-			country: s.country,
-			nationality: s.nationality,
+			country: countryMap.get(s.country) ?? String(s.country),
+			nationality: s.nationality ? (countryMap.get(s.nationality) ?? String(s.nationality)) : '',
 			gender: s.gender ?? '',
 			age: s.age,
-			status: s.status,
+			status: config.statusOptions[s.status] ?? String(s.status),
 			domain: s.domain ?? '',
 			diploma: s.diploma ?? '',
 			phdAdvisorName: s.phd_ad_name ?? '',
@@ -109,14 +115,14 @@ export const load: PageServerLoad = async ({ locals }) => {
 			travel: travel ? {
 				arrivalDate: fmt(travel.arrival_date_time),
 				arrivalTransport: travel.arrival_transport,
-				arrivalLocation: travel.arrival_location,
+				arrivalLocation: config.travel.locations[travel.arrival_location as unknown as number] ?? travel.arrival_location,
 				arrivalFlight: travel.arrival_flight,
-				arrivalTransfer: travel.arrival_transfer,
+				arrivalTransfer: config.transfer.arrival[travel.arrival_transfer] ?? String(travel.arrival_transfer),
 				departureDate: fmt(travel.departure_date_time),
 				departureTransport: travel.departure_transport,
-				departureLocation: travel.departure_location,
+				departureLocation: config.travel.locations[travel.departure_location as unknown as number] ?? travel.departure_location,
 				departureFlight: travel.departure_flight,
-				departureTransfer: travel.departure_transfer,
+				departureTransfer: config.transfer.departure[travel.departure_transfer] ?? String(travel.departure_transfer),
 			} : null,
 		};
 	});
