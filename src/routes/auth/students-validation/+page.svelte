@@ -1,7 +1,26 @@
 <script lang="ts">
+	import * as XLSX from 'xlsx';
+
 	let { data } = $props();
 
 	const pct = (n: number) => data.stats.total > 0 ? Math.round((n / data.stats.total) * 100) : 0;
+
+	function exportExcel() {
+		const rows = data.students.map((s) => ({
+			'Last Name': s.lastName,
+			'First Name': s.firstName,
+			Email: s.email,
+			University: s.university,
+			Profile: s.profileValidated ? 'Yes' : 'No',
+			Paper: s.paperValidated ? 'Yes' : 'No',
+			Travel: s.travelValidated ? 'Yes' : 'No',
+			'All Validated': s.allValidated ? 'Yes' : 'No',
+		}));
+		const ws = XLSX.utils.json_to_sheet(rows);
+		const wb = XLSX.utils.book_new();
+		XLSX.utils.book_append_sheet(wb, ws, 'Students');
+		XLSX.writeFile(wb, `IOEA${data.year}_students_validation.xlsx`);
+	}
 </script>
 
 <svelte:head>
@@ -10,8 +29,11 @@
 
 <div class="page">
 	<header class="sv-header">
-		<h1>Students Validation</h1>
-		<p class="subtitle">IOEA {data.year} — {data.stats.total} accepted students</p>
+		<div>
+			<h1>Students Validation</h1>
+			<p class="subtitle">IOEA {data.year} — {data.stats.total} accepted students</p>
+		</div>
+		<button class="btn-export" onclick={exportExcel}>Export Excel</button>
 	</header>
 
 	<!-- Stats -->
@@ -112,8 +134,27 @@
 	}
 
 	.sv-header {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 1rem;
 		margin-bottom: 2rem;
 	}
+
+	.btn-export {
+		flex-shrink: 0;
+		padding: 0.5rem 1rem;
+		background: var(--color-primary);
+		color: white;
+		border: none;
+		border-radius: 0.375rem;
+		font-size: 0.875rem;
+		font-weight: 600;
+		cursor: pointer;
+		transition: opacity 0.15s;
+	}
+
+	.btn-export:hover { opacity: 0.85; }
 
 	.sv-header h1 {
 		font-size: 1.6rem;
