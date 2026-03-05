@@ -9,6 +9,11 @@ function formatDateForInput(dt: Date | null): string {
 	return dt.toISOString().slice(0, 10);
 }
 
+function formatTimeForInput(dt: Date | null): string {
+	if (!dt || isNaN(dt.getTime()) || dt.getFullYear() < 100) return '';
+	return dt.toISOString().slice(11, 16);
+}
+
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.session || !hasAnyRole(locals.session, ['admin', 'student'])) {
 		throw redirect(302, '/auth/login');
@@ -29,11 +34,13 @@ export const load: PageServerLoad = async ({ locals }) => {
 		travel: travel
 			? {
 					arrivalDate: formatDateForInput(travel.arrival_date_time),
+					arrivalTime: formatTimeForInput(travel.arrival_date_time),
 					arrivalTransport: travel.arrival_transport,
 					arrivalLocation: travel.arrival_location,
 					arrivalFlight: travel.arrival_flight,
 					arrivalTransfer: travel.arrival_transfer,
 					departureDate: formatDateForInput(travel.departure_date_time),
+					departureTime: formatTimeForInput(travel.departure_date_time),
 					departureTransport: travel.departure_transport,
 					departureLocation: travel.departure_location,
 					departureFlight: travel.departure_flight,
@@ -56,8 +63,9 @@ export const actions: Actions = {
 
 		const formData = await request.formData();
 		const arrivalDate = formData.get('arrivalDate') as string;
-
+		const arrivalTime = formData.get('arrivalTime') as string;
 		const departureDate = formData.get('departureDate') as string;
+		const departureTime = formData.get('departureTime') as string;
 		const arrivalTransport = (formData.get('arrivalTransport') as string) || '';
 		const arrivalLocation = (formData.get('arrivalLocation') as string) || '';
 		const arrivalFlight = (formData.get('arrivalFlight') as string) || '';
@@ -67,19 +75,19 @@ export const actions: Actions = {
 		const departureFlight = (formData.get('departureFlight') as string) || '';
 		const departureTransfer = (formData.get('departureTransfer') as string) || '';
 
-		if (!arrivalDate || !departureDate || !arrivalTransport || !arrivalLocation ||
-			!arrivalFlight || !arrivalTransfer || !departureTransport || !departureLocation ||
-			!departureFlight || !departureTransfer) {
+		if (!arrivalDate || !arrivalTime || !departureDate || !departureTime ||
+			!arrivalTransport || !arrivalLocation || !arrivalFlight || !arrivalTransfer ||
+			!departureTransport || !departureLocation || !departureFlight || !departureTransfer) {
 			return fail(400, { error: 'All fields are required.' });
 		}
 
 		const travelData = {
-			arrival_date_time: new Date(arrivalDate),
+			arrival_date_time: new Date(`${arrivalDate}T${arrivalTime}:00Z`),
 			arrival_transport: arrivalTransport,
 			arrival_location: arrivalLocation,
 			arrival_flight: arrivalFlight,
 			arrival_transfer: parseInt(arrivalTransfer) || 0,
-			departure_date_time: new Date(departureDate),
+			departure_date_time: new Date(`${departureDate}T${departureTime}:00Z`),
 			departure_transport: departureTransport,
 			departure_location: departureLocation,
 			departure_flight: departureFlight,

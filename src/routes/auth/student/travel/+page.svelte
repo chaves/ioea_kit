@@ -6,7 +6,29 @@
 	let loading = $state(false);
 
 	let arrivalDate = $state(data.travel?.arrivalDate ?? '');
-	const canValidate = $derived(!!arrivalDate);
+	let arrivalTime = $state(data.travel?.arrivalTime ?? '');
+	let arrivalTransport = $state(data.travel?.arrivalTransport ?? '');
+	let arrivalLocation = $state(data.travel?.arrivalLocation ?? '');
+	let arrivalFlight = $state(data.travel?.arrivalFlight ?? '');
+	let arrivalTransfer = $state(data.travel?.arrivalTransfer != null ? String(data.travel.arrivalTransfer) : '');
+
+	let departureDate = $state(data.travel?.departureDate ?? '');
+	let departureTime = $state(data.travel?.departureTime ?? '');
+	let departureTransport = $state(data.travel?.departureTransport ?? '');
+	let departureLocation = $state(data.travel?.departureLocation ?? '');
+	let departureFlight = $state(data.travel?.departureFlight ?? '');
+	let departureTransfer = $state(data.travel?.departureTransfer != null ? String(data.travel.departureTransfer) : '');
+
+	const canValidate = $derived(
+		!!arrivalDate && !!arrivalTime && !!departureDate && !!departureTime &&
+		!!arrivalTransport && !!arrivalLocation && !!arrivalFlight && !!arrivalTransfer &&
+		!!departureTransport && !!departureLocation && !!departureFlight && !!departureTransfer
+	);
+
+	const arrivalFlightLabel = $derived(arrivalTransport === 'Boat' ? 'Boat number' : 'Flight number');
+	const departureFlightLabel = $derived(departureTransport === 'Boat' ? 'Boat number' : 'Flight number');
+	const arrivalFlightPlaceholder = $derived(arrivalTransport === 'Boat' ? 'e.g. NGO 1234' : 'e.g. AF1234');
+	const departureFlightPlaceholder = $derived(departureTransport === 'Boat' ? 'e.g. NGO 1234' : 'e.g. AF1234');
 </script>
 
 <svelte:head>
@@ -47,47 +69,60 @@
 			<div class="travel-grid">
 				<fieldset class="travel-section">
 					<legend>Arrival</legend>
-					<div class="form-group">
-						<label for="arrivalDate" class="form-label">Arrival date <span class="required-star">*</span></label>
-						<input
-							type="date"
-							id="arrivalDate"
-							name="arrivalDate"
-							class="form-input"
-							bind:value={arrivalDate}
-							required
-						/>
+					<div class="form-row">
+						<div class="form-group">
+							<label for="arrivalDate" class="form-label">Date <span class="required-star">*</span></label>
+							<input
+								type="date"
+								id="arrivalDate"
+								name="arrivalDate"
+								class="form-input"
+								bind:value={arrivalDate}
+								required
+							/>
+						</div>
+						<div class="form-group">
+							<label for="arrivalTime" class="form-label">Time <span class="required-star">*</span></label>
+							<input
+								type="time"
+								id="arrivalTime"
+								name="arrivalTime"
+								class="form-input"
+								bind:value={arrivalTime}
+								required
+							/>
+						</div>
 					</div>
 					<div class="form-row">
 						<div class="form-group">
-							<label for="arrivalTransport" class="form-label">Transport</label>
-							<select id="arrivalTransport" name="arrivalTransport" class="form-input" required>
+							<label for="arrivalTransport" class="form-label">Transport <span class="required-star">*</span></label>
+							<select id="arrivalTransport" name="arrivalTransport" class="form-input" bind:value={arrivalTransport} required>
 								<option value="">—</option>
 								{#each data.transportOptions.filter(o => o) as opt}
-									<option value={opt} selected={data.travel?.arrivalTransport === opt}>{opt}</option>
+									<option value={opt}>{opt}</option>
 								{/each}
 							</select>
 						</div>
 						<div class="form-group">
-							<label for="arrivalLocation" class="form-label">Port / Airport</label>
-							<select id="arrivalLocation" name="arrivalLocation" class="form-input" required>
+							<label for="arrivalLocation" class="form-label">Port / Airport <span class="required-star">*</span></label>
+							<select id="arrivalLocation" name="arrivalLocation" class="form-input" bind:value={arrivalLocation} required>
 								<option value="">—</option>
 								{#each Object.entries(data.locationOptions) as [k, v]}
-									<option value={k} selected={data.travel?.arrivalLocation === k}>{v}</option>
+									<option value={k}>{v}</option>
 								{/each}
 							</select>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="arrivalFlight" class="form-label">Flight / Boat number</label>
-						<input type="text" id="arrivalFlight" name="arrivalFlight" class="form-input" placeholder="e.g. AF1234" value={data.travel?.arrivalFlight ?? ''} required />
+						<label for="arrivalFlight" class="form-label">{arrivalFlightLabel} <span class="required-star">*</span></label>
+						<input type="text" id="arrivalFlight" name="arrivalFlight" class="form-input" placeholder={arrivalFlightPlaceholder} bind:value={arrivalFlight} autocomplete="off" required />
 					</div>
 					<div class="form-group">
-						<label for="arrivalTransfer" class="form-label">Transfer to Cargèse</label>
-						<select id="arrivalTransfer" name="arrivalTransfer" class="form-input" required>
+						<label for="arrivalTransfer" class="form-label">Transfer to Cargèse <span class="required-star">*</span></label>
+						<select id="arrivalTransfer" name="arrivalTransfer" class="form-input" bind:value={arrivalTransfer} required>
 							<option value="">—</option>
 							{#each Object.entries(data.arrivalTransferOptions) as [k, v]}
-								<option value={k} selected={data.travel?.arrivalTransfer === parseInt(k)}>{v}</option>
+								<option value={k}>{v}</option>
 							{/each}
 						</select>
 					</div>
@@ -95,40 +130,46 @@
 
 				<fieldset class="travel-section">
 					<legend>Departure</legend>
-					<div class="form-group">
-						<label for="departureDate" class="form-label">Departure date</label>
-						<input type="date" id="departureDate" name="departureDate" class="form-input" value={data.travel?.departureDate ?? ''} required />
+					<div class="form-row">
+						<div class="form-group">
+							<label for="departureDate" class="form-label">Date <span class="required-star">*</span></label>
+							<input type="date" id="departureDate" name="departureDate" class="form-input" bind:value={departureDate} min={arrivalDate || undefined} required />
+						</div>
+						<div class="form-group">
+							<label for="departureTime" class="form-label">Time <span class="required-star">*</span></label>
+							<input type="time" id="departureTime" name="departureTime" class="form-input" bind:value={departureTime} required />
+						</div>
 					</div>
 					<div class="form-row">
 						<div class="form-group">
-							<label for="departureTransport" class="form-label">Transport</label>
-							<select id="departureTransport" name="departureTransport" class="form-input" required>
+							<label for="departureTransport" class="form-label">Transport <span class="required-star">*</span></label>
+							<select id="departureTransport" name="departureTransport" class="form-input" bind:value={departureTransport} required>
 								<option value="">—</option>
 								{#each data.transportOptions.filter(o => o) as opt}
-									<option value={opt} selected={data.travel?.departureTransport === opt}>{opt}</option>
+									<option value={opt}>{opt}</option>
 								{/each}
 							</select>
 						</div>
 						<div class="form-group">
-							<label for="departureLocation" class="form-label">Port / Airport</label>
-							<select id="departureLocation" name="departureLocation" class="form-input" required>
+							<label for="departureLocation" class="form-label">Port / Airport <span class="required-star">*</span></label>
+							<select id="departureLocation" name="departureLocation" class="form-input" bind:value={departureLocation} required>
 								<option value="">—</option>
 								{#each Object.entries(data.locationOptions) as [k, v]}
-									<option value={k} selected={data.travel?.departureLocation === k}>{v}</option>
+									<option value={k}>{v}</option>
 								{/each}
 							</select>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="departureFlight" class="form-label">Flight / Boat number</label>
-						<input type="text" id="departureFlight" name="departureFlight" class="form-input" placeholder="e.g. AF1234" value={data.travel?.departureFlight ?? ''} required />
+						<label for="departureFlight" class="form-label">{departureFlightLabel} <span class="required-star">*</span></label>
+						<input type="text" id="departureFlight" name="departureFlight" class="form-input" placeholder={departureFlightPlaceholder} bind:value={departureFlight} autocomplete="off" required />
 					</div>
 					<div class="form-group">
-						<label for="departureTransfer" class="form-label">Transfer from Cargèse</label>
-						<select id="departureTransfer" name="departureTransfer" class="form-input" required>
+						<label for="departureTransfer" class="form-label">Transfer from Cargèse <span class="required-star">*</span></label>
+						<select id="departureTransfer" name="departureTransfer" class="form-input" bind:value={departureTransfer} required>
 							<option value="">—</option>
 							{#each Object.entries(data.departureTransferOptions) as [k, v]}
-								<option value={k} selected={data.travel?.departureTransfer === parseInt(k)}>{v}</option>
+								<option value={k}>{v}</option>
 							{/each}
 						</select>
 					</div>
@@ -140,7 +181,7 @@
 					{loading ? 'Saving…' : 'Validate travel'}
 				</button>
 				{#if !canValidate}
-					<span class="footer-hint">Fill in your arrival date first</span>
+					<span class="footer-hint">Fill in all required fields to save</span>
 				{/if}
 			</div>
 		</form>
