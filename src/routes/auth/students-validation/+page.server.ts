@@ -80,6 +80,11 @@ export const load: PageServerLoad = async ({ locals }) => {
 		return dt.toISOString().slice(0, 10);
 	}
 
+	function fmtTime(dt: Date | null | undefined): string {
+		if (!dt || isNaN(dt.getTime()) || dt.getFullYear() < 100) return '';
+		return dt.toISOString().slice(11, 16);
+	}
+
 	const students = accepted.map((s) => {
 		const sections = validationMap.get(s.email) ?? new Set();
 		const profileValidated = sections.has('profile');
@@ -114,11 +119,13 @@ export const load: PageServerLoad = async ({ locals }) => {
 			allValidated: profileValidated && paperValidated && travelValidated,
 			travel: travel ? {
 				arrivalDate: fmt(travel.arrival_date_time),
+				arrivalTime: fmtTime(travel.arrival_date_time),
 				arrivalTransport: travel.arrival_transport,
 				arrivalLocation: config.travel.locations[travel.arrival_location as unknown as number] ?? travel.arrival_location,
 				arrivalFlight: travel.arrival_flight,
 				arrivalTransfer: config.transfer.arrival[travel.arrival_transfer] ?? String(travel.arrival_transfer),
 				departureDate: fmt(travel.departure_date_time),
+				departureTime: fmtTime(travel.departure_date_time),
 				departureTransport: travel.departure_transport,
 				departureLocation: config.travel.locations[travel.departure_location as unknown as number] ?? travel.departure_location,
 				departureFlight: travel.departure_flight,
