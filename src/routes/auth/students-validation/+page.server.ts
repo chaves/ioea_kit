@@ -1,5 +1,5 @@
-import { redirect } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import { redirect, fail } from '@sveltejs/kit';
+import type { PageServerLoad, Actions } from './$types';
 import { prisma } from '$lib/server/db';
 import { hasAnyRole } from '$lib/server/auth';
 import { config } from '$lib/config';
@@ -20,6 +20,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 			status: true, domain: true, diploma: true,
 			phd_ad_name: true, phd_year: true, phd_ad_mail: true,
 			title: true, summary: true, paper: true,
+			cancelled: true,
 		},
 	});
 
@@ -113,6 +114,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 			paperSummary: s.summary ?? '',
 			hasPaperFile: !!(s.paper && s.paper.length > 0),
 			hasPhoto: photoMap.get(s.email) ?? false,
+			cancelled: s.cancelled,
 			profileValidated,
 			paperValidated,
 			travelValidated,
@@ -134,15 +136,41 @@ export const load: PageServerLoad = async ({ locals }) => {
 		};
 	});
 
+	const active = students.filter((s) => !s.cancelled);
 	const total = students.length;
-	const allValidated = students.filter((s) => s.allValidated).length;
-	const profileCount = students.filter((s) => s.profileValidated).length;
-	const paperCount = students.filter((s) => s.paperValidated).length;
-	const travelCount = students.filter((s) => s.travelValidated).length;
+	const cancelledCount = students.filter((s) => s.cancelled).length;
+	const allValidated = active.filter((s) => s.allValidated).length;
+	const profileCount = active.filter((s) => s.profileValidated).length;
+	const paperCount = active.filter((s) => s.paperValidated).length;
+	const travelCount = active.filter((s) => s.travelValidated).length;
 
 	return {
 		year: currentYear,
 		students,
-		stats: { total, allValidated, profileCount, paperCount, travelCount },
+		stats: { total, cancelledCount, activeTotal: total - cancelledCount, allValidated, profileCount, paperCount, travelCount },
 	};
+};
+
+export const actions: Actions = {
+	cancel: async ({ locals, request }) => {
+		if (!locals.session || !hasAnyRole(locals.session, ['admin', 'program-admin'])) {
+			return fail(403, { error: 'Unauthorized' });
+		}
+		const data = await request.formData();
+		const id = Number(data.get('id'));
+		if (!id) return fail(400, { error: 'Missing id' });
+		await prisma.call_submissions.update({ where: { id: BigInt(id) }, data: { cancelled: true } });
+		return { success: true };
+	},
+
+	uncancel: async ({ locals, request }) => {
+		if (!locals.session || !hasAnyRole(locals.session, ['admin', 'program-admin'])) {
+			return fail(403, { error: 'Unauthorized' });
+		}
+		const data = await request.formData();
+		const id = Number(data.get('id'));
+		if (!id) return fail(400, { error: 'Missing id' });
+		await prisma.call_submissions.update({ where: { id: BigInt(id) }, data: { cancelled: false } });
+		return { success: true };
+	},
 };
