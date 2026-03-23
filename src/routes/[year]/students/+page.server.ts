@@ -54,10 +54,18 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 			groupId: c.group_id
 		}));
 
-		// For current year (2025), students are in the main 'students' table
+		// For current year, students are in the main 'students' table
 		if (isCurrentYear) {
-			// Get all students from the main table
+			// Get cancelled emails for this year to exclude them
+			const cancelledSubmissions = await prisma.call_submissions.findMany({
+				where: { call_year: year, cancelled: true },
+				select: { email: true },
+			});
+			const cancelledEmails = new Set(cancelledSubmissions.map((s) => s.email));
+
+			// Get all students from the main table, excluding cancelled
 			const studentsData = await prisma.students.findMany({
+				where: { email: { notIn: [...cancelledEmails] } },
 				orderBy: { last_name: 'asc' }
 			});
 

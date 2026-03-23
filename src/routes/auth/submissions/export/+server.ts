@@ -10,6 +10,7 @@ export const GET: RequestHandler = async ({ locals }) => {
 	}
 
 	const submissions = await prisma.call_submissions.findMany({
+		where: { cancelled: false },
 		orderBy: { last_name: 'asc' }
 	});
 
