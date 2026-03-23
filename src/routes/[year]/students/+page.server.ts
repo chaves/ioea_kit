@@ -72,18 +72,17 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 			// Get all groups
 			const groups = await prisma.students_groups.findMany();
 
-			// Get all papers
-			const papers = await prisma.students_papers.findMany();
+			// Get paper titles from call_submissions (students_papers is unused)
+			const submissions = await prisma.call_submissions.findMany({
+				where: { call_year: year, accepted: true, waitlisted: false, cancelled: false },
+				select: { email: true, title: true },
+			});
+			const paperTitleByEmail = new Map(submissions.map((s) => [s.email, s.title]));
 
-			// Create maps for quick lookup
+			// Create group map for quick lookup
 			const groupMap = new Map<number, number>();
 			groups.forEach((g) => {
 				groupMap.set(g.student_id, g.group_id);
-			});
-
-			const paperMap = new Map<number, string>();
-			papers.forEach((p) => {
-				if (p.title) paperMap.set(p.student_id, p.title);
 			});
 
 			students = studentsData.map((s) => ({
@@ -93,11 +92,11 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 				university: s.university,
 				photo: s.photo,
 				groupId: groupMap.get(s.id) ?? null,
-				paperTitle: paperMap.get(s.id) ?? null
+				paperTitle: paperTitleByEmail.get(s.email) ?? null
 			}));
 		}
-	} catch (error) {
-		console.error('Error fetching students:', error);
+	} catch (err) {
+		console.error('Error fetching students:', err);
 		students = [];
 	}
 
@@ -114,4 +113,3 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 		showParticipants: config.showParticipants,
 	};
 };
-

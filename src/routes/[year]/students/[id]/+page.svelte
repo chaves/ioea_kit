@@ -39,7 +39,7 @@
 	title="{fullName} - IOEA {data.year}"
 	description={seoDescription}
 	ogType="article"
-	ogImage={data.student.photo ? `/images/students/${data.student.photo}` : '/site-logo.png'}
+	ogImage={data.student.photo ? `/student-photos/${data.student.photo}` : '/site-logo.png'}
 />
 
 <PageHeader title={fullName} />
@@ -61,7 +61,7 @@
 						<div class="flex-shrink-0 w-[180px] h-[180px] sm:w-[180px] sm:h-[180px] rounded-lg overflow-hidden bg-bg-alt mx-auto sm:mx-0">
 								{#if data.student.photo}
 									<img
-										src={`/images/students/${data.student.photo}`}
+										src={`/student-photos/${data.student.photo}`}
 										alt={fullName}
 										class="w-full h-full object-cover"
 										onerror={(e) => {

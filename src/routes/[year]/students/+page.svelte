@@ -187,7 +187,7 @@
 											{#if student.photo}
 												<a href="/{data.year}/students/{student.id}" class="inline-block no-underline">
 													<img
-														src={`/images/students/${student.photo}`}
+														src={`/student-photos/${student.photo}`}
 														alt="{student.firstName} {student.lastName}"
 														class="w-16 h-16 object-cover rounded-lg border-2 border-white shadow-md transition-transform duration-200 hover:scale-125 hover:z-10"
 														onerror={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}

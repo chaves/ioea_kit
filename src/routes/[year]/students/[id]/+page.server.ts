@@ -26,9 +26,10 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 			throw error(404, 'Student not found');
 		}
 
-		// Get student's paper
-		const paper = await prisma.students_papers.findFirst({
-			where: { student_id: studentId }
+		// Get student's paper from call_submissions (students_papers table is unused)
+		const submission = await prisma.call_submissions.findFirst({
+			where: { email: student.email, call_year: year, accepted: true },
+			select: { title: true, summary: true, paper: true },
 		});
 
 		// Get student's group
@@ -76,11 +77,11 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 				nationality: nationalityName,
 				photo: student.photo
 			},
-			paper: paper
+			paper: submission
 				? {
-						title: paper.title,
-						abstract: paper.abstract,
-						file: paper.file
+						title: submission.title,
+						abstract: submission.summary,
+						file: submission.paper && submission.paper.length > 0 ? submission.paper : null
 					}
 				: null,
 			groupId: group?.group_id ?? null
