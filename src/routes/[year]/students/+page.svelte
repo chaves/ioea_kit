@@ -86,7 +86,7 @@
 					{/if}
 
 					<!-- Seminar Chairs Section -->
-					{#if data.showGroups && filteredChairs.length > 0}
+					{#if data.showGroups && viewMode !== 'all' && filteredChairs.length > 0}
 						<section class="mb-12">
 							<h2 class="text-primary text-2xl mb-6 pb-2 border-b-2 border-secondary">Seminar Chairs</h2>
 							<div class="grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-6">
