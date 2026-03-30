@@ -102,7 +102,7 @@
 							{#if data.groupId}
 								<div class="mb-3">
 									<span class="block text-xs uppercase tracking-wide text-text-light mb-1">Seminar Group</span>
-									<a href="/{data.year}/students" class="inline-block px-3 py-1 bg-secondary text-white text-sm font-semibold rounded no-underline hover:bg-primary">
+									<a href="/{data.year}/students?group={data.groupId}" class="inline-block px-3 py-1 bg-secondary text-white text-sm font-semibold rounded no-underline hover:bg-primary">
 										Group {data.groupId}
 									</a>
 								</div>

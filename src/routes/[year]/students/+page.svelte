@@ -2,6 +2,7 @@
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import SEO from '$lib/components/SEO.svelte';
+	import { page } from '$app/state';
 
 	interface Props {
 		data: {
@@ -33,7 +34,8 @@
 
 	let { data }: Props = $props();
 
-	let viewMode = $state<'all' | number>('all');
+	const groupParam = page.url.searchParams.get('group');
+	let viewMode = $state<'all' | number>(groupParam ? parseInt(groupParam) : 'all');
 
 	function setViewMode(mode: 'all' | number) {
 		viewMode = mode;
