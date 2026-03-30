@@ -1,6 +1,5 @@
 <script lang="ts">
 	import PageHeader from '$lib/components/PageHeader.svelte';
-	import Sidebar from '$lib/components/Sidebar.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 
 	interface Props {
@@ -46,7 +45,7 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
+		<div class="max-w-4xl mx-auto">
 			<div class="main-content">
 				<nav class="flex items-center gap-2 mb-8 text-sm">
 					<a href="/{data.year}" class="text-primary no-underline hover:underline">IOEA {data.year}</a>
@@ -58,7 +57,7 @@
 
 				<div class="bg-white rounded-lg border border-border overflow-hidden">
 					<div class="flex flex-col sm:flex-row gap-8 p-8 border-b border-border">
-						<div class="flex-shrink-0 w-[180px] h-[180px] sm:w-[180px] sm:h-[180px] rounded-lg overflow-hidden bg-bg-alt mx-auto sm:mx-0">
+						<div class="flex-shrink-0 w-[220px] h-[220px] sm:w-[300px] sm:h-[300px] rounded-lg overflow-hidden bg-bg-alt mx-auto sm:mx-0">
 								{#if data.student.photo}
 									<img
 										src={`/student-photos/${data.student.photo}`}
@@ -149,10 +148,6 @@
 					</a>
 				</div>
 			</div>
-
-			<aside class="sticky top-[100px] self-start hidden lg:block">
-				<Sidebar />
-			</aside>
 		</div>
 	</div>
 </section>

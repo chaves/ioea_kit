@@ -1,6 +1,5 @@
 <script lang="ts">
 	import PageHeader from '$lib/components/PageHeader.svelte';
-	import Sidebar from '$lib/components/Sidebar.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 
 	interface Chair {
@@ -46,7 +45,7 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
+		<div>
 			<div class="main-content">
 				{#if data.groups.length === 0}
 					<div class="text-center py-16 px-8 bg-bg-alt rounded-lg">
@@ -73,7 +72,7 @@
 											<div class="flex flex-wrap gap-4">
 												{#each group.chairs as chair}
 													<div class="flex items-center gap-4 bg-bg-alt rounded-lg p-3 flex-1 min-w-[220px]">
-														<div class="w-16 h-16 rounded-full overflow-hidden bg-primary flex-shrink-0">
+														<div class="w-24 h-24 rounded-full overflow-hidden bg-primary flex-shrink-0">
 															{#if chair.photo}
 																<img
 																	src={`/images/semchairs/${chair.photo}`}
@@ -115,7 +114,7 @@
 														href="/{data.year}/students/{student.id}"
 														class="flex items-center gap-3 p-3 rounded-lg border border-border bg-white hover:border-primary hover:shadow-sm transition-all no-underline group"
 													>
-														<div class="w-10 h-10 rounded-full overflow-hidden bg-bg-alt flex-shrink-0">
+														<div class="w-14 h-14 rounded-full overflow-hidden bg-bg-alt flex-shrink-0">
 															{#if student.photo}
 																<img
 																	src={`/student-photos/${student.photo}`}
@@ -148,10 +147,6 @@
 					</div>
 				{/if}
 			</div>
-
-			<aside class="sticky top-[100px] self-start hidden lg:block">
-				<Sidebar />
-			</aside>
 		</div>
 	</div>
 </section>
