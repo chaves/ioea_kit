@@ -1,6 +1,5 @@
 <script lang="ts">
 	import PageHeader from '$lib/components/PageHeader.svelte';
-	import Sidebar from '$lib/components/Sidebar.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { page } from '$app/state';
 
@@ -59,7 +58,7 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
+		<div>
 			<div class="main-content">
 				{#if data.showParticipants && (data.students.length > 0 || (data.chairs.length > 0 && data.showGroups))}
 					<!-- Filter buttons -->
@@ -191,7 +190,7 @@
 													<img
 														src={`/student-photos/${student.photo}`}
 														alt="{student.firstName} {student.lastName}"
-														class="w-16 h-16 object-cover rounded-lg border-2 border-white shadow-md transition-transform duration-200 hover:scale-125 hover:z-10"
+														class="w-20 h-20 object-cover rounded-lg border-2 border-white shadow-md transition-transform duration-200 hover:scale-125 hover:z-10"
 														onerror={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
 													/>
 												</a>
@@ -212,10 +211,6 @@
 					</div>
 				{/if}
 			</div>
-
-			<aside class="sticky top-[100px] self-start hidden lg:block">
-				<Sidebar />
-			</aside>
 		</div>
 	</div>
 </section>
