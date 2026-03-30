@@ -83,11 +83,11 @@ export const config = {
     } as Record<number, string>,
   },
   // Students group open
-  studentsGroupOpen: false,
+  studentsGroupOpen: true,
   // Show participants in student dashboard
   showParticipants: true,
   // Call for applications status - controls whether applications are open
-  callIsOpen: true,
+  callIsOpen: false,
   // Brochure configuration
   brochure: {
     // PDF source (optional - if provided, image will be generated from this)
