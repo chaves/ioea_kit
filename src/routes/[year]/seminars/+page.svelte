@@ -72,7 +72,7 @@
 											<div class="flex flex-wrap gap-4">
 												{#each group.chairs as chair}
 													<div class="flex items-center gap-4 bg-bg-alt rounded-lg p-3 flex-1 min-w-[220px]">
-														<div class="w-24 h-24 rounded-full overflow-hidden bg-primary flex-shrink-0">
+														<div class="w-36 h-36 rounded-full overflow-hidden bg-primary flex-shrink-0">
 															{#if chair.photo}
 																<img
 																	src={`/images/semchairs/${chair.photo}`}
@@ -88,14 +88,14 @@
 														</div>
 														<div class="flex flex-col gap-0.5 min-w-0">
 															{#if chair.website}
-																<a href={chair.website} target="_blank" rel="noopener" class="font-semibold text-primary no-underline hover:text-secondary truncate">
+																<a href={chair.website} target="_blank" rel="noopener" class="text-lg font-semibold text-primary no-underline hover:text-secondary truncate">
 																	{chair.firstName} {chair.lastName}
 																</a>
 															{:else}
-																<span class="font-semibold text-primary truncate">{chair.firstName} {chair.lastName}</span>
+																<span class="text-lg font-semibold text-primary truncate">{chair.firstName} {chair.lastName}</span>
 															{/if}
 															{#if chair.institution}
-																<span class="text-xs text-text-light truncate">{chair.institution}</span>
+																<span class="text-sm text-text-light truncate">{chair.institution}</span>
 															{/if}
 														</div>
 													</div>
@@ -114,7 +114,7 @@
 														href="/{data.year}/students/{student.id}"
 														class="flex items-center gap-3 p-3 rounded-lg border border-border bg-white hover:border-primary hover:shadow-sm transition-all no-underline group"
 													>
-														<div class="w-14 h-14 rounded-full overflow-hidden bg-bg-alt flex-shrink-0">
+														<div class="w-20 h-20 rounded-full overflow-hidden bg-bg-alt flex-shrink-0">
 															{#if student.photo}
 																<img
 																	src={`/student-photos/${student.photo}`}
@@ -129,11 +129,11 @@
 															{/if}
 														</div>
 														<div class="flex flex-col gap-0.5 min-w-0">
-															<span class="font-semibold text-primary text-sm group-hover:text-secondary transition-colors truncate">
+															<span class="font-semibold text-primary text-base group-hover:text-secondary transition-colors truncate">
 																{student.lastName}, {student.firstName}
 															</span>
 															{#if student.university}
-																<span class="text-xs text-text-light truncate">{student.university}</span>
+																<span class="text-sm text-text-light truncate">{student.university}</span>
 															{/if}
 														</div>
 													</a>
