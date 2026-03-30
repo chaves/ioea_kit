@@ -10,11 +10,43 @@
 	}
 
 	let { data }: Props = $props();
+
+	const sessions = [
+		{
+			number: 'I',
+			title: 'Dissertation',
+			content: `The dissertation process implies that you can successfully write up in a limited time. Your dissertation might be the longest piece of writing you have ever had to do, so you might see the process as endless. You could lose your motivation or be confused at different points of your dissertation or be unable to manage your writing time. This session goes through these different points. It seeks to answer the following questions: how to manage time? Should we write a little bit every day or plan an overall work schedule including readings, testing and writing? What should the structure of the dissertation look like? How often should I meet with my supervisor? When is a chapter ready for a seminar?`
+		},
+		{
+			number: 'II',
+			title: 'Publication Process',
+			content: `Publication is a key element of succeeding in academia — not only a tenure requirement, but increasingly prominent even at the job market stage. It takes a lot of time to polish a paper for submission: building up the motivation, clearly stating the contribution, laying out the methodology and presenting the results. With other duties like finishing a dissertation, applying for jobs, teaching and administrative tasks, finding the optimal balance between research and other commitments remains a challenge throughout one's career.`,
+			items: [
+				'How to polish the final draft for submission?',
+				'When can we consider a paper is ready for submission?',
+				'How to select a journal?',
+				'How to address an R&R?',
+				'If a paper gets rejected, how to incorporate comments?',
+				'After rejection — how to choose the next journal?',
+				'How to balance research along with academic and non-academic job requirements?'
+			]
+		},
+		{
+			number: 'III',
+			title: 'Being on the Job Market',
+			content: `The job market process is extremely stressful. Two dimensions are particularly critical: the application file (CV, cover letters, teaching statement, research statement, and recommendation letters) and the job talk. Senior scholars will provide useful tips on polishing CVs and cover letters, writing research or teaching statements, and preparing the job talk. Issues like how to schedule interviews, whether to start with your best interviews or not, and how to handle too many invitations will also be addressed.`
+		},
+		{
+			number: 'IV',
+			title: 'Funding Research',
+			content: `Research requires funding: many agencies are willing to help. Getting a post-doc or grants available to travel and build new research networks is one of the key challenges. Where should you investigate these opportunities? When should you apply? How should you apply? These questions and more will be discussed in this fourth session.`
+		}
+	];
 </script>
 
 <SEO
 	title="Lunch Sessions - IOEA {data.year}"
-	description="Information about the informal lunch sessions and networking opportunities during IOEA {data.year}."
+	description="Short sessions focused on the practical aspects of the Ph.D. process and academic career at IOEA {data.year}."
 />
 
 <PageHeader title="Lunch Sessions - IOEA {data.year}" />
@@ -23,40 +55,41 @@
 	<div class="container">
 		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-				<p class="text-lg sm:text-xl font-medium text-text mb-10 leading-relaxed">
-					Lunch sessions provide informal opportunities for discussion and networking
-					during the IOEA program.
-				</p>
 
-				<article>
-					<h2 class="text-primary text-2xl mb-6 pb-2 border-b-2 border-secondary font-bold">About Lunch Sessions</h2>
-					<p class="text-base sm:text-[1.05rem] leading-relaxed mb-6 text-text">
-						The lunch sessions complement the formal program by offering:
-					</p>
-					<ul class="mb-8 pl-6 space-y-3 text-base sm:text-[1.05rem] text-text">
-						<li class="pl-2 leading-relaxed font-medium"><span class="text-secondary mr-2">•</span> Informal presentations by faculty on emerging topics</li>
-						<li class="pl-2 leading-relaxed font-medium"><span class="text-secondary mr-2">•</span> Q&A sessions with lecturers</li>
-						<li class="pl-2 leading-relaxed font-medium"><span class="text-secondary mr-2">•</span> Career development discussions</li>
-						<li class="pl-2 leading-relaxed font-medium"><span class="text-secondary mr-2">•</span> Networking opportunities with peers and faculty</li>
-					</ul>
-
-					<p class="text-base sm:text-[1.05rem] leading-relaxed mb-10 text-text">
-						These sessions take place during lunch breaks and provide a relaxed
-						atmosphere for continued learning and discussion.
-					</p>
-				</article>
-
-				<div class="bg-bg-alt p-8 rounded-2xl border border-border shadow-inner mt-10">
-					<h3 class="text-xl font-bold text-primary mb-4 flex items-center gap-3">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-						Schedule
-					</h3>
-					<p class="text-base sm:text-[1.05rem] m-0 leading-relaxed text-text font-medium">
-						The detailed schedule for lunch sessions will be announced during the program.
-						Sessions typically cover topics not addressed in the main lectures and provide
-						opportunities for more interactive discussions.
+				<div class="bg-bg-alt p-6 rounded-xl border border-border mb-10">
+					<p class="text-base leading-relaxed text-text m-0">
+						<strong>Mission:</strong> The purpose of these short sessions is to focus on the practical aspects of the Ph.D. process and more broadly on the academic career. Unlike other sessions at IOEA (lectures, workshops and seminars), these sessions are much shorter and do not focus on research issues. Rather, they are devoted to discussing answers to questions that Ph.D. students and young scholars face all the time. Close interactions between participants and faculty are one of the characterizing features. Since the sessions aim to find answers to questions that participants most likely have, participant involvement is sought a week before IOEA starts.
 					</p>
 				</div>
+
+				<p class="text-base leading-relaxed text-text mb-10">
+					The sessions address four main dimensions: (1) managing the dissertation; (2) the publication process; (3) the job market; and (4) careers for academics outside academia.
+				</p>
+
+				<div class="flex flex-col gap-6">
+					{#each sessions as session}
+						<div class="border border-border rounded-xl overflow-hidden">
+							<div class="bg-primary px-6 py-4 flex items-center gap-4">
+								<span class="text-white/60 text-sm font-bold uppercase tracking-widest">Session {session.number}</span>
+								<h2 class="text-white text-xl font-bold m-0">{session.title}</h2>
+							</div>
+							<div class="p-6">
+								<p class="text-base leading-relaxed text-text m-0 mb-0">{session.content}</p>
+								{#if session.items}
+									<ul class="mt-4 space-y-2 pl-0 list-none">
+										{#each session.items as item}
+											<li class="flex items-start gap-2 text-base text-text leading-relaxed">
+												<span class="text-secondary font-bold flex-shrink-0 mt-0.5">→</span>
+												{item}
+											</li>
+										{/each}
+									</ul>
+								{/if}
+							</div>
+						</div>
+					{/each}
+				</div>
+
 			</div>
 
 			<aside class="sticky top-[100px] self-start hidden lg:block">
@@ -65,5 +98,3 @@
 		</div>
 	</div>
 </section>
-
-

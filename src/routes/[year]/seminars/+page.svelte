@@ -3,41 +3,43 @@
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 
+	interface Chair {
+		id: number;
+		firstName: string;
+		lastName: string;
+		institution: string | null;
+		website: string | null;
+		photo: string | null;
+	}
+
+	interface Student {
+		id: number;
+		firstName: string;
+		lastName: string;
+		university: string | null;
+		photo: string | null;
+		paperTitle: string | null;
+	}
+
+	interface Group {
+		groupId: number;
+		chairs: Chair[];
+		students: Student[];
+	}
+
 	interface Props {
 		data: {
 			year: number;
-			chairs: Array<{
-				id: number;
-				firstName: string;
-				lastName: string;
-				university: string | null;
-				website: string | null;
-				photo: string | null;
-				bio: string | null;
-				groupId: number | null;
-			}>;
+			groups: Group[];
 		};
 	}
 
 	let { data }: Props = $props();
-
-	// Group chairs by group
-	const chairsByGroup = $derived(() => {
-		const groups: Record<number, typeof data.chairs> = {};
-		data.chairs.forEach((chair) => {
-			const groupId = chair.groupId ?? 0;
-			if (!groups[groupId]) {
-				groups[groupId] = [];
-			}
-			groups[groupId].push(chair);
-		});
-		return groups;
-	});
 </script>
 
 <SEO
 	title="Seminars - IOEA {data.year}"
-	description="Research seminars at the IOEA {data.year} session where participants present their work."
+	description="Research seminars at IOEA {data.year} — participants present their work in small groups supervised by seminar chairs."
 />
 
 <PageHeader title="Seminars - IOEA {data.year}" />
@@ -46,66 +48,103 @@
 	<div class="container">
 		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
 			<div class="main-content">
-				<p class="text-lg text-text-light mb-8">
-					The seminar sessions at IOEA {data.year} provide participants with the opportunity
-					to present their research and receive feedback from faculty and peers.
-				</p>
-
-				<div class="bg-bg-alt p-6 rounded-lg mb-8">
-					<h2 class="mb-4">About the Seminars</h2>
-					<p class="m-0 leading-relaxed">
-						Participants are organized into small groups, each led by experienced seminar chairs.
-						In these sessions, participants present their work-in-progress and receive
-						constructive feedback to help advance their research.
-					</p>
-				</div>
-
-				{#if data.chairs.length > 0}
-					<div>
-						<h2 class="mb-6">Seminar Chairs</h2>
-						<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-							{#each data.chairs as chair}
-								<div class="bg-white rounded-lg border border-border overflow-hidden">
-									<div class="aspect-square overflow-hidden bg-bg-alt">
-											{#if chair.photo}
-												<img
-													src={`/images/semchairs/${chair.photo}`}
-													alt="{chair.firstName} {chair.lastName}"
-													class="w-full h-full object-cover"
-													onerror={(e) => {
-														(e.currentTarget as HTMLImageElement).src = '/images/placeholder-person.jpg';
-													}}
-												/>
-											{:else}
-												<div class="w-full h-full flex items-center justify-center bg-primary text-white text-3xl font-semibold">
-													{chair.firstName[0]}{chair.lastName[0]}
-												</div>
-										{/if}
-									</div>
-									<div class="p-4">
-										<h3 class="text-base mb-1 m-0">
-											{#if chair.website}
-												<a href={chair.website} target="_blank" rel="noopener" class="text-primary no-underline hover:text-secondary">
-													{chair.firstName} {chair.lastName}
-												</a>
-											{:else}
-												{chair.firstName} {chair.lastName}
-											{/if}
-										</h3>
-										{#if chair.university}
-											<p class="text-sm text-text-light m-0 mb-2">{chair.university}</p>
-										{/if}
-										{#if chair.groupId}
-											<span class="inline-block px-3 py-1 bg-secondary text-white text-xs font-semibold rounded-full">Group {chair.groupId}</span>
-										{/if}
-									</div>
-								</div>
-							{/each}
-						</div>
+				{#if data.groups.length === 0}
+					<div class="text-center py-16 px-8 bg-bg-alt rounded-lg">
+						<p class="text-lg text-text">Seminar group information for IOEA {data.year} will be available soon.</p>
 					</div>
 				{:else}
-					<div class="text-center py-12 bg-bg-alt rounded-lg text-text-light">
-						<p>Seminar chair information will be available soon.</p>
+					<p class="text-lg text-text-light mb-10">
+						Participants are organized into {data.groups.length} seminar groups. Each group is led by two chairs and presents their research work throughout the week.
+					</p>
+
+					<div class="flex flex-col gap-12">
+						{#each data.groups as group}
+							<div class="border border-border rounded-xl overflow-hidden shadow-sm">
+								<!-- Group header -->
+								<div class="bg-primary px-6 py-4">
+									<h2 class="text-white text-xl font-bold m-0">Group {group.groupId}</h2>
+								</div>
+
+								<div class="p-6 flex flex-col gap-8">
+									<!-- Chairs -->
+									{#if group.chairs.length > 0}
+										<div>
+											<h3 class="text-sm font-bold uppercase tracking-widest text-text-light mb-4">Seminar Chairs</h3>
+											<div class="flex flex-wrap gap-4">
+												{#each group.chairs as chair}
+													<div class="flex items-center gap-4 bg-bg-alt rounded-lg p-3 flex-1 min-w-[220px]">
+														<div class="w-16 h-16 rounded-full overflow-hidden bg-primary flex-shrink-0">
+															{#if chair.photo}
+																<img
+																	src={`/images/semchairs/${chair.photo}`}
+																	alt="{chair.firstName} {chair.lastName}"
+																	class="w-full h-full object-cover"
+																	onerror={(e) => { (e.currentTarget as HTMLImageElement).src = '/images/placeholder-person.jpg'; }}
+																/>
+															{:else}
+																<div class="w-full h-full flex items-center justify-center text-white text-xl font-semibold">
+																	{chair.firstName[0]}{chair.lastName[0]}
+																</div>
+															{/if}
+														</div>
+														<div class="flex flex-col gap-0.5 min-w-0">
+															{#if chair.website}
+																<a href={chair.website} target="_blank" rel="noopener" class="font-semibold text-primary no-underline hover:text-secondary truncate">
+																	{chair.firstName} {chair.lastName}
+																</a>
+															{:else}
+																<span class="font-semibold text-primary truncate">{chair.firstName} {chair.lastName}</span>
+															{/if}
+															{#if chair.institution}
+																<span class="text-xs text-text-light truncate">{chair.institution}</span>
+															{/if}
+														</div>
+													</div>
+												{/each}
+											</div>
+										</div>
+									{/if}
+
+									<!-- Students -->
+									{#if group.students.length > 0}
+										<div>
+											<h3 class="text-sm font-bold uppercase tracking-widest text-text-light mb-4">Participants ({group.students.length})</h3>
+											<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+												{#each group.students as student}
+													<a
+														href="/{data.year}/students/{student.id}"
+														class="flex items-center gap-3 p-3 rounded-lg border border-border bg-white hover:border-primary hover:shadow-sm transition-all no-underline group"
+													>
+														<div class="w-10 h-10 rounded-full overflow-hidden bg-bg-alt flex-shrink-0">
+															{#if student.photo}
+																<img
+																	src={`/student-photos/${student.photo}`}
+																	alt="{student.firstName} {student.lastName}"
+																	class="w-full h-full object-cover"
+																	onerror={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+																/>
+															{:else}
+																<div class="w-full h-full flex items-center justify-center bg-secondary text-white text-sm font-semibold">
+																	{student.firstName[0]}{student.lastName[0]}
+																</div>
+															{/if}
+														</div>
+														<div class="flex flex-col gap-0.5 min-w-0">
+															<span class="font-semibold text-primary text-sm group-hover:text-secondary transition-colors truncate">
+																{student.lastName}, {student.firstName}
+															</span>
+															{#if student.university}
+																<span class="text-xs text-text-light truncate">{student.university}</span>
+															{/if}
+														</div>
+													</a>
+												{/each}
+											</div>
+										</div>
+									{/if}
+								</div>
+							</div>
+						{/each}
 					</div>
 				{/if}
 			</div>
@@ -116,4 +155,3 @@
 		</div>
 	</div>
 </section>
-
