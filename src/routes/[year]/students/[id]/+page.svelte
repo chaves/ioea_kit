@@ -124,7 +124,7 @@
 							{/if}
 
 							{#if data.paper.file}
-								<a href="/uploads/papers/{data.paper.file}" class="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-primary text-white rounded-md no-underline font-medium transition-colors duration-200 hover:bg-secondary hover:text-white" download>
+								<a href="/uploads/call/{data.year}/{data.paper.file}" class="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-primary text-white rounded-md no-underline font-medium transition-colors duration-200 hover:bg-secondary hover:text-white" download>
 									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 										<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
 										<polyline points="7 10 12 15 17 10" />
