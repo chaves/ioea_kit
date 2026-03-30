@@ -87,7 +87,7 @@ export const config = {
   // Show participants in student dashboard
   showParticipants: true,
   // Call for applications status - controls whether applications are open
-  callIsOpen: false,
+  callIsOpen: true,
   // Brochure configuration
   brochure: {
     // PDF source (optional - if provided, image will be generated from this)
