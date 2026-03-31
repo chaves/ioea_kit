@@ -94,14 +94,14 @@ export const config = {
     pdfName: "IOEABrochure2024.pdf",
     name: "IOEABrochure2024.pdf",
     // Image filename (generated from PDF or manually created)
-    imageName: "graphiques/IOEABrochure2024.jpg",
+    imageName: "graphiques/IOEABrochure2024.webp",
   },
   // Program configuration
   program: {
     // PDF source (optional - if provided, image will be generated from this)
     pdfName: `IOEAProgramme2026.pdf`,
     // Image filename (generated from PDF or manually created)
-    imageName: `graphiques/IOEAProgramme2026.jpg`,
+    imageName: `graphiques/IOEAProgramme2026.webp`,
   },
   // Financial information (prices in euros)
   prices: {

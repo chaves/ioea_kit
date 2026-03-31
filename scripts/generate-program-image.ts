@@ -53,16 +53,26 @@ async function convertPDFToImage(
 	// Try pdf2pic first (requires GraphicsMagick and Ghostscript)
 	try {
 		const { fromPath } = await import('pdf2pic');
+		const tempName = outputPath.split('/').pop()?.replace(/\.\w+$/, '') || 'program';
 		const convert = fromPath(fullPdfPath, {
-			density: 100,
-			saveFilename: outputPath.split('/').pop()?.replace('.jpg', '') || 'program',
+			density: 150,
+			saveFilename: tempName,
 			savePath: join(fullOutputPath, '..'),
 			format: 'jpg',
-			width,
-			height: Math.round(width * 1.414) // A4 aspect ratio
+			width: width * 2,
+			height: Math.round(width * 2 * 1.414),
 		});
 
-		const result = await convert(1, { responseType: 'image' });
+		await convert(1, { responseType: 'image' });
+
+		// Resize and convert to WebP
+		const tempFile = join(fullOutputPath, '..', tempName + '.1.jpg');
+		const imageBuffer = await readFile(tempFile);
+		await sharp(imageBuffer)
+			.resize({ width, withoutEnlargement: true })
+			.webp({ quality })
+			.toFile(fullOutputPath);
+
 		console.log('✓ Image generated using pdf2pic');
 		return;
 	} catch (pdf2picError) {
@@ -78,21 +88,23 @@ async function convertPDFToImage(
 		const outputDir = join(fullOutputPath, '..');
 		await mkdir(outputDir, { recursive: true });
 
-		// Use pdftocairo to convert first page
+		// Use pdftocairo to convert first page at high resolution, then downsample with sharp
+		const tempBase = fullOutputPath.replace(/\.\w+$/, '');
 		await execFileAsync('pdftocairo', [
 			'-jpeg',
+			'-r', '150',
 			'-f', '1',
 			'-l', '1',
-			'-scale-to-x', String(width),
-			'-scale-to-y', '-1', // Maintain aspect ratio
 			fullPdfPath,
-			fullOutputPath.replace('.jpg', '')
+			tempBase,
 		]);
 
-		// Optimize with sharp
-		const imageBuffer = await readFile(fullOutputPath.replace('.jpg', '-1.jpg'));
+		// Resize and convert to WebP with sharp
+		const tempFile = tempBase + '-1.jpg';
+		const imageBuffer = await readFile(tempFile);
 		await sharp(imageBuffer)
-			.jpeg({ quality })
+			.resize({ width, withoutEnlargement: true })
+			.webp({ quality })
 			.toFile(fullOutputPath);
 
 		console.log('✓ Image generated using pdf-poppler');
@@ -123,7 +135,7 @@ async function generateProgramImage(year: number): Promise<void> {
 	console.log(`   Output: ${outputPath}`);
 
 	try {
-		await convertPDFToImage(pdfPath, outputPath);
+		await convertPDFToImage(pdfPath, outputPath, 400, 80);
 		console.log(`   ✅ Successfully generated: static/images/${outputPath}`);
 	} catch (error) {
 		console.warn(`   ⚠️  Skipped: ${error instanceof Error ? error.message : error}`);
@@ -140,7 +152,7 @@ async function generateBrochureImage(): Promise<void> {
 	console.log(`   Output: ${outputPath}`);
 
 	try {
-		await convertPDFToImage(pdfPath, outputPath);
+		await convertPDFToImage(pdfPath, outputPath, 400, 80);
 		console.log(`   ✅ Successfully generated: static/images/${outputPath}`);
 	} catch (error) {
 		console.warn(`   ⚠️  Skipped: ${error instanceof Error ? error.message : error}`);
