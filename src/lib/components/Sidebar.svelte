@@ -33,9 +33,9 @@
 	{#if shouldShowProgram}
 		<div class="sidebar-widget">
 			<h3>Program {config.currentYear}</h3>
-			<a href={`/pdf/${config.program.pdfName}`} target="_blank" class="program-preview">
+			<a href={`/pdf/${config.program.pdfName}?v=${__BUILD_ID__}`} target="_blank" class="program-preview">
 				<img
-					src={`/images/${config.program.imageName}`}
+					src={`/images/${config.program.imageName}?v=${__BUILD_ID__}`}
 					alt="IOEA {config.currentYear} Program"
 					class="program-image"
 				/>
@@ -64,9 +64,9 @@
 {#if showBrochure}
 	<div class="sidebar-widget brochure-widget">
 		<h3>Brochure</h3>
-		<a href={`/pdf/${config.brochure.name}`} target="_blank" class="brochure-preview">
+		<a href={`/pdf/${config.brochure.name}?v=${__BUILD_ID__}`} target="_blank" class="brochure-preview">
 			<img
-				src={`/images/${config.brochure.imageName}`}
+				src={`/images/${config.brochure.imageName}?v=${__BUILD_ID__}`}
 					alt="IOEA Brochure {config.currentYear}"
 					class="brochure-image"
 					onerror={(e) => {

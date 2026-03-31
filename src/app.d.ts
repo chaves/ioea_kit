@@ -3,6 +3,7 @@
 import type { Session } from '$lib/server/auth';
 
 declare global {
+	const __BUILD_ID__: string;
 	namespace App {
 		// interface Error {}
 		interface Locals {
