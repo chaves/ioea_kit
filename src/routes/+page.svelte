@@ -61,7 +61,7 @@
 	// Track which videos have been loaded (iframe shown)
 	let loadedVideos = $state(new Set<string>());
 	let mainVideoLoaded = $state(false);
-	const mainVideoId = 'igkwXFJLjWk';
+	const mainVideoId = 'avcC11fXzlA';
 
 	// Track which testimonials are expanded
 	let expandedQuotes = $state(new Set<number>());
@@ -126,13 +126,14 @@
 			<div class="main-content">
 				<!-- Video Section -->
 				<div class="mb-12">
+					<h2 class="mb-4">IOEA 2025: participants' impressions</h2>
 					<div class="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.1)] bg-black">
 						{#if mainVideoLoaded}
 							<iframe
 								width="560"
 								height="315"
 								src="https://www.youtube.com/embed/{mainVideoId}?autoplay=1"
-								title="IOEA Presentation"
+								title="IOEA 2025 - Participants' impressions"
 								frameborder="0"
 								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 								allowfullscreen
@@ -143,11 +144,11 @@
 								type="button"
 								class="flex absolute top-0 left-0 justify-center items-center p-0 w-full h-full bg-transparent border-0 transition-opacity duration-200 cursor-pointer hover:opacity-90"
 								onclick={loadMainVideo}
-								aria-label="Play IOEA Presentation"
+								aria-label="Play IOEA 2025 - Participants' impressions"
 							>
 								<img
 									src={getThumbnailUrl(mainVideoId)}
-									alt="IOEA Presentation"
+									alt="IOEA 2025 - Participants' impressions"
 									loading="lazy"
 									class="object-cover absolute top-0 left-0 w-full h-full"
 									onerror={(e) => {

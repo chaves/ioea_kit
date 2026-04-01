@@ -61,6 +61,23 @@ export const videoSections: VideoSection[] = [
         name: "Jens Prüfer",
         institution: "Tilburg University & University of East Anglia",
       },
+      {
+        id: "HdCqXp_GVYc",
+        name: "Guanchi Zhang",
+        institution: "Vermont Law and Graduate School",
+      },
+      {
+        id: "rJJlpDNobZ8",
+        name: "Arthur Silve",
+        institution: "Laval University",
+      },
+    ],
+  },
+  {
+    year: 2025,
+    title: "IOEA 2025: participants' impressions",
+    videos: [
+      { id: "avcC11fXzlA", name: "Participants", institution: "IOEA 2025" },
     ],
   },
   {
