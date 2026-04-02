@@ -61,7 +61,7 @@
 	// Track which videos have been loaded (iframe shown)
 	let loadedVideos = $state(new Set<string>());
 	let mainVideoLoaded = $state(false);
-	const mainVideoId = 'avcC11fXzlA';
+	const mainVideoId = 'igkwXFJLjWk';
 
 	// Track which testimonials are expanded
 	let expandedQuotes = $state(new Set<number>());
@@ -126,14 +126,13 @@
 			<div class="main-content">
 				<!-- Video Section -->
 				<div class="mb-12">
-					<h2 class="mb-4">IOEA 2025: participants' impressions</h2>
 					<div class="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.1)] bg-black">
 						{#if mainVideoLoaded}
 							<iframe
 								width="560"
 								height="315"
 								src="https://www.youtube.com/embed/{mainVideoId}?autoplay=1"
-								title="IOEA 2025 - Participants' impressions"
+								title="IOEA Presentation"
 								frameborder="0"
 								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 								allowfullscreen
@@ -144,11 +143,11 @@
 								type="button"
 								class="flex absolute top-0 left-0 justify-center items-center p-0 w-full h-full bg-transparent border-0 transition-opacity duration-200 cursor-pointer hover:opacity-90"
 								onclick={loadMainVideo}
-								aria-label="Play IOEA 2025 - Participants' impressions"
+								aria-label="Play IOEA Presentation"
 							>
 								<img
 									src={getThumbnailUrl(mainVideoId)}
-									alt="IOEA 2025 - Participants' impressions"
+									alt="IOEA Presentation"
 									loading="lazy"
 									class="object-cover absolute top-0 left-0 w-full h-full"
 									onerror={(e) => {
@@ -332,6 +331,47 @@
 							{/if}
 						{/each}
 					</div>
+					<!-- Participants' impressions video -->
+					<div class="mt-6">
+						<h3 class="mb-4 text-base font-semibold text-primary">IOEA 2025: participants' impressions</h3>
+						<div class="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.08)] bg-black">
+							{#if loadedVideos.has('avcC11fXzlA')}
+								<iframe
+									src="https://www.youtube.com/embed/avcC11fXzlA?autoplay=1"
+									title="IOEA 2025 - Participants' impressions"
+									frameborder="0"
+									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+									allowfullscreen
+									class="absolute top-0 left-0 w-full h-full"
+								></iframe>
+							{:else}
+								<button
+									type="button"
+									class="flex absolute top-0 left-0 justify-center items-center p-0 w-full h-full bg-transparent border-0 transition-opacity duration-200 cursor-pointer hover:opacity-90"
+									onclick={() => loadVideo('avcC11fXzlA')}
+									aria-label="Play IOEA 2025 - Participants' impressions"
+								>
+									<img
+										src={getThumbnailUrl('avcC11fXzlA')}
+										alt="IOEA 2025 - Participants' impressions"
+										loading="lazy"
+										class="object-cover absolute top-0 left-0 w-full h-full"
+										onerror={(e) => {
+											const img = e.currentTarget as HTMLImageElement;
+											img.src = `https://img.youtube.com/vi/avcC11fXzlA/hqdefault.jpg`;
+										}}
+									/>
+									<div class="relative z-10 w-[68px] h-12 transition-transform duration-200 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:scale-110" aria-hidden="true">
+										<svg xmlns="http://www.w3.org/2000/svg" width="68" height="48" viewBox="0 0 68 48">
+											<path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.63-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"/>
+											<path d="M 45,24 27,14 27,34" fill="#fff"/>
+										</svg>
+									</div>
+								</button>
+							{/if}
+						</div>
+					</div>
+
 					<div class="mt-8 text-center">
 						<a href="/community/testimonials" class="inline-flex gap-2 items-center px-6 py-3 text-base font-semibold text-white no-underline rounded-lg transition-all duration-200 bg-secondary hover:bg-secondary-dark hover:shadow-lg hover:-translate-y-0.5">
 							Read more testimonials →
