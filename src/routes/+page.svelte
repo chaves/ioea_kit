@@ -286,12 +286,13 @@
 				<div class="mb-12">
 					<h2 class="mb-6">Participants' impressions</h2>
 					<div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6">
+						{#each [{ id: 'avcC11fXzlA', year: 2025 }, { id: 'c1zzIZRZiho', year: 2024 }] as vid}
 						<div class="flex flex-col gap-6 bg-white p-6 rounded-lg border border-border shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
 							<div class="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.08)] bg-black">
-								{#if loadedVideos.has('avcC11fXzlA')}
+								{#if loadedVideos.has(vid.id)}
 									<iframe
-										src="https://www.youtube.com/embed/avcC11fXzlA?autoplay=1"
-										title="IOEA 2025 - Participants' impressions"
+										src="https://www.youtube.com/embed/{vid.id}?autoplay=1"
+										title="IOEA {vid.year} - Participants' impressions"
 										frameborder="0"
 										allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 										allowfullscreen
@@ -301,17 +302,17 @@
 									<button
 										type="button"
 										class="flex absolute top-0 left-0 justify-center items-center p-0 w-full h-full bg-transparent border-0 transition-opacity duration-200 cursor-pointer hover:opacity-90"
-										onclick={() => loadVideo('avcC11fXzlA')}
-										aria-label="Play IOEA 2025 - Participants' impressions"
+										onclick={() => loadVideo(vid.id)}
+										aria-label="Play IOEA {vid.year} - Participants' impressions"
 									>
 										<img
-											src={getThumbnailUrl('avcC11fXzlA')}
-											alt="IOEA 2025 - Participants' impressions"
+											src={getThumbnailUrl(vid.id)}
+											alt="IOEA {vid.year} - Participants' impressions"
 											loading="lazy"
 											class="object-cover absolute top-0 left-0 w-full h-full"
 											onerror={(e) => {
 												const img = e.currentTarget as HTMLImageElement;
-												img.src = `https://img.youtube.com/vi/avcC11fXzlA/hqdefault.jpg`;
+												img.src = `https://img.youtube.com/vi/${vid.id}/hqdefault.jpg`;
 											}}
 										/>
 										<div class="relative z-10 w-[68px] h-12 transition-transform duration-200 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:scale-110" aria-hidden="true">
@@ -326,10 +327,11 @@
 							<div class="flex-1">
 								<div class="flex flex-col gap-1">
 									<strong class="font-semibold text-primary">Participants</strong>
-									<span class="text-xs text-text-light">IOEA 2025</span>
+									<span class="text-xs text-text-light">IOEA {vid.year}</span>
 								</div>
 							</div>
 						</div>
+						{/each}
 					</div>
 				</div>
 
