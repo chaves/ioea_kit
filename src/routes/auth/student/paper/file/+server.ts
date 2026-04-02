@@ -1,6 +1,6 @@
 import type { RequestHandler } from './$types';
 import { error, redirect } from '@sveltejs/kit';
-import { readFile, access } from 'fs/promises';
+import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { hasAnyRole } from '$lib/server/auth';
 import { prisma } from '$lib/server/db';
@@ -27,25 +27,12 @@ export const GET: RequestHandler = async ({ locals }) => {
 
 	const year = String(config.currentYear);
 	const filename = submission.paper;
+	const filePath = join('uploads', 'call', year, filename);
 
-	// Try student re-upload dir first, then original call upload dir
-	const candidates = [
-		join('uploads', 'students', year, filename),
-		join('uploads', 'call', year, filename),
-	];
-
-	let buffer: Buffer | null = null;
-	for (const path of candidates) {
-		try {
-			await access(path);
-			buffer = await readFile(path);
-			break;
-		} catch {
-			// try next
-		}
-	}
-
-	if (!buffer) {
+	let buffer: Buffer;
+	try {
+		buffer = await readFile(filePath);
+	} catch {
 		throw error(404, 'Paper file not found on server');
 	}
 

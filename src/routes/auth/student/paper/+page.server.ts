@@ -3,10 +3,10 @@ import type { PageServerLoad, Actions } from './$types';
 import { prisma } from '$lib/server/db';
 import { hasAnyRole } from '$lib/server/auth';
 import { config } from '$lib/config';
-import { writeFile, mkdir, copyFile, access } from 'fs/promises';
+import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 
-const PAPERS_DIR = join('uploads', 'students', String(config.currentYear));
+const PAPERS_DIR = join('uploads', 'call', String(config.currentYear));
 const MAX_PAPER_SIZE = 5 * 1024 * 1024;
 
 function slugify(email: string): string {
@@ -94,27 +94,6 @@ export const actions: Actions = {
 		const paperNow = updateData.paper ?? submission.paper;
 		if (!paperNow) {
 			return fail(400, { error: 'A paper file is required. Please upload a PDF before validating.' });
-		}
-
-		// Copy from call dir to student dir if not already there
-		const slug = slugify(locals.session.email);
-		const studentFilename = `${slug}-paper.pdf`;
-		const studentPath = join(PAPERS_DIR, studentFilename);
-		try {
-			await access(studentPath);
-		} catch {
-			const callPath = join('uploads', 'call', String(config.currentYear), paperNow);
-			try {
-				await access(callPath);
-				await mkdir(PAPERS_DIR, { recursive: true });
-				await copyFile(callPath, studentPath);
-				await prisma.call_submissions.update({
-					where: { id: submission.id },
-					data: { paper: studentFilename },
-				});
-			} catch {
-				// Source not found — leave as-is
-			}
 		}
 
 		await prisma.students_validations.upsert({
