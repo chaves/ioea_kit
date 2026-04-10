@@ -67,11 +67,12 @@ export const load: PageServerLoad = async ({ params }) => {
   } else if (
     p.lien &&
     !p.lien.startsWith("http") &&
-    !p.lien.startsWith("/pdf/")
+    !p.lien.startsWith("/")
   ) {
-    // It's a relative path, ensure it starts with /pdf/
+    // It's a relative path (no leading slash), ensure it starts with /pdf/
     presentationLink = `/pdf/${p.lien}`;
   }
+  // else: absolute path (starts with /) or external URL → use as-is
 
   // File size calculation removed since files are now external
   let fileSize: string | null = null;
