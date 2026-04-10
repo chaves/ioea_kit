@@ -10,6 +10,10 @@ const UPLOAD_DIR = `uploads/call/${config.currentYear}`;
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export const load: PageServerLoad = async ({ cookies }) => {
+	if (!config.callIsOpen) {
+		throw redirect(303, `/${config.currentYear}`);
+	}
+
 	// Clean up any old multi-step cookies (migration from old flow)
 	try {
 		cookies.delete('call_step1', { path: '/' });
