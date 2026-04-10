@@ -112,9 +112,11 @@
 				<a href="/{currentYear}" class="px-8 py-4 text-lg btn btn-primary">
 					IOEA {currentYear}
 				</a>
-				<a href="/call" class="px-8 py-4 text-lg btn btn-secondary">
-					Apply Now
-				</a>
+				{#if appConfig.callIsOpen}
+					<a href="/call" class="px-8 py-4 text-lg btn btn-secondary">
+						Apply Now
+					</a>
+				{/if}
 			</div>
 		</div>
 	</div>
@@ -217,9 +219,11 @@
 							</li>
 						</ul>
 					</div>
-					<a href="/call" class="btn btn-primary">
-						Apply for IOEA {currentYear}
-					</a>
+					{#if appConfig.callIsOpen}
+						<a href="/call" class="btn btn-primary">
+							Apply for IOEA {currentYear}
+						</a>
+					{/if}
 				</div>
 
 				<!-- Faculty Videos Preview -->
