@@ -4,6 +4,7 @@
 	import SEO from '$lib/components/SEO.svelte';
 	import { page } from '$app/stores';
 	import { pdfUrl } from '$lib/utils/files';
+	import { marked } from 'marked';
 
 	import type { PageData } from './$types';
 
@@ -23,7 +24,9 @@
 
 	const fileExtension = $derived(getFileExtension(data.presentation.link));
 
-	const abstractHtml = $derived(data.presentation.abstract ?? '');
+	const abstractHtml = $derived(
+		data.presentation.abstract ? (marked.parse(data.presentation.abstract) as string) : ''
+	);
 
 	const seoTitle = $derived(data.presentation.title ? `${data.presentation.title} - ${data.presentation.author.firstName} ${data.presentation.author.lastName}` : `${typeLabel} - IOEA ${data.year}`);
 	const seoDescription = $derived(data.presentation.abstract ? data.presentation.abstract.replace(/<[^>]*>/g, '').substring(0, 160) : `${typeLabel} by ${data.presentation.author.firstName} ${data.presentation.author.lastName} at IOEA ${data.year}`);

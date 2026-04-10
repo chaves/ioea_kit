@@ -78,6 +78,27 @@
 						</svg>
 						Provision Students
 					</a>
+					<a href="/auth/manager/presentations" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname.startsWith('/auth/manager/presentations') ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<rect x="2" y="3" width="20" height="14" rx="2"></rect>
+							<line x1="8" y1="21" x2="16" y2="21"></line>
+							<line x1="12" y1="17" x2="12" y2="21"></line>
+						</svg>
+						Presentations
+					</a>
+					<a href="/auth/manager/authors" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname.startsWith('/auth/manager/authors') ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<circle cx="12" cy="8" r="4"></circle>
+							<path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"></path>
+						</svg>
+						Authors
+					</a>
+					<a href="/auth/manager/themes" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname.startsWith('/auth/manager/themes') ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M4 6h16M4 12h16M4 18h10"></path>
+						</svg>
+						Themes
+					</a>
 				{/if}
 				{#if data.session?.roles?.includes('admin') || data.session?.roles?.includes('program-admin')}
 					<a href="/auth/submissions" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/submissions' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
