@@ -11,8 +11,8 @@ import { createServer } from 'http';
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 
-// Set body size limit for file uploads (12MB)
-process.env.BODY_SIZE_LIMIT = process.env.BODY_SIZE_LIMIT || '12582912';
+// Set body size limit for file uploads (30MB)
+process.env.BODY_SIZE_LIMIT = process.env.BODY_SIZE_LIMIT || '31457280';
 
 // Origin handling:
 // - In production, prefer letting SvelteKit derive the origin from trusted proxy headers.
