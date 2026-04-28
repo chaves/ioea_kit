@@ -7,7 +7,7 @@ export const config = {
   // Basic constants
   currentYear: 2026,
   archiveFromYear: 2002,
-  archiveToYear: 2025,
+  archiveToYear: 2026,
   sessionNumber: 23, // Current session number (2026 = 23rd session)
 
   // Bad sessions (cancelled years)
