@@ -34,13 +34,13 @@
 				<div class="mb-12 text-lg sm:text-xl font-medium text-text leading-relaxed">
 					<p>
 						IOEA could not be possible without the precious work of a strong, close-knit and competent organization team.
-						This organization team is composed of the director, the academy's coordinators and the seminars chairs.
+						This organization team is composed of the co-directors, the academy's coordinators and the seminars chairs.
 					</p>
 				</div>
 
 				<!-- Director -->
 				<section class="mb-16">
-					<h2 class="text-primary text-2xl mb-8 pb-3 border-b-2 border-secondary font-bold">Director</h2>
+					<h2 class="text-primary text-2xl mb-8 pb-3 border-b-2 border-secondary font-bold">Co-Directors</h2>
 						<div class="flex gap-10 bg-white p-10 rounded-2xl border border-border shadow-md hover:shadow-2xl transition-all duration-300 group flex-col sm:flex-row sm:text-left text-center sm:items-start items-center">
 							<div class="flex-shrink-0 w-[180px] h-auto overflow-hidden rounded-xl shadow-lg transition-all duration-300 relative group-hover:scale-105 group-hover:shadow-2xl group-hover:ring-4 group-hover:ring-secondary/20">
 								<img
@@ -68,6 +68,107 @@
 									<a href="http://www.brousseau.info" class="inline-flex items-center gap-2 text-secondary font-bold hover:text-primary transition-colors">
 										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
 										www.brousseau.info
+									</a>
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Simon Porcher -->
+					<div class="flex gap-10 bg-white p-10 rounded-2xl border border-border shadow-md hover:shadow-2xl transition-all duration-300 group flex-col sm:flex-row sm:text-left text-center sm:items-start items-center mt-8">
+						<div class="flex-shrink-0 w-[180px] h-auto overflow-hidden rounded-xl shadow-lg transition-all duration-300 relative group-hover:scale-105 group-hover:shadow-2xl group-hover:ring-4 group-hover:ring-secondary/20">
+							<img
+								src="/images/organizers/simon.jpg"
+								alt="Simon Porcher"
+								class="w-full h-auto block"
+								onerror={(e) => {
+									(e.currentTarget as HTMLImageElement).style.display = 'none';
+								}}
+							/>
+						</div>
+						<div class="flex-1">
+							<h3 class="mb-4 text-primary text-3xl font-bold transition-colors duration-200 group-hover:text-secondary-dark">Simon Porcher</h3>
+							<div class="text-base sm:text-lg leading-relaxed text-text space-y-4">
+								<p>
+									Professor (Agrégé des Universités) in Strategy and Public Management at <a href="http://www.dauphine.fr/" class="text-link font-bold">Paris Dauphine University</a>,
+									part of PSL Research University, and member of the Dauphine Research in Management (CNRS UMR).
+									He is also Co-Director of the Water Economics Institute.
+								</p>
+								<p>
+									He joined the organizing team of the IOEA since the 2026 edition alongside Eric Brousseau.
+								</p>
+								<p class="mt-6">
+									<a href="https://sites.google.com/site/simporcher/" class="inline-flex items-center gap-2 text-secondary font-bold hover:text-primary transition-colors">
+										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+										sites.google.com/site/simporcher
+									</a>
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Jens Prüfer -->
+					<div class="flex gap-10 bg-white p-10 rounded-2xl border border-border shadow-md hover:shadow-2xl transition-all duration-300 group flex-col sm:flex-row sm:text-left text-center sm:items-start items-center mt-8">
+						<div class="flex-shrink-0 w-[180px] h-auto overflow-hidden rounded-xl shadow-lg transition-all duration-300 relative group-hover:scale-105 group-hover:shadow-2xl group-hover:ring-4 group-hover:ring-secondary/20">
+							<img
+								src="/images/organizers/jens.jpg"
+								alt="Jens Prüfer"
+								class="w-full h-auto block"
+								onerror={(e) => {
+									(e.currentTarget as HTMLImageElement).style.display = 'none';
+								}}
+							/>
+						</div>
+						<div class="flex-1">
+							<h3 class="mb-4 text-primary text-3xl font-bold transition-colors duration-200 group-hover:text-secondary-dark">Jens Prüfer</h3>
+							<div class="text-base sm:text-lg leading-relaxed text-text space-y-4">
+								<p>
+									Director of the Tilburg Law and Economics Center (TILEC), Professor of Economics, Governance, and Technology
+									at Tilburg University, Professor in Economics at the University of East Anglia, and Deputy Director of the
+									Centre for Competition Policy (CCP).
+								</p>
+								<p>
+									He joined the organizing team of the IOEA since the 2026 edition alongside Eric Brousseau.
+								</p>
+								<p class="mt-6">
+									<a href="https://prufer.net/" class="inline-flex items-center gap-2 text-secondary font-bold hover:text-primary transition-colors">
+										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+										prufer.net
+									</a>
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Giorgio Zanarone -->
+					<div class="flex gap-10 bg-white p-10 rounded-2xl border border-border shadow-md hover:shadow-2xl transition-all duration-300 group flex-col sm:flex-row sm:text-left text-center sm:items-start items-center mt-8">
+						<div class="flex-shrink-0 w-[180px] h-auto overflow-hidden rounded-xl shadow-lg transition-all duration-300 relative group-hover:scale-105 group-hover:shadow-2xl group-hover:ring-4 group-hover:ring-secondary/20">
+							<img
+								src="/images/organizers/giorgio.jpg"
+								alt="Giorgio Zanarone"
+								class="w-full h-auto block"
+								onerror={(e) => {
+									(e.currentTarget as HTMLImageElement).style.display = 'none';
+								}}
+							/>
+						</div>
+						<div class="flex-1">
+							<h3 class="mb-4 text-primary text-3xl font-bold transition-colors duration-200 group-hover:text-secondary-dark">Giorgio Zanarone</h3>
+							<div class="text-base sm:text-lg leading-relaxed text-text space-y-4">
+								<p>
+									Associate Professor at HEC Lausanne, the business school of the University of Lausanne,
+									specializing in business strategy and the economics of institutions and organizations.
+									He is also a Research Fellow at CEPR, and has served as Secretary and elected Director of
+									<a href="http://www.sioe.org/" class="text-link font-bold">SIOE</a>,
+									as well as Representative-at-Large of the Strategic Management Society.
+								</p>
+								<p>
+									He joined the organizing team of the IOEA since the 2026 edition alongside Eric Brousseau.
+								</p>
+								<p class="mt-6">
+									<a href="https://sites.google.com/view/giorgio-zanarone" class="inline-flex items-center gap-2 text-secondary font-bold hover:text-primary transition-colors">
+										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+										sites.google.com/view/giorgio-zanarone
 									</a>
 								</p>
 							</div>
