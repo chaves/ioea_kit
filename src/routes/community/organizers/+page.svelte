@@ -1,6 +1,5 @@
 <script lang="ts">
 	import PageHeader from '$lib/components/PageHeader.svelte';
-	import Sidebar from '$lib/components/Sidebar.svelte';
 	import { coordinators } from '$lib/data/organizers';
 
 	interface Props {
@@ -28,7 +27,7 @@
 
 <section class="section-space">
 	<div class="container">
-		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
+		<div>
 			<div class="main-content">
 
 				<div class="mb-12 text-lg sm:text-xl font-medium text-text leading-relaxed">
@@ -265,9 +264,6 @@
 				</section>
 			</div>
 
-			<aside class="sticky top-[100px] self-start hidden lg:block">
-				<Sidebar />
-			</aside>
 		</div>
 	</div>
 </section>
