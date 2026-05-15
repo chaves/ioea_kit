@@ -94,7 +94,8 @@
 									He is also Co-Director of the Water Economics Institute.
 								</p>
 								<p>
-									He joined the organizing team of the IOEA since the 2026 edition alongside Eric Brousseau.
+									He joined the organizing team of the IOEA since the 2026 edition alongside Eric Brousseau,
+									together with Jens Prüfer and Giorgio Zanarone.
 								</p>
 								<p class="mt-6">
 									<a href="https://sites.google.com/site/simporcher/" class="inline-flex items-center gap-2 text-secondary font-bold hover:text-primary transition-colors">
@@ -122,12 +123,13 @@
 							<h3 class="mb-4 text-primary text-3xl font-bold transition-colors duration-200 group-hover:text-secondary-dark">Jens Prüfer</h3>
 							<div class="text-base sm:text-lg leading-relaxed text-text space-y-4">
 								<p>
-									Director of the Tilburg Law and Economics Center (TILEC), Professor of Economics, Governance, and Technology
+									Jens Prüfer is Director of the Tilburg Law and Economics Center (TILEC), Professor of Economics, Governance, and Technology
 									at Tilburg University, Professor in Economics at the University of East Anglia, and Deputy Director of the
 									Centre for Competition Policy (CCP).
 								</p>
 								<p>
-									He joined the organizing team of the IOEA since the 2026 edition alongside Eric Brousseau.
+									He joined the organizing team of the IOEA since the 2026 edition alongside Eric Brousseau,
+									together with Simon Porcher and Giorgio Zanarone.
 								</p>
 								<p class="mt-6">
 									<a href="https://prufer.net/" class="inline-flex items-center gap-2 text-secondary font-bold hover:text-primary transition-colors">
@@ -162,7 +164,8 @@
 									as well as Representative-at-Large of the Strategic Management Society.
 								</p>
 								<p>
-									He joined the organizing team of the IOEA since the 2026 edition alongside Eric Brousseau.
+									He joined the organizing team of the IOEA since the 2026 edition alongside Eric Brousseau,
+									together with Simon Porcher and Jens Prüfer.
 								</p>
 								<p class="mt-6">
 									<a href="https://sites.google.com/view/giorgio-zanarone" class="inline-flex items-center gap-2 text-secondary font-bold hover:text-primary transition-colors">
