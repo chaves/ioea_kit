@@ -159,8 +159,7 @@
 								<p>
 									Associate Professor at HEC Lausanne, the business school of the University of Lausanne,
 									specializing in business strategy and the economics of institutions and organizations.
-									He is also a Research Fellow at CEPR, and has served as Secretary and elected Director of
-									<a href="http://www.sioe.org/" class="text-link font-bold">SIOE</a>,
+									He is also a Research Fellow at CEPR, and has served as Secretary and elected Director of Society for Institutional and Organizational Economics (SIOE),
 									as well as Representative-at-Large of the Strategic Management Society.
 								</p>
 								<p>
