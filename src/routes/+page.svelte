@@ -290,7 +290,7 @@
 				<div class="mb-12">
 					<h2 class="mb-6">Participants' impressions</h2>
 					<div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6">
-						{#each [{ id: 'avcC11fXzlA', year: 2025 }, { id: 'c1zzIZRZiho', year: 2024 }] as vid}
+						{#each [{ id: 'aKZikF2fXxQ', year: 2026 }, { id: 'avcC11fXzlA', year: 2025 }] as vid}
 						<div class="flex flex-col gap-6 bg-white p-6 rounded-lg border border-border shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
 							<div class="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.08)] bg-black">
 								{#if loadedVideos.has(vid.id)}

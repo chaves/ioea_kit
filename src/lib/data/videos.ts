@@ -13,6 +13,29 @@ export interface VideoSection {
 
 export const videoSections: VideoSection[] = [
   {
+    year: 2026,
+    title: "IOEA 2026: Faculties speak about it!",
+    videos: [
+      { id: "RKFMRr9O7tI", name: "Minyuan Zhao", institution: "IOEA 2026" },
+      { id: "9ofRVPUUsK4", name: "Christopher Stanton", institution: "IOEA 2026" },
+      { id: "oRnpJPqH3nM", name: "James Cross", institution: "IOEA 2026" },
+      { id: "3KSHKcYFSoA", name: "Tobias Kretschmer", institution: "IOEA 2026" },
+      { id: "Q7AtO62udX0", name: "Roberta Ziparo", institution: "IOEA 2026" },
+      { id: "Ge1mSWovgao", name: "Subhrendu Pattanayak", institution: "IOEA 2026" },
+      { id: "mEHesV-0QKM", name: "Maciej Bernatt", institution: "IOEA 2026" },
+      { id: "LfTK-b2rtNI", name: "Hillel Rapoport", institution: "IOEA 2026" },
+      { id: "K9d7nWz74aE", name: "Maitreesh Ghatak", institution: "IOEA 2026" },
+    ],
+  },
+  {
+    year: 2026,
+    title: "IOEA 2026: participants' impressions",
+    videos: [
+      { id: "aKZikF2fXxQ", name: "Participants' impressions #1", institution: "IOEA 2026" },
+      { id: "9SqzIagpzYQ", name: "Participants' impressions #2", institution: "IOEA 2026" },
+    ],
+  },
+  {
     year: 2025,
     title: "IOEA 2025: Faculties speak about it!",
     videos: [
