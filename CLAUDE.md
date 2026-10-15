@@ -10,6 +10,7 @@ npm run build        # Build for production (runs prisma generate first)
 npm run check        # Type-check with svelte-check
 npm start            # Run production server via server.js wrapper
 npx prisma generate  # Regenerate Prisma client after schema changes
+./scripts/deploy.sh  # Deploy to AlwaysData: pull + install + build over SSH, then restart via API (--restart: restart only)
 ```
 
 No test framework is configured. Use `npm run check` to verify types.
