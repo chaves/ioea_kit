@@ -69,9 +69,9 @@ Tailwind CSS with custom CSS variables defined in `src/app.css`. Color palette: 
 - **Email**: Template functions return `EmailOptions`, `sendEmail()` handles transport
 - **Config**: All site-wide settings in `src/lib/config.ts` (year, deadlines, feature flags)
 
-## Critical: Do Not Touch
+## Critical: Handle With Care
 
-- `src/routes/call/*` — Public application form (production-critical)
+- `src/routes/call/*` — Public application form (production-critical). Changes are allowed but must be minimal and verified (check + build, test the form). Never block access to it (no robots/noindex/redirect added on the form itself).
 
 ## Production (AlwaysData)
 

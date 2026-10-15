@@ -1,11 +1,14 @@
 <script lang="ts">
 	import PageHeader from '#lib/components/PageHeader.svelte';
+	import SEO from '#lib/components/SEO.svelte';
 	import { config } from '#lib/config.js';
 </script>
 
-<svelte:head>
-	<title>Application Submitted | IOEA {config.currentYear}</title>
-</svelte:head>
+<SEO
+	title="Application Submitted - IOEA {config.currentYear}"
+	description="Your application to the IOEA {config.currentYear} session has been submitted."
+	noindex
+/>
 
 <PageHeader title="Application Submitted" />
 
