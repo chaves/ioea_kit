@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
 	let { children, data } = $props();
 
 	// Don't show auth layout on standalone pages (login, forgot/reset/change password)
-	const isStandalonePage = $derived(['/auth/login', '/auth/forgot-password', '/auth/reset-password', '/auth/change-password', '/auth/verify-email'].includes($page.url.pathname));
+	const isStandalonePage = $derived(['/auth/login', '/auth/forgot-password', '/auth/reset-password', '/auth/change-password', '/auth/verify-email'].includes(page.url.pathname));
 
 	const userRoleLabel = $derived(() => {
 		const roles = data.session?.roles ?? [];
@@ -18,7 +18,7 @@
 
 	// Close sidebar on route change
 	$effect(() => {
-		$page.url.pathname;
+		page.url.pathname;
 		mobileOpen = false;
 	});
 </script>
@@ -61,7 +61,7 @@
 			<nav class="flex-1 pt-8 pb-6 overflow-visible">
 				{#if data.session?.roles?.includes('admin')}
 					<div class="px-6 pb-2 pt-1 text-xs uppercase tracking-wider text-white/40 font-semibold">Admin</div>
-					<a href="/auth/manager/users" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/manager/users' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+					<a href="/auth/manager/users" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {page.url.pathname === '/auth/manager/users' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 							<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
 							<circle cx="9" cy="7" r="4"></circle>
@@ -70,7 +70,7 @@
 						</svg>
 						Users
 					</a>
-					<a href="/auth/manager/provision-students" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/manager/provision-students' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+					<a href="/auth/manager/provision-students" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {page.url.pathname === '/auth/manager/provision-students' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 							<path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
 							<circle cx="12" cy="7" r="4"></circle>
@@ -78,7 +78,7 @@
 						</svg>
 						Provision Students
 					</a>
-					<a href="/auth/manager/presentations" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname.startsWith('/auth/manager/presentations') ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+					<a href="/auth/manager/presentations" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {page.url.pathname.startsWith('/auth/manager/presentations') ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 							<rect x="2" y="3" width="20" height="14" rx="2"></rect>
 							<line x1="8" y1="21" x2="16" y2="21"></line>
@@ -86,14 +86,14 @@
 						</svg>
 						Presentations
 					</a>
-					<a href="/auth/manager/authors" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname.startsWith('/auth/manager/authors') ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+					<a href="/auth/manager/authors" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {page.url.pathname.startsWith('/auth/manager/authors') ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 							<circle cx="12" cy="8" r="4"></circle>
 							<path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"></path>
 						</svg>
 						Authors
 					</a>
-					<a href="/auth/manager/themes" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname.startsWith('/auth/manager/themes') ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+					<a href="/auth/manager/themes" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {page.url.pathname.startsWith('/auth/manager/themes') ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 							<path d="M4 6h16M4 12h16M4 18h10"></path>
 						</svg>
@@ -101,14 +101,14 @@
 					</a>
 				{/if}
 				{#if data.session?.roles?.includes('admin') || data.session?.roles?.includes('program-admin')}
-					<a href="/auth/submissions" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/submissions' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+					<a href="/auth/submissions" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {page.url.pathname === '/auth/submissions' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="shrink-0">
 							<path d="M9 11l3 3L22 4"></path>
 							<path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
 						</svg>
 						Submissions
 					</a>
-					<a href="/auth/students-validation" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/students-validation' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+					<a href="/auth/students-validation" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {page.url.pathname === '/auth/students-validation' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="shrink-0">
 							<path d="M9 11l3 3L22 4"></path>
 							<circle cx="12" cy="7" r="4"></circle>
@@ -119,7 +119,7 @@
 				{/if}
 				{#if data.session?.roles?.includes('student') && !data.session?.roles?.includes('admin') && !data.session?.roles?.includes('program-admin')}
 					<div class="px-6 pb-2 pt-1 text-xs uppercase tracking-wider text-white/40 font-semibold">Student</div>
-					<a href="/auth/student" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/auth/student' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+					<a href="/auth/student" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {page.url.pathname === '/auth/student' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 							<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
 							<circle cx="12" cy="7" r="4"></circle>
@@ -134,7 +134,7 @@
 					<span class="block font-semibold">{data.session?.name ?? 'User'}</span>
 					<span class="text-sm opacity-70 capitalize">{userRoleLabel()}</span>
 				</div>
-				<a href="/auth/profile" class="flex items-center gap-2 text-white/70 text-sm mb-3 no-underline transition-colors duration-200 hover:text-white {$page.url.pathname === '/auth/profile' ? 'text-white' : ''}">
+				<a href="/auth/profile" class="flex items-center gap-2 text-white/70 text-sm mb-3 no-underline transition-colors duration-200 hover:text-white {page.url.pathname === '/auth/profile' ? 'text-white' : ''}">
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
 						<circle cx="12" cy="7" r="4"></circle>

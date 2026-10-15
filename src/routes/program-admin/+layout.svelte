@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
 	let { children, data } = $props();
 
 	// Don't show admin layout on login page
-	const isLoginPage = $derived($page.url.pathname === '/program-admin/login');
+	const isLoginPage = $derived(page.url.pathname === '/program-admin/login');
 </script>
 
 {#if isLoginPage}
@@ -20,7 +20,7 @@
 			</div>
 
 			<nav class="flex-1 py-6 overflow-y-auto">
-				<a href="/program-admin" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/program-admin' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+				<a href="/program-admin" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {page.url.pathname === '/program-admin' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<rect x="3" y="3" width="7" height="7"></rect>
 						<rect x="14" y="3" width="7" height="7"></rect>
@@ -34,7 +34,7 @@
 					Program Management
 				</div>
 
-				<a href="/program-admin/themes" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/program-admin/themes' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+				<a href="/program-admin/themes" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {page.url.pathname === '/program-admin/themes' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
 						<path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
@@ -42,7 +42,7 @@
 					Themes
 				</a>
 
-				<a href="/program-admin/presentations" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/program-admin/presentations' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+				<a href="/program-admin/presentations" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {page.url.pathname === '/program-admin/presentations' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<rect x="2" y="3" width="20" height="14" rx="2"></rect>
 						<line x1="8" y1="21" x2="16" y2="21"></line>
@@ -51,7 +51,7 @@
 					Presentations
 				</a>
 
-				<a href="/program-admin/authors" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/program-admin/authors' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+				<a href="/program-admin/authors" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {page.url.pathname === '/program-admin/authors' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
 						<circle cx="9" cy="7" r="4"></circle>
@@ -61,7 +61,7 @@
 					Authors
 				</a>
 
-				<a href="/program-admin/chairs" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {$page.url.pathname === '/program-admin/chairs' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+				<a href="/program-admin/chairs" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {page.url.pathname === '/program-admin/chairs' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
 					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
 						<circle cx="9" cy="7" r="4"></circle>

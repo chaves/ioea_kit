@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { prisma } from '$lib/server/db';
-import { config } from '$lib/config';
+import { prisma } from '#lib/server/db.js';
+import { config } from '#lib/config.js';
 
 export const load: PageServerLoad = async ({ parent, params }) => {
 	const { isCurrent } = await parent();

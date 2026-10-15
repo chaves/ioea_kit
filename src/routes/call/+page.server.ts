@@ -1,10 +1,10 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { prisma } from '$lib/server/db';
+import { prisma } from '#lib/server/db.js';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
-import { sendEmail, applicationReceiptEmail } from '$lib/server/email';
-import { config } from '$lib/config';
+import { sendEmail, applicationReceiptEmail } from '#lib/server/email.js';
+import { config } from '#lib/config.js';
 
 const UPLOAD_DIR = `uploads/call/${config.currentYear}`;
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB

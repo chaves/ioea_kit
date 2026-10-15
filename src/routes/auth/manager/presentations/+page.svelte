@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
+	import { refreshAll } from '$app/navigation';
 	import { marked } from 'marked';
 
 	interface Presentation {
@@ -128,7 +128,7 @@
 			lienFd.append('lien', path);
 			await fetch('?/updateLien', { method: 'POST', body: lienFd });
 
-			await invalidateAll();
+			await refreshAll();
 		} catch {
 			uploadError = { ...uploadError, [p.id]: 'Upload failed' };
 		} finally {

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { staticConfig, getConfig } from '$lib/config';
-	import Sidebar from '$lib/components/Sidebar.svelte';
-	import SEO from '$lib/components/SEO.svelte';
+	import { staticConfig, getConfig } from '#lib/config.js';
+	import Sidebar from '#lib/components/Sidebar.svelte';
+	import SEO from '#lib/components/SEO.svelte';
 	import type { PageData } from './$types';
 
 	type TestimonialCard =

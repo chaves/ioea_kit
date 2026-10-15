@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import { getArchiveYears } from '$lib/config';
+import { getArchiveYears } from '#lib/config.js';
 import { readdir } from 'fs/promises';
 import { join } from 'path';
 

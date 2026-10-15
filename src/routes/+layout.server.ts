@@ -1,5 +1,5 @@
 import type { LayoutServerLoad } from './$types';
-import { getPhotoYears, staticConfig, getConfig } from '$lib/config';
+import { getPhotoYears, staticConfig, getConfig } from '#lib/config.js';
 import { readdir, access } from 'fs/promises';
 import { join } from 'path';
 import { constants } from 'fs';

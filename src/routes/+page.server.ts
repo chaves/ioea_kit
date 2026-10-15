@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
-import { config } from '$lib/config';
-import { getRandomTestimonials } from '$lib/data/testimonials';
-import { getRandomVideoTestimonials } from '$lib/data/videos';
+import { config } from '#lib/config.js';
+import { getRandomTestimonials } from '#lib/data/testimonials.js';
+import { getRandomVideoTestimonials } from '#lib/data/videos.js';
 
 export const load: PageServerLoad = async () => {
 	return {

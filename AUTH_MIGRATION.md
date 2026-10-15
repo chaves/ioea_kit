@@ -155,7 +155,7 @@ if (session.userType === 'admin') { ... }
 
 **New:**
 ```typescript
-import { hasRole, hasAnyRole } from '$lib/server/auth';
+import { hasRole, hasAnyRole } from '#lib/server/auth.js';
 
 if (hasRole(session, 'admin')) { ... }
 if (hasAnyRole(session, ['admin', 'reviewer'])) { ... }

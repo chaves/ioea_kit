@@ -1,6 +1,6 @@
 import { redirect, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
-import { validateUserCredentials, createSession, getSession, hasAnyRole, getUserByEmail } from '$lib/server/auth';
+import { validateUserCredentials, createSession, getSession, hasAnyRole, getUserByEmail } from '#lib/server/auth.js';
 
 function getRedirectForRoles(roles: string[]): string {
 	if (roles.includes('admin')) return '/auth/manager/users';

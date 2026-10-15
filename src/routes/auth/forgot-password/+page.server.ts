@@ -1,7 +1,7 @@
 import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
-import { getUserByEmail, createPasswordResetToken, checkForgotPasswordRateLimit } from '$lib/server/auth';
-import { sendEmail, passwordResetEmail } from '$lib/server/email';
+import { getUserByEmail, createPasswordResetToken, checkForgotPasswordRateLimit } from '#lib/server/auth.js';
+import { sendEmail, passwordResetEmail } from '#lib/server/email.js';
 
 export const actions: Actions = {
 	default: async ({ request, url, getClientAddress }) => {

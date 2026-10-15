@@ -1,5 +1,5 @@
-import { json, error } from '@sveltejs/kit';
-import { hasRole } from '$lib/server/auth';
+import { error } from '@sveltejs/kit';
+import { hasRole } from '#lib/server/auth.js';
 import { writeFile, mkdir, unlink } from 'fs/promises';
 import { existsSync } from 'fs';
 import { join } from 'path';
@@ -66,7 +66,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 	const buffer = Buffer.from(await file.arrayBuffer());
 	await writeFile(filepath, buffer);
 
-	return json({ path: `/slides/${year}/${filename}` });
+	return Response.json({ path: `/slides/${year}/${filename}` });
 };
 
 export const DELETE: RequestHandler = async ({ url, locals }) => {
@@ -92,5 +92,5 @@ export const DELETE: RequestHandler = async ({ url, locals }) => {
 		// File may already not exist — not a fatal error
 	}
 
-	return json({ ok: true });
+	return Response.json({ ok: true });
 };

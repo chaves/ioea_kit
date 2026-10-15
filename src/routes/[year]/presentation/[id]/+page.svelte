@@ -1,9 +1,9 @@
 <script lang="ts">
-	import PageHeader from '$lib/components/PageHeader.svelte';
-	import Sidebar from '$lib/components/Sidebar.svelte';
-	import SEO from '$lib/components/SEO.svelte';
-	import { page } from '$app/stores';
-	import { pdfUrl } from '$lib/utils/files';
+	import PageHeader from '#lib/components/PageHeader.svelte';
+	import Sidebar from '#lib/components/Sidebar.svelte';
+	import SEO from '#lib/components/SEO.svelte';
+	import { page } from '$app/state';
+	import { pdfUrl } from '#lib/utils/files.js';
 	import { marked } from 'marked';
 
 	import type { PageData } from './$types';

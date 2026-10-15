@@ -2,9 +2,9 @@ import type { RequestHandler } from './$types';
 import { error, redirect } from '@sveltejs/kit';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
-import { hasAnyRole } from '$lib/server/auth';
-import { prisma } from '$lib/server/db';
-import { config } from '$lib/config';
+import { hasAnyRole } from '#lib/server/auth.js';
+import { prisma } from '#lib/server/db.js';
+import { config } from '#lib/config.js';
 
 export const GET: RequestHandler = async ({ locals }) => {
 	if (!locals.session || !hasAnyRole(locals.session, ['admin', 'student'])) {

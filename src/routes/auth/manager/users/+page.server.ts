@@ -10,9 +10,9 @@ import {
 	hashPassword,
 	createSession,
 	getUserWithRolesById,
-} from '$lib/server/auth';
-import { prisma } from '$lib/server/db';
-import { sendEmail, welcomeUserEmail, passwordResetEmail } from '$lib/server/email';
+} from '#lib/server/auth.js';
+import { prisma } from '#lib/server/db.js';
+import { sendEmail, welcomeUserEmail, passwordResetEmail } from '#lib/server/email.js';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!locals.session || !hasRole(locals.session, 'admin')) {

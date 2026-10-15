@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
-import { prisma } from '$lib/server/db';
-import { getPhotoYears } from '$lib/config';
+import { prisma } from '#lib/server/db.js';
+import { getPhotoYears } from '#lib/config.js';
 import { readdir } from 'fs/promises';
 import { join } from 'path';
 

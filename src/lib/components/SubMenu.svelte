@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
 	interface MenuItem {
 		href: string;
@@ -14,7 +14,7 @@
 	let { items }: Props = $props();
 
 	function isActive(href: string): boolean {
-		return $page.url.pathname === href;
+		return page.url.pathname === href;
 	}
 </script>
 

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import PageHeader from '$lib/components/PageHeader.svelte';
-	import Sidebar from '$lib/components/Sidebar.svelte';
-	import { sponsorsByYear } from '$lib/data/sponsors';
+	import PageHeader from '#lib/components/PageHeader.svelte';
+	import Sidebar from '#lib/components/Sidebar.svelte';
+	import { sponsorsByYear } from '#lib/data/sponsors.js';
 </script>
 
 <svelte:head>

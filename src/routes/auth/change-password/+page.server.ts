@@ -1,7 +1,7 @@
 import { redirect, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
-import { getSession, hashPassword, hasAnyRole } from '$lib/server/auth';
-import { prisma } from '$lib/server/db';
+import { getSession, hashPassword, hasAnyRole } from '#lib/server/auth.js';
+import { prisma } from '#lib/server/db.js';
 
 export const load: PageServerLoad = async ({ cookies }) => {
 	const session = await getSession(cookies);

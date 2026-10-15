@@ -14,18 +14,8 @@ const HOST = process.env.HOST || '0.0.0.0';
 // Set body size limit for file uploads (30MB)
 process.env.BODY_SIZE_LIMIT = process.env.BODY_SIZE_LIMIT || '31457280';
 
-// Origin handling:
-// - In production, prefer letting SvelteKit derive the origin from trusted proxy headers.
-// - In dev, set a sensible default to avoid CSRF/URL issues when running locally.
-if (!process.env.ORIGIN) {
-	if (process.env.NODE_ENV !== 'production') {
-		process.env.ORIGIN = `http://localhost:${PORT}`;
-	} else {
-		console.warn(
-			'Warning: ORIGIN is not set. Ensure proxy headers are correct, or set ORIGIN explicitly for your deployment.'
-		);
-	}
-}
+// Origin: adapter-node (SvelteKit 3) ignores the ORIGIN env var at runtime;
+// the public origin is baked in at build time via `paths.origin` in vite.config.ts.
 
 // For reverse proxy setups (AlwaysData), trust forwarded headers
 process.env.PROTOCOL_HEADER = process.env.PROTOCOL_HEADER || 'x-forwarded-proto';

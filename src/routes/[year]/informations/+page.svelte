@@ -1,8 +1,8 @@
 <script lang="ts">
-	import PageHeader from '$lib/components/PageHeader.svelte';
-	import Sidebar from '$lib/components/Sidebar.svelte';
-	import SEO from '$lib/components/SEO.svelte';
-	import { config } from '$lib/config';
+	import PageHeader from '#lib/components/PageHeader.svelte';
+	import Sidebar from '#lib/components/Sidebar.svelte';
+	import SEO from '#lib/components/SEO.svelte';
+	import { config } from '#lib/config.js';
 
 	interface Props {
 		data: {

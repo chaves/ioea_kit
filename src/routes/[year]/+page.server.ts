@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { staticConfig } from '$lib/config';
-import { prisma } from '$lib/server/db';
+import { staticConfig } from '#lib/config.js';
+import { prisma } from '#lib/server/db.js';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const year = parseInt(params.year);

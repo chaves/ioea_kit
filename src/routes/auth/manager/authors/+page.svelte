@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
-	import CropModal from '$lib/components/CropModal.svelte';
+	import { refreshAll } from '$app/navigation';
+	import CropModal from '#lib/components/CropModal.svelte';
 
 	interface Author {
 		id: number;
@@ -80,7 +80,7 @@
 			lienFd.append('photo', filename);
 			await fetch('?/updatePhoto', { method: 'POST', body: lienFd });
 
-			await invalidateAll();
+			await refreshAll();
 		} catch {
 			uploadError = { ...uploadError, [author.id]: 'Upload failed' };
 		} finally {

@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
-import { config, getArchiveYears } from '$lib/config';
+import { config, getArchiveYears } from '#lib/config.js';
 
 export const load: LayoutServerLoad = async ({ params }) => {
 	const year = parseInt(params.year);

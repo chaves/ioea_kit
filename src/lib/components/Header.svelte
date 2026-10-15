@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { menus, config } from '$lib/config';
+	import { page } from '$app/state';
+	import { menus, config } from '#lib/config.js';
 
 	let mobileMenuOpen = $state(false);
 	let activeDropdown = $state<string | null>(null);
 
 	function isActive(href: string, exact = false): boolean {
-		const currentPath = $page.url.pathname;
+		const currentPath = page.url.pathname;
 		if (href === '/') {
 			return currentPath === '/';
 		}

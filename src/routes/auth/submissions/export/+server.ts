@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { prisma } from '$lib/server/db';
-import { hasAnyRole } from '$lib/server/auth';
+import { prisma } from '#lib/server/db.js';
+import { hasAnyRole } from '#lib/server/auth.js';
 import * as XLSX from 'xlsx';
 
 export const GET: RequestHandler = async ({ locals }) => {

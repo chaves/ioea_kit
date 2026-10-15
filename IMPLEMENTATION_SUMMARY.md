@@ -82,7 +82,7 @@ Users can now have multiple roles simultaneously:
 
 ### Role Checking
 ```typescript
-import { hasRole, hasAnyRole } from '$lib/server/auth';
+import { hasRole, hasAnyRole } from '#lib/server/auth.js';
 
 // Check single role
 if (hasRole(session, 'admin')) { ... }

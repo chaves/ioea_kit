@@ -1,5 +1,5 @@
-import { json, error } from '@sveltejs/kit';
-import { hasRole } from '$lib/server/auth';
+import { error } from '@sveltejs/kit';
+import { hasRole } from '#lib/server/auth.js';
 import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import { join } from 'path';
@@ -56,5 +56,5 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 	const buffer = Buffer.from(await file.arrayBuffer());
 	await writeFile(join(dir, filename), buffer);
 
-	return json({ filename });
+	return Response.json({ filename });
 };

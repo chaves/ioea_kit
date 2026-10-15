@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import PageHeader from '$lib/components/PageHeader.svelte';
+	import { page } from '$app/state';
+	import PageHeader from '#lib/components/PageHeader.svelte';
 
 	// Check if error is from browser extension
-	const isExtensionError = $page.error?.message?.includes('browser extension') ?? false;
+	const isExtensionError = page.error?.message?.includes('browser extension') ?? false;
 </script>
 
 <svelte:head>
@@ -34,25 +34,25 @@
 
 				<h1 class="text-3xl font-bold mb-4 text-text">Oops! Something went wrong</h1>
 
-				{#if $page.status === 404}
+				{#if page.status === 404}
 					<p class="text-lg text-text-light mb-8">
 						The page you're looking for doesn't exist or has been moved.
 					</p>
-				{:else if $page.status === 500}
+				{:else if page.status === 500}
 					<p class="text-lg text-text-light mb-8">
 						We're experiencing technical difficulties. Please try again later.
 					</p>
 				{:else}
 					<p class="text-lg text-text-light mb-8">
-						{$page.error?.message ?? 'An unexpected error occurred'}
+						{page.error?.message ?? 'An unexpected error occurred'}
 					</p>
 				{/if}
 
-				{#if import.meta.env.DEV && $page.error}
+				{#if import.meta.env.DEV && page.error}
 					<div class="mt-8 p-4 bg-red-50 border border-red-200 rounded-lg text-left">
 						<p class="text-sm font-semibold text-red-800 mb-2">Development Error Details:</p>
 						<pre
-							class="text-xs text-red-700 whitespace-pre-wrap overflow-x-auto">{JSON.stringify($page.error, null, 2)}</pre>
+							class="text-xs text-red-700 whitespace-pre-wrap overflow-x-auto">{JSON.stringify(page.error, null, 2)}</pre>
 					</div>
 				{/if}
 

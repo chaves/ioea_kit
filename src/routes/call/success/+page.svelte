@@ -1,6 +1,6 @@
 <script lang="ts">
-	import PageHeader from '$lib/components/PageHeader.svelte';
-	import { config } from '$lib/config';
+	import PageHeader from '#lib/components/PageHeader.svelte';
+	import { config } from '#lib/config.js';
 </script>
 
 <svelte:head>

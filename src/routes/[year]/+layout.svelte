@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
 	let { children, data } = $props();
 
@@ -11,7 +11,7 @@
 	]);
 
 	function isTabActive(tabHref: string): boolean {
-		return $page.url.pathname === tabHref || $page.url.pathname.startsWith(tabHref + '/');
+		return page.url.pathname === tabHref || page.url.pathname.startsWith(tabHref + '/');
 	}
 </script>
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import PageHeader from '$lib/components/PageHeader.svelte';
-	import { coordinators } from '$lib/data/organizers';
+	import PageHeader from '#lib/components/PageHeader.svelte';
+	import { coordinators } from '#lib/data/organizers.js';
 
 	interface Props {
 		data: {

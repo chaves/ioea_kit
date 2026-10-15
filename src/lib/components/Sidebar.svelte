@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { config } from '$lib/config';
-	import { page } from '$app/stores';
+	import { config } from '#lib/config.js';
+	import { page } from '$app/state';
 
 	interface Props {
 		showBrochure?: boolean;
@@ -11,8 +11,8 @@
 	let { showBrochure = true, showPhotos = true, showProgram }: Props = $props();
 
 	// Get random photo from layout data (server-loaded)
-	const randomPhoto = $page.data.randomPhoto as { year: number; filename: string } | null;
-	const programPDFExists = $page.data.programPDFExists as boolean | undefined;
+	const randomPhoto = page.data.randomPhoto as { year: number; filename: string } | null;
+	const programPDFExists = page.data.programPDFExists as boolean | undefined;
 
 	const randomPhotoYear = randomPhoto?.year ?? null;
 	const randomPhotoFilename = randomPhoto?.filename ?? null;

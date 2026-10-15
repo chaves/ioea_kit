@@ -1,10 +1,13 @@
-import type { HandleClientError } from '@sveltejs/kit';
+import type { HandleClientError } from '@sveltejs/kit/hooks';
 
 /**
  * Client-side error handler
  * Filters out known browser extension errors that don't affect functionality
  */
-export const handleError: HandleClientError = ({ error, event }) => {
+export const handleError: HandleClientError = ({ kind, error, event }) => {
+	// Kit 3 also routes app/framework errors (e.g. 404) here: keep their status and message
+	if (kind !== 'unknown') return;
+
 	// Get error message
 	const errorMessage = error instanceof Error ? error.message : String(error);
 

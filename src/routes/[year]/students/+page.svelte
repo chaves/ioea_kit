@@ -1,6 +1,6 @@
 <script lang="ts">
-	import PageHeader from '$lib/components/PageHeader.svelte';
-	import SEO from '$lib/components/SEO.svelte';
+	import PageHeader from '#lib/components/PageHeader.svelte';
+	import SEO from '#lib/components/SEO.svelte';
 	import { page } from '$app/state';
 
 	interface Props {

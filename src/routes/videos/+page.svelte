@@ -1,7 +1,7 @@
 <script lang="ts">
-	import PageHeader from '$lib/components/PageHeader.svelte';
-	import SEO from '$lib/components/SEO.svelte';
-	import { videoSections } from '$lib/data/videos';
+	import PageHeader from '#lib/components/PageHeader.svelte';
+	import SEO from '#lib/components/SEO.svelte';
+	import { videoSections } from '#lib/data/videos.js';
 
 	// Track which videos have been loaded (iframe shown)
 	let loadedVideos = $state(new Set<string>());

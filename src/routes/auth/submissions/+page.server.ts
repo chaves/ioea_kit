@@ -1,7 +1,7 @@
 import { redirect, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
-import { prisma } from '$lib/server/db';
-import { hasAnyRole, hasRole } from '$lib/server/auth';
+import { prisma } from '#lib/server/db.js';
+import { hasAnyRole, hasRole } from '#lib/server/auth.js';
 import { unlink } from 'fs/promises';
 import { join } from 'path';
 

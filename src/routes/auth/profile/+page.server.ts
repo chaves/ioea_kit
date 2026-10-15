@@ -1,8 +1,8 @@
 import { redirect, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
-import { getSession, hashPassword, verifyPassword, createEmailChangeToken } from '$lib/server/auth';
-import { prisma } from '$lib/server/db';
-import { sendEmail, emailChangeVerificationEmail } from '$lib/server/email';
+import { getSession, hashPassword, verifyPassword, createEmailChangeToken } from '#lib/server/auth.js';
+import { prisma } from '#lib/server/db.js';
+import { sendEmail, emailChangeVerificationEmail } from '#lib/server/email.js';
 
 export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!locals.session) {

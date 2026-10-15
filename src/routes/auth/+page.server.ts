@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { hasRole } from '$lib/server/auth';
+import { hasRole } from '#lib/server/auth.js';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	// Redirect to appropriate auth page based on user roles

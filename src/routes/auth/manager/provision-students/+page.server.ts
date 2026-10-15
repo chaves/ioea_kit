@@ -1,8 +1,8 @@
 import { redirect, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
-import { prisma } from '$lib/server/db';
-import { hasRole, createUser, generateRandomPassword } from '$lib/server/auth';
-import { config } from '$lib/config';
+import { prisma } from '#lib/server/db.js';
+import { hasRole, createUser, generateRandomPassword } from '#lib/server/auth.js';
+import { config } from '#lib/config.js';
 import type { call_submissions } from '@prisma/client';
 
 async function upsertStudentRecord(sub: call_submissions) {

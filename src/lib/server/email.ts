@@ -1,4 +1,4 @@
-import { config, getConfig, staticConfig } from "$lib/config";
+import { config, getConfig, staticConfig } from "#lib/config.js";
 
 interface EmailOptions {
   to: string;

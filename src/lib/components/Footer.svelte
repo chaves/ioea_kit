@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { config } from '$lib/config';
-	import { getFooterSponsors } from '$lib/data/sponsors';
+	import { config } from '#lib/config.js';
+	import { getFooterSponsors } from '#lib/data/sponsors.js';
 
 	const footerSponsors = getFooterSponsors();
 </script>

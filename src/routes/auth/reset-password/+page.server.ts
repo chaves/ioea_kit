@@ -1,7 +1,7 @@
 import { redirect, fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
-import { validateResetToken, consumeResetToken, hashPassword } from '$lib/server/auth';
-import { prisma } from '$lib/server/db';
+import { validateResetToken, consumeResetToken, hashPassword } from '#lib/server/auth.js';
+import { prisma } from '#lib/server/db.js';
 
 export const load: PageServerLoad = async ({ url }) => {
 	const token = url.searchParams.get('token');

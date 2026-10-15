@@ -1,8 +1,8 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { prisma } from '$lib/server/db';
-import { hasAnyRole } from '$lib/server/auth';
-import { config } from '$lib/config';
+import { prisma } from '#lib/server/db.js';
+import { hasAnyRole } from '#lib/server/auth.js';
+import { config } from '#lib/config.js';
 
 function fmt(dt: Date | null): string {
 	if (!dt || isNaN(dt.getTime()) || dt.getFullYear() < 100) return '';

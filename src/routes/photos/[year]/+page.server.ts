@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { getPhotoYears } from '$lib/config';
+import { getPhotoYears } from '#lib/config.js';
 import { readdir } from 'fs/promises';
 import { join } from 'path';
 

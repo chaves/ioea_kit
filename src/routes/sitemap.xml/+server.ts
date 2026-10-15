@@ -1,4 +1,4 @@
-import { config, getArchiveYears } from "$lib/config";
+import { config, getArchiveYears } from "#lib/config.js";
 
 export async function GET({ url }) {
   const domain = url.origin;

@@ -1,6 +1,6 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
-import type { Session } from '$lib/server/auth';
+import type { Session } from '#lib/server/auth.js';
 
 declare global {
 	const __BUILD_ID__: string;

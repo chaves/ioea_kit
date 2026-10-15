@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
-import { hasRole } from '$lib/server/auth';
+import { hasRole } from '#lib/server/auth.js';
 
 export const load: LayoutServerLoad = async ({ locals, url }) => {
 	// Allow access to login page without session
