@@ -10,6 +10,7 @@
 		ogImage?: string;
 		ogImageAlt?: string;
 		jsonLd?: any;
+		noindex?: boolean;
 	}
 
 	let {
@@ -19,15 +20,18 @@
 		ogType = 'website',
 		ogImage = '/site-logo.png',
 		ogImageAlt = 'Institutional and Organizational Economics Academy Logo',
-		jsonLd
+		jsonLd,
+		noindex = false
 	}: Props = $props();
 
 	const siteName = 'Institutional and Organizational Economics Academy (IOEA)';
 	const defaultDescription = 'The Institutional and Organizational Economics Academy (IOEA) is dedicated to the analysis of institutions, organizations and contracts.';
 
-	const fullTitle = $derived(title ? `${title} | ${siteName}` : siteName);
+	// Short suffix keeps titles under ~60 chars in search results; skip it when the title already names IOEA
+	const fullTitle = $derived(!title ? siteName : title.includes('IOEA') ? title : `${title} | IOEA`);
 	const metaDescription = $derived(description || defaultDescription);
-	const url = $derived(canonical || page.url.href);
+	// Query strings (filters, tracking) must not create duplicate canonical URLs
+	const url = $derived(canonical || `${page.url.origin}${page.url.pathname}`);
 
 	// Ensure absolute URL for social images
 	const absoluteOgImage = $derived(ogImage.startsWith('http') ? ogImage : `${page.url.origin}${ogImage.startsWith('/') ? '' : '/'}${ogImage}`);
@@ -53,9 +57,12 @@
 <svelte:head>
 	<!-- Primary Meta Tags -->
 	<title>{fullTitle}</title>
-	<meta name="title" content={fullTitle} />
 	<meta name="description" content={metaDescription} />
-	<link rel="canonical" href={url} />
+	{#if noindex}
+		<meta name="robots" content="noindex" />
+	{:else}
+		<link rel="canonical" href={url} />
+	{/if}
 
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content={ogType} />
@@ -67,11 +74,10 @@
 	<meta property="og:site_name" content={siteName} />
 
 	<!-- Twitter -->
-	<meta property="twitter:card" content="summary_large_image" />
-	<meta property="twitter:url" content={url} />
-	<meta property="twitter:title" content={fullTitle} />
-	<meta property="twitter:description" content={metaDescription} />
-	<meta property="twitter:image" content={absoluteOgImage} />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content={fullTitle} />
+	<meta name="twitter:description" content={metaDescription} />
+	<meta name="twitter:image" content={absoluteOgImage} />
 
 	<!-- Structured Data -->
 	{@html `<script type="application/ld+json">${JSON.stringify(finalJsonLd)}<\/script>`}

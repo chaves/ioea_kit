@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import SEO from '#lib/components/SEO.svelte';
 	import PageHeader from '#lib/components/PageHeader.svelte';
 
 	interface Props {
@@ -13,10 +14,10 @@
 	let loading = $state(false);
 </script>
 
-<svelte:head>
-	<title>Join the Community | IOEA</title>
-	<meta name="description" content="Subscribe to the IOEA mailing list to receive updates about upcoming sessions and community news." />
-</svelte:head>
+<SEO
+	title="Join the Community"
+	description="Subscribe to the IOEA mailing list to receive updates about upcoming sessions and community news."
+/>
 
 <PageHeader title="Join the Community" />
 

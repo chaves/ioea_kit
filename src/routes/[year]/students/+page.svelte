@@ -51,7 +51,7 @@
 
 <SEO
 	title="Participants - IOEA {data.year}"
-	description="Meet the participants and seminar chairs of IOEA {data.year}."
+	description="Meet the participants of IOEA {data.year}: Ph.D. students, post-docs and researchers, with their papers and seminar chairs."
 />
 
 <PageHeader title="Participants - IOEA {data.year}" />

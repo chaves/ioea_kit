@@ -1,13 +1,14 @@
 <script lang="ts">
 	import PageHeader from '#lib/components/PageHeader.svelte';
+	import SEO from '#lib/components/SEO.svelte';
 	import Sidebar from '#lib/components/Sidebar.svelte';
 	import { sponsorsByYear } from '#lib/data/sponsors.js';
 </script>
 
-<svelte:head>
-	<title>Sponsors | IOEA</title>
-	<meta name="description" content="The IOEA is made possible thanks to the generous support of our sponsors and partner institutions." />
-</svelte:head>
+<SEO
+	title="Sponsors"
+	description="The IOEA is made possible thanks to the generous support of our sponsors and partner institutions."
+/>
 
 <PageHeader title="Sponsors" />
 

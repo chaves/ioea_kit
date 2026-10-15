@@ -14,11 +14,16 @@
 	}
 
 	let { data }: Props = $props();
+
+	// Past years' landing page redirects to its lectures: link there directly
+	function yearHref(year: number): string {
+		return year === config.currentYear ? `/${year}` : `/${year}/lectures`;
+	}
 </script>
 
 <SEO
 	title="Past Editions"
-	description="Explore the archives of past IOEA sessions from {config.archiveFromYear} to {config.archiveToYear}."
+	description="Archives of past IOEA sessions from {config.archiveFromYear} to {config.archiveToYear}: lectures, workshops, faculty and photos of every edition."
 />
 
 <PageHeader title="Past Editions" />
@@ -36,7 +41,7 @@
 					<div class="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-8">
 						{#each data.yearsWithPhotos as { year, photo }}
 							<div class="bg-white rounded-xl overflow-hidden border border-border transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group">
-								<a href="/{year}" class="relative block aspect-[16/10] overflow-hidden bg-bg-alt">
+								<a href={yearHref(year)} class="relative block aspect-[16/10] overflow-hidden bg-bg-alt">
 									<img
 										src={photo ? `/images/photos/${year}/${photo}` : '/images/placeholder-year.jpg'}
 										alt="IOEA {year}"
@@ -52,7 +57,7 @@
 								</a>
 								<div class="p-6 text-center">
 									<h3 class="text-2xl m-0 font-bold">
-										<a href="/{year}" class="text-primary no-underline hover:text-secondary transition-colors">IOEA {year}</a>
+										<a href={yearHref(year)} class="text-primary no-underline hover:text-secondary transition-colors">IOEA {year}</a>
 									</h3>
 								</div>
 							</div>

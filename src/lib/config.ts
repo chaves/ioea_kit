@@ -138,6 +138,20 @@ export function getConfig() {
   return config;
 }
 
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+// ISO date (YYYY-MM-DD) of the current session's start/end day
+export function sessionIsoDate(day: number): string {
+  const month = MONTHS.indexOf(config.session.month) + 1;
+  return `${config.session.year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
+// True once the current session's last day is over: switches the site to past tense
+// until the config is moved to the next year.
+export function isSessionOver(now: Date = new Date()): boolean {
+  return now > new Date(`${sessionIsoDate(config.session.endDate)}T23:59:59`);
+}
+
 // Menu configuration
 export const menus = {
   main: [

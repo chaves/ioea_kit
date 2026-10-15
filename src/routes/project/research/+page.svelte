@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PageHeader from '#lib/components/PageHeader.svelte';
+	import SEO from '#lib/components/SEO.svelte';
 	import Sidebar from '#lib/components/Sidebar.svelte';
 
 	const researchAreas = [
@@ -14,10 +15,10 @@
 	];
 </script>
 
-<svelte:head>
-	<title>Research Areas | IOEA</title>
-	<meta name="description" content="Explore the wide variety of research themes covered by the Institutional and Organizational Economics Academy." />
-</svelte:head>
+<SEO
+	title="Research Areas"
+	description="Explore the wide variety of research themes covered by the Institutional and Organizational Economics Academy."
+/>
 
 <PageHeader title="A Wide Variety of Themes" />
 

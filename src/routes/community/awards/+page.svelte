@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PageHeader from '#lib/components/PageHeader.svelte';
+	import SEO from '#lib/components/SEO.svelte';
 	import Sidebar from '#lib/components/Sidebar.svelte';
 	import { getAwardsByYear, getAwardYears } from '#lib/data/awards.js';
 
@@ -7,10 +8,10 @@
 	const years = getAwardYears();
 </script>
 
-<svelte:head>
-	<title>Prize Winners | IOEA Community</title>
-	<meta name="description" content="IOEA award winners - Best Paper and Best PhD Project laureates since 2007." />
-</svelte:head>
+<SEO
+	title="Prize Winners"
+	description="IOEA award winners - Best Paper and Best PhD Project laureates since 2007."
+/>
 
 <PageHeader title="Prize Winners" />
 

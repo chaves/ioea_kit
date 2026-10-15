@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PageHeader from '#lib/components/PageHeader.svelte';
+	import SEO from '#lib/components/SEO.svelte';
 	import Sidebar from '#lib/components/Sidebar.svelte';
 
 	interface Props {
@@ -18,10 +19,10 @@
 	let { data }: Props = $props();
 </script>
 
-<svelte:head>
-	<title>Lecturers & Organizers | IOEA Community</title>
-	<meta name="description" content="Photos of lecturers and organizers who have taught at the Institutional and Organizational Economics Academy." />
-</svelte:head>
+<SEO
+	title="Lecturers & Organizers"
+	description="Photos of lecturers and organizers who have taught at the Institutional and Organizational Economics Academy."
+/>
 
 <PageHeader title="Lecturers & Organizers" />
 

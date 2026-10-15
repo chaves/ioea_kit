@@ -1,13 +1,14 @@
 <script lang="ts">
 	import PageHeader from '#lib/components/PageHeader.svelte';
+	import SEO from '#lib/components/SEO.svelte';
 	import Sidebar from '#lib/components/Sidebar.svelte';
 	import { testimonials } from '#lib/data/testimonials.js';
 </script>
 
-<svelte:head>
-	<title>Testimonials | IOEA Community</title>
-	<meta name="description" content="Testimonials from IOEA alumni and faculty members." />
-</svelte:head>
+<SEO
+	title="Testimonials"
+	description="Testimonials from IOEA alumni and faculty members about their experience at the Institutional and Organizational Economics Academy."
+/>
 
 <PageHeader title="Testimonials" />
 

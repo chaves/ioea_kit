@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PageHeader from '#lib/components/PageHeader.svelte';
+	import SEO from '#lib/components/SEO.svelte';
 	import { coordinators } from '#lib/data/organizers.js';
 
 	interface Props {
@@ -18,10 +19,10 @@
 	let { data }: Props = $props();
 </script>
 
-<svelte:head>
-	<title>The Organizers | IOEA Community</title>
-	<meta name="description" content="Meet the organizers and coordinators of the IOEA." />
-</svelte:head>
+<SEO
+	title="The Organizers"
+	description="Meet the directors, organizers and coordinators of the Institutional and Organizational Economics Academy (IOEA)."
+/>
 
 <PageHeader title="The Organizers" />
 

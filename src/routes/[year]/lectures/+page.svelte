@@ -10,7 +10,7 @@
 
 <SEO
 	title="Lectures - IOEA {data.year}"
-	description="Explore the lectures and academic program of the IOEA {data.year} session."
+	description="Lectures of the IOEA {data.year} session: leading scholars present the state of the art in institutional and organizational economics."
 />
 
 <PageHeader title="Lectures - IOEA {data.year}" />

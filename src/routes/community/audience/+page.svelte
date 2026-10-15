@@ -1,13 +1,14 @@
 <script lang="ts">
 	import PageHeader from '#lib/components/PageHeader.svelte';
+	import SEO from '#lib/components/SEO.svelte';
 	import Sidebar from '#lib/components/Sidebar.svelte';
 	import { audienceByRegion } from '#lib/data/audience.js';
 </script>
 
-<svelte:head>
-	<title>The Audience | IOEA Community</title>
-	<meta name="description" content="International audience of the IOEA - statistics and demographics." />
-</svelte:head>
+<SEO
+	title="The Audience"
+	description="International audience of the IOEA: where participants come from and how participation has evolved over the years."
+/>
 
 <PageHeader title="The Audience" />
 

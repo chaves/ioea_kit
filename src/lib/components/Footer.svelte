@@ -42,8 +42,8 @@
 				<div>
 					<h4 class="pb-2 mb-4 text-base font-semibold text-white border-b-2 border-secondary">About IOEA</h4>
 					<p class="text-sm leading-relaxed text-white/80">
-						The Institutional and Organizational Economics Academy is a two-week
-						intensive summer school held annually in Cargèse, Corsica.
+						The Institutional and Organizational Economics Academy is a one-week
+						intensive spring school held annually in Cargèse, Corsica.
 					</p>
 				</div>
 
@@ -52,7 +52,9 @@
 					<h4 class="pb-2 mb-4 text-base font-semibold text-white border-b-2 border-secondary">Quick Links</h4>
 					<ul class="p-0 m-0 list-none">
 						<li class="mb-2"><a href="/{config.currentYear}" class="text-sm no-underline transition-colors duration-200 text-white/80 hover:text-white">IOEA {config.currentYear}</a></li>
-						<li class="mb-2"><a href="/call" class="text-sm no-underline transition-colors duration-200 text-white/80 hover:text-white">Apply Now</a></li>
+						{#if config.callIsOpen}
+							<li class="mb-2"><a href="/call" class="text-sm no-underline transition-colors duration-200 text-white/80 hover:text-white">Apply Now</a></li>
+						{/if}
 						<li class="mb-2"><a href="/community" class="text-sm no-underline transition-colors duration-200 text-white/80 hover:text-white">The Community</a></li>
 						<li class="mb-2"><a href="/archives" class="text-sm no-underline transition-colors duration-200 text-white/80 hover:text-white">Past Editions</a></li>
 					</ul>

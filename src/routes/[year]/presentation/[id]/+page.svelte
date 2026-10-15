@@ -28,8 +28,27 @@
 		data.presentation.abstract ? (marked.parse(data.presentation.abstract) as string) : ''
 	);
 
-	const seoTitle = $derived(data.presentation.title ? `${data.presentation.title} - ${data.presentation.author.firstName} ${data.presentation.author.lastName}` : `${typeLabel} - IOEA ${data.year}`);
-	const seoDescription = $derived(data.presentation.abstract ? data.presentation.abstract.replace(/<[^>]*>/g, '').substring(0, 160) : `${typeLabel} by ${data.presentation.author.firstName} ${data.presentation.author.lastName} at IOEA ${data.year}`);
+	const authorName = $derived(`${data.presentation.author.firstName} ${data.presentation.author.lastName}`);
+	// The year keeps titles unique when a lecture is given in several sessions
+	const seoTitle = $derived(data.presentation.title ? `${data.presentation.title} - ${authorName} (IOEA ${data.year})` : `${typeLabel} - IOEA ${data.year}`);
+
+	// Plain-text abstract for the meta description; placeholders ("&nbsp;", "will be added soon") fall back to a generic sentence
+	function plainAbstract(abstract: string | null): string {
+		if (!abstract) return '';
+		const text = abstract
+			.replace(/<[^>]*>/g, ' ')
+			.replace(/&nbsp;/g, ' ')
+			.replace(/[#*_`>]/g, '')
+			.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+			.replace(/\s+/g, ' ')
+			.trim();
+		if (text.length < 60 || /will be added soon/i.test(text)) return '';
+		return text.length <= 160 ? text : `${text.slice(0, 157).replace(/\s+\S*$/, '')}...`;
+	}
+	const seoDescription = $derived(
+		plainAbstract(data.presentation.abstract) ||
+			`${typeLabel}${data.presentation.title ? ` "${data.presentation.title}"` : ''} by ${authorName} at the IOEA ${data.year} session in Cargèse, Corsica.`
+	);
 </script>
 
 <SEO
@@ -99,7 +118,7 @@
 					</div>
 
 					{#if data.presentation.title}
-						<h1 class="text-[1.75rem] text-primary mb-8 leading-snug sm:text-2xl">{data.presentation.title}</h1>
+						<h2 class="text-[1.75rem] text-primary mb-8 leading-snug sm:text-2xl">{data.presentation.title}</h2>
 					{/if}
 
 					{#if data.presentation.abstract}

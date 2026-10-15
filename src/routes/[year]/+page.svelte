@@ -2,7 +2,7 @@
 	import PageHeader from '#lib/components/PageHeader.svelte';
 	import Sidebar from '#lib/components/Sidebar.svelte';
 	import SEO from '#lib/components/SEO.svelte';
-	import { getConfig, staticConfig } from '#lib/config.js';
+	import { getConfig, staticConfig, isSessionOver, sessionIsoDate } from '#lib/config.js';
 
 	interface Props {
 		data: {
@@ -50,22 +50,25 @@
 	}
 
 	const sessionOrdinal = $derived(getOrdinal(sessionNumber));
+	const sessionOver = isSessionOver();
 
 	const eventJsonLd = $derived({
 		'@context': 'https://schema.org',
 		'@type': 'Event',
 		'name': `IOEA ${year} - ${sessionNumber}${sessionOrdinal} session`,
 		'description': `The ${sessionNumber}${sessionOrdinal} session of the Institutional and Organizational Economics Academy, ${appConfig.session.dateRange} ${year} in Corsica, France.`,
-		'startDate': `${year}-${appConfig.session.month === 'April' ? '04' : '05'}-${appConfig.session.startDate.toString().padStart(2, '0')}`,
-		'endDate': `${year}-${appConfig.session.month === 'April' ? '04' : '05'}-${appConfig.session.endDate.toString().padStart(2, '0')}`,
+		'startDate': sessionIsoDate(appConfig.session.startDate),
+		'endDate': sessionIsoDate(appConfig.session.endDate),
 		'eventStatus': 'https://schema.org/EventScheduled',
 		'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
 		'location': {
 			'@type': 'Place',
-			'name': 'Corsica',
+			'name': "Institut d'Études Scientifiques de Cargèse",
 			'address': {
 				'@type': 'PostalAddress',
-				'addressLocality': 'Corsica',
+				'addressLocality': 'Cargèse',
+				'addressRegion': 'Corsica',
+				'postalCode': '20130',
 				'addressCountry': 'FR'
 			}
 		},
@@ -125,9 +128,19 @@
 					</div>
 				{:else}
 					<div class="p-8 mb-12 bg-bg-alt rounded-xl border-l-8 border-border">
-						<p class="text-xl font-semibold text-text">
-							The call for applications is currently closed.
-						</p>
+						{#if sessionOver}
+							<p class="text-xl font-semibold text-text">
+								IOEA {year} took place on {appConfig.session.fullDateRange} in Cargèse.
+							</p>
+							<p class="mt-3 text-base text-text">
+								The call for applications for the next session will be announced on this website.
+								<a href="/community/join">Join our mailing list</a> to be notified.
+							</p>
+						{:else}
+							<p class="text-xl font-semibold text-text">
+								The call for applications is currently closed.
+							</p>
+						{/if}
 					</div>
 				{/if}
 
@@ -146,7 +159,7 @@
 				<p class="text-base sm:text-[1.05rem] leading-relaxed mb-8 text-text">Ph.D. students, Post-docs and researchers, in Economics, Management, Political Science, Sociology, Law and other social sciences.</p>
 
 				<h4 class="mt-12 mb-6 text-2xl font-bold text-primary border-b-2 border-secondary pb-2">Program</h4>
-				<p class="text-base sm:text-[1.05rem] leading-relaxed mb-8 text-text">Formal lectures will be given every morning. Each lecture is dedicated to the extensive presentation of the state of the art of the discipline on a specific applied or theoretical topic. Afternoons will be dedicated to workshops devoted either to research questions or methodologies. Seminars, held in the second part of the afternoon, allow the participants to have their work discussed by recognized scholars in the field.</p>
+				<p class="text-base sm:text-[1.05rem] leading-relaxed mb-8 text-text">Formal lectures are given every morning. Each lecture is dedicated to the extensive presentation of the state of the art of the discipline on a specific applied or theoretical topic. Afternoons are dedicated to workshops devoted either to research questions or methodologies. Seminars, held in the second part of the afternoon, allow the participants to have their work discussed by recognized scholars in the field.</p>
 
 				<h4 class="mt-12 mb-6 text-2xl font-bold text-primary border-b-2 border-secondary pb-2">Lecturers</h4>
 				<p class="text-base sm:text-[1.05rem] leading-relaxed mb-8 text-text">
@@ -187,61 +200,63 @@
 					<strong class="font-bold">Eric Brousseau</strong> (University Paris-Dauphine - PSL)
 				</p>
 
-				<h4 class="mt-12 mb-6 text-2xl font-bold text-primary border-b-2 border-secondary pb-2">Registrations</h4>
-				<p class="text-base sm:text-[1.05rem] leading-relaxed mb-8 text-text">Attendants will be selected on the basis of their resume, and of a paper or of a presentation of their research program.</p>
+				{#if !sessionOver}
+					<h4 class="mt-12 mb-6 text-2xl font-bold text-primary border-b-2 border-secondary pb-2">Registrations</h4>
+					<p class="text-base sm:text-[1.05rem] leading-relaxed mb-8 text-text">Attendants will be selected on the basis of their resume, and of a paper or of a presentation of their research program.</p>
 
-				<h4 class="mt-12 mb-6 text-2xl font-bold text-primary border-b-2 border-secondary pb-2">Calendar</h4>
-				<p class="text-lg sm:text-[1.1rem] leading-relaxed mb-4 font-bold text-secondary">
-					Applications will be continuously assessed from February 15th until March 15th.
-				</p>
-				<p class="text-base sm:text-[1.05rem] leading-relaxed mb-8 text-text font-medium">
-					As the number of available positions is limited, early submission of applications is strongly encouraged.
-				</p>
-				<div class="mb-12 space-y-6">
-					<div class="flex gap-6 items-center p-6 rounded-xl border-l-8 bg-bg-alt border-primary-light shadow-sm">
-						<div class="flex flex-shrink-0 justify-center items-center w-14 h-14 rounded-xl bg-primary-light shadow-md">
-							<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-								<rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-								<line x1="16" y1="2" x2="16" y2="6"></line>
-								<line x1="8" y1="2" x2="8" y2="6"></line>
-								<line x1="3" y1="10" x2="21" y2="10"></line>
-							</svg>
-						</div>
-						<div>
-							<p class="text-sm font-bold uppercase tracking-wider text-text-light mb-1">Closing date for application</p>
-							<p class="text-2xl font-bold text-primary">{appConfig.deadlines.application}</p>
-							<p class="text-sm font-bold text-red-600 mt-1 uppercase">Earlier application is strongly recommended</p>
-						</div>
-					</div>
-					<div class="flex gap-6 items-center p-6 rounded-xl border-l-8 bg-bg-alt border-primary-light shadow-sm">
-						<div class="flex flex-shrink-0 justify-center items-center w-14 h-14 rounded-xl bg-primary-light shadow-md">
-							<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-								<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-								<polyline points="22 4 12 14.01 9 11.01"></polyline>
-							</svg>
-						</div>
-						<div>
-							<p class="text-sm font-bold uppercase tracking-wider text-text-light mb-1">Notification of acceptance</p>
-							<p class="text-2xl font-bold text-primary">from Mid-February</p>
-						</div>
-					</div>
-					{#if appConfig.deadlines.registration}
+					<h4 class="mt-12 mb-6 text-2xl font-bold text-primary border-b-2 border-secondary pb-2">Calendar</h4>
+					<p class="text-lg sm:text-[1.1rem] leading-relaxed mb-4 font-bold text-secondary">
+						Applications will be continuously assessed from February 15th until March 15th.
+					</p>
+					<p class="text-base sm:text-[1.05rem] leading-relaxed mb-8 text-text font-medium">
+						As the number of available positions is limited, early submission of applications is strongly encouraged.
+					</p>
+					<div class="mb-12 space-y-6">
 						<div class="flex gap-6 items-center p-6 rounded-xl border-l-8 bg-bg-alt border-primary-light shadow-sm">
 							<div class="flex flex-shrink-0 justify-center items-center w-14 h-14 rounded-xl bg-primary-light shadow-md">
 								<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-									<circle cx="8.5" cy="7" r="4"></circle>
-									<line x1="20" y1="8" x2="20" y2="14"></line>
-									<line x1="23" y1="11" x2="17" y2="11"></line>
+									<rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+									<line x1="16" y1="2" x2="16" y2="6"></line>
+									<line x1="8" y1="2" x2="8" y2="6"></line>
+									<line x1="3" y1="10" x2="21" y2="10"></line>
 								</svg>
 							</div>
 							<div>
-								<p class="text-sm font-bold uppercase tracking-wider text-text-light mb-1">Closing date for registration</p>
-								<p class="text-2xl font-bold text-primary">{appConfig.deadlines.registration}</p>
+								<p class="text-sm font-bold uppercase tracking-wider text-text-light mb-1">Closing date for application</p>
+								<p class="text-2xl font-bold text-primary">{appConfig.deadlines.application}</p>
+								<p class="text-sm font-bold text-red-600 mt-1 uppercase">Earlier application is strongly recommended</p>
 							</div>
 						</div>
-					{/if}
-				</div>
+						<div class="flex gap-6 items-center p-6 rounded-xl border-l-8 bg-bg-alt border-primary-light shadow-sm">
+							<div class="flex flex-shrink-0 justify-center items-center w-14 h-14 rounded-xl bg-primary-light shadow-md">
+								<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+									<polyline points="22 4 12 14.01 9 11.01"></polyline>
+								</svg>
+							</div>
+							<div>
+								<p class="text-sm font-bold uppercase tracking-wider text-text-light mb-1">Notification of acceptance</p>
+								<p class="text-2xl font-bold text-primary">from Mid-February</p>
+							</div>
+						</div>
+						{#if appConfig.deadlines.registration}
+							<div class="flex gap-6 items-center p-6 rounded-xl border-l-8 bg-bg-alt border-primary-light shadow-sm">
+								<div class="flex flex-shrink-0 justify-center items-center w-14 h-14 rounded-xl bg-primary-light shadow-md">
+									<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+										<circle cx="8.5" cy="7" r="4"></circle>
+										<line x1="20" y1="8" x2="20" y2="14"></line>
+										<line x1="23" y1="11" x2="17" y2="11"></line>
+									</svg>
+								</div>
+								<div>
+									<p class="text-sm font-bold uppercase tracking-wider text-text-light mb-1">Closing date for registration</p>
+									<p class="text-2xl font-bold text-primary">{appConfig.deadlines.registration}</p>
+								</div>
+							</div>
+						{/if}
+					</div>
+				{/if}
 			</div>
 
 			<aside class="sticky top-[100px] self-start hidden lg:block">

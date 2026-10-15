@@ -1,13 +1,14 @@
 <script lang="ts">
 	import PageHeader from '#lib/components/PageHeader.svelte';
+	import SEO from '#lib/components/SEO.svelte';
 	import Sidebar from '#lib/components/Sidebar.svelte';
 	import { professions, topInstitutions, participationStats, returnedAsOrganizers } from '#lib/data/alumni.js';
 </script>
 
-<svelte:head>
-	<title>Alumni | IOEA Community</title>
-	<meta name="description" content="IOEA Alumni - career outcomes and professional positions of former participants." />
-</svelte:head>
+<SEO
+	title="Alumni"
+	description="IOEA Alumni - career outcomes and professional positions of former participants."
+/>
 
 <PageHeader title="Alumni" />
 

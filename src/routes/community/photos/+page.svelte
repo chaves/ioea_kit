@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PageHeader from '#lib/components/PageHeader.svelte';
+	import SEO from '#lib/components/SEO.svelte';
 	import Sidebar from '#lib/components/Sidebar.svelte';
 
 	interface Props {
@@ -14,10 +15,10 @@
 	let { data }: Props = $props();
 </script>
 
-<svelte:head>
-	<title>Photos | IOEA Community</title>
-	<meta name="description" content="Photo gallery of the IOEA community - lecturers and annual sessions." />
-</svelte:head>
+<SEO
+	title="Photos"
+	description="Photo gallery of the IOEA community: lecturers, organizers and every annual session in Cargèse since 2002."
+/>
 
 <PageHeader title="Photos" />
 

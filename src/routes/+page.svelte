@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { staticConfig, getConfig } from '#lib/config.js';
+	import { staticConfig, getConfig, isSessionOver } from '#lib/config.js';
 	import Sidebar from '#lib/components/Sidebar.svelte';
 	import SEO from '#lib/components/SEO.svelte';
 	import type { PageData } from './$types';
@@ -17,6 +17,7 @@
 	// Get config
 	const appConfig = $derived(getConfig());
 	const sessionDates = $derived(appConfig.session.fullDateRange);
+	const sessionOver = isSessionOver();
 
 	// Get session number from config
 	const sessionNumber = $derived(appConfig.sessionNumber);
@@ -106,7 +107,7 @@
 			<h1 class="mb-4 text-4xl leading-tight text-white sm:text-3xl">Institutional and Organizational Economics<br />Academy</h1>
 			<p class="mb-6 text-xl font-medium leading-relaxed opacity-95 sm:text-lg">
 				<strong>The {sessionNumber}{sessionOrdinal} session of the Institutional and Organizational Economics Academy</strong>
-				<strong>will be held in Cargèse (Corsica - France) on {sessionDates}.</strong>
+				<strong>{sessionOver ? 'was held' : 'will be held'} in Cargèse (Corsica - France) on {sessionDates}.</strong>
 			</p>
 			<div class="flex flex-wrap gap-4">
 				<a href="/{currentYear}" class="px-8 py-4 text-lg btn btn-primary">
@@ -204,21 +205,32 @@
 				<!-- Current Edition -->
 				<div class="mb-12">
 					<h2 class="mb-6">IOEA {currentYear}</h2>
-					<p class="mb-4 text-lg leading-relaxed">
-						The {currentYear} edition of the IOEA will take place in spring at the
-						Institut d'Études Scientifiques de Cargèse in Corsica, France.
-					</p>
-					<div class="p-6 my-6 rounded-lg bg-bg-alt">
-						<h3 class="mb-4 text-base">Important Dates</h3>
-						<ul class="p-0 m-0 list-none">
-							<li class="py-2 border-b border-border last:border-b-0">
-								<strong>Application Deadline:</strong> {appConfig.deadlines.application}   - [Earlier application is recommended] – notification of acceptance from Mid-February
-							</li>
-							<li class="py-2 border-b border-border last:border-b-0">
-								<strong>Registration:</strong> {appConfig.deadlines.registration}
-							</li>
-						</ul>
-					</div>
+					{#if sessionOver}
+						<p class="mb-4 text-lg leading-relaxed">
+							The {currentYear} edition of the IOEA took place on {sessionDates} at the
+							Institut d'Études Scientifiques de Cargèse in Corsica, France.
+						</p>
+						<p class="mb-4 text-lg leading-relaxed">
+							The call for applications for the next session will be announced on this website.
+							<a href="/community/join">Join our mailing list</a> to be notified.
+						</p>
+					{:else}
+						<p class="mb-4 text-lg leading-relaxed">
+							The {currentYear} edition of the IOEA will take place in spring at the
+							Institut d'Études Scientifiques de Cargèse in Corsica, France.
+						</p>
+						<div class="p-6 my-6 rounded-lg bg-bg-alt">
+							<h3 class="mb-4 text-base">Important Dates</h3>
+							<ul class="p-0 m-0 list-none">
+								<li class="py-2 border-b border-border last:border-b-0">
+									<strong>Application Deadline:</strong> {appConfig.deadlines.application}   - [Earlier application is recommended] – notification of acceptance from Mid-February
+								</li>
+								<li class="py-2 border-b border-border last:border-b-0">
+									<strong>Registration:</strong> {appConfig.deadlines.registration}
+								</li>
+							</ul>
+						</div>
+					{/if}
 					{#if appConfig.callIsOpen}
 						<a href="/call" class="btn btn-primary">
 							Apply for IOEA {currentYear}

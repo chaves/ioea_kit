@@ -1,8 +1,9 @@
-import { config, getArchiveYears } from "#lib/config.js";
+import { config, getArchiveYears, getPhotoYears } from "#lib/config.js";
+import { prisma } from "#lib/server/db.js";
 
+// Only list URLs that answer 200: redirects and 404s waste crawl budget
 export async function GET({ url }) {
   const domain = url.origin;
-  const years = [config.currentYear, ...getArchiveYears()];
 
   const staticPages = [
     "",
@@ -18,13 +19,17 @@ export async function GET({ url }) {
     "community/awards",
     "community/join",
     "community/photos",
+    "community/photos/lecturers",
     "archives",
     "videos",
     "sponsors",
-    "call",
+    // /call redirects to the current year while the call is closed
+    ...(config.callIsOpen ? ["call"] : []),
   ];
 
-  const yearPages = [
+  // The current year has its full set of pages; past years only keep
+  // lectures and workshops (/YEAR itself redirects to /YEAR/lectures)
+  const currentYearPages = [
     "",
     "lectures",
     "workshops",
@@ -34,12 +39,25 @@ export async function GET({ url }) {
     "informations",
     "students",
   ];
+  const archiveYears = getArchiveYears().filter((year) => year !== config.currentYear);
+
+  const presentations = await prisma.$queryRaw<Array<{ id: number; year: number }>>`
+		SELECT e_presentation.id, YEAR(e_themes.date_new) AS year
+		FROM e_presentation
+		JOIN e_themes ON e_presentation.id_themes = e_themes.id
+		WHERE e_themes.lecwp IN ('lectures', 'workshops') AND e_themes.date_new IS NOT NULL
+		ORDER BY year DESC, e_presentation.id ASC
+	`;
 
   const allPages = [
     ...staticPages.map((page) => `${domain}/${page}`),
-    ...years.flatMap((year) =>
-      yearPages.map((page) => `${domain}/${year}${page ? `/${page}` : ""}`),
-    ),
+    ...currentYearPages.map((page) => `${domain}/${config.currentYear}${page ? `/${page}` : ""}`),
+    ...archiveYears.flatMap((year) => [`${domain}/${year}/lectures`, `${domain}/${year}/workshops`]),
+    ...getPhotoYears().map((year) => `${domain}/photos/${year}`),
+    // Cancelled sessions (badSessions) answer 404, even if they have presentations
+    ...presentations
+      .filter((p) => !config.badSessions.includes(Number(p.year)))
+      .map((p) => `${domain}/${Number(p.year)}/presentation/${p.id}`),
   ];
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -49,7 +67,7 @@ ${allPages
     (page) => `  <url>
     <loc>${page}</loc>
     <changefreq>monthly</changefreq>
-    <priority>${page === domain ? "1.0" : "0.8"}</priority>
+    <priority>${page === `${domain}/` ? "1.0" : "0.8"}</priority>
   </url>`,
   )
   .join("\n")}

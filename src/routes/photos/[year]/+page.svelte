@@ -1,6 +1,8 @@
 <script lang="ts">
 	import PageHeader from '#lib/components/PageHeader.svelte';
+	import SEO from '#lib/components/SEO.svelte';
 	import Sidebar from '#lib/components/Sidebar.svelte';
+	import { config } from '#lib/config.js';
 
 	interface Props {
 		data: {
@@ -11,11 +13,16 @@
 
 	let { data }: Props = $props();
 	let selectedPhoto = $state<string | null>(null);
+
+	// Cancelled sessions have photos but no program pages
+	const hasProgram = $derived(!config.badSessions.includes(data.year));
+	const programHref = $derived(data.year === config.currentYear ? `/${data.year}` : `/${data.year}/lectures`);
 </script>
 
-<svelte:head>
-	<title>Photos IOEA {data.year}</title>
-</svelte:head>
+<SEO
+	title="Photos IOEA {data.year}"
+	description="Photo gallery of the IOEA {data.year} session in Cargèse, Corsica: lectures, workshops, seminars and social events."
+/>
 
 <PageHeader title="Photos - IOEA {data.year}" />
 
@@ -57,12 +64,14 @@
 					</div>
 				{/if}
 
-				<div class="mt-12 pt-8 border-t border-border">
-					<a href="/archives/{data.year}" class="inline-flex items-center gap-3 px-8 py-4 bg-primary text-white rounded-xl font-bold text-lg no-underline transition-all duration-300 hover:bg-primary-dark hover:-translate-y-1 hover:shadow-xl">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-						View IOEA {data.year} Program
-					</a>
-				</div>
+				{#if hasProgram}
+					<div class="mt-12 pt-8 border-t border-border">
+						<a href={programHref} class="inline-flex items-center gap-3 px-8 py-4 bg-primary text-white rounded-xl font-bold text-lg no-underline transition-all duration-300 hover:bg-primary-dark hover:-translate-y-1 hover:shadow-xl">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+							View IOEA {data.year} Program
+						</a>
+					</div>
+				{/if}
 			</div>
 
 			<aside class="sticky top-[100px] self-start hidden lg:block">

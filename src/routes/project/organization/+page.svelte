@@ -1,12 +1,13 @@
 <script lang="ts">
 	import PageHeader from '#lib/components/PageHeader.svelte';
+	import SEO from '#lib/components/SEO.svelte';
 	import Sidebar from '#lib/components/Sidebar.svelte';
 </script>
 
-<svelte:head>
-	<title>Organization | IOEA</title>
-	<meta name="description" content="Learn about how the IOEA is organized: lectures, workshops, seminars, and networking opportunities." />
-</svelte:head>
+<SEO
+	title="Organization"
+	description="Learn about how the IOEA is organized: lectures, workshops, seminars, and networking opportunities."
+/>
 
 <PageHeader title="Organization" />
 
