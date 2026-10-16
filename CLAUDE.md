@@ -32,7 +32,7 @@ This is an **IOEA (Institutional and Organizational Economics Academy)** website
 
 | Portal | Routes | Auth Guard | Roles |
 |--------|--------|-----------|-------|
-| Public site | `/`, `/[year]/*`, `/community/*`, `/call/*` | None | — |
+| Public site | `/`, `/[year]/*`, `/community/*`, `/news/*`, `/call/*` | None | — |
 | Admin/Reviewer | `/auth/*` | `+layout.server.ts` checks admin/reviewer | admin, reviewer |
 | Student | `/students/*` | `+layout.server.ts` checks student | student |
 | Program Admin | `/program-admin/*` | `+layout.server.ts` checks program-admin | program-admin |
@@ -54,6 +54,7 @@ Prisma with MySQL. Schema in `prisma/schema.prisma`. Key model groups:
 - **Call**: `call_submissions`, `call_notes`, `call_comments`, `call_reviewers`, `call_groups`
 - **Students**: `students`, `students_papers`, `students_travels`, `students_groups`
 - **Content**: `e_auteurs`, `e_presentation`, `e_themes`, `e_references`, `chairs`
+- **News**: `news_article`, `news_file` — managed at `/auth/manager/news` (admin), same model as the SIOE site. Images (`/images/news/`) and PDFs (`/files/news/`) are written to `static/` and mirrored into `build/client/`; `server.js` serves those two folders from disk so uploads show without a restart
 
 Migrations are raw SQL files in `prisma/migrations/` (applied manually, not via `prisma migrate`).
 

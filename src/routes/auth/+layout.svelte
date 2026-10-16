@@ -99,6 +99,13 @@
 						</svg>
 						Themes
 					</a>
+					<a href="/auth/manager/news" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {page.url.pathname.startsWith('/auth/manager/news') ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path>
+							<path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"></path>
+						</svg>
+						News
+					</a>
 				{/if}
 				{#if data.session?.roles?.includes('admin') || data.session?.roles?.includes('program-admin')}
 					<a href="/auth/submissions" class="flex items-center gap-3 px-6 py-3.5 text-white/80 font-medium transition-all duration-200 hover:bg-white/10 hover:text-white {page.url.pathname === '/auth/submissions' ? 'bg-white/15 text-white border-l-[3px] border-secondary' : ''}">

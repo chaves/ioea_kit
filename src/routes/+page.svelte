@@ -2,6 +2,7 @@
 	import { staticConfig, getConfig, isSessionOver } from '#lib/config.js';
 	import Sidebar from '#lib/components/Sidebar.svelte';
 	import SEO from '#lib/components/SEO.svelte';
+	import NewsCard from '#lib/components/NewsCard.svelte';
 	import type { PageData } from './$types';
 
 	type TestimonialCard =
@@ -237,6 +238,21 @@
 						</a>
 					{/if}
 				</div>
+
+				<!-- Latest News -->
+				{#if data.recentNews.length > 0}
+					<div class="mb-12">
+						<div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 mb-6">
+							<h2 class="mb-0">Latest News</h2>
+							<a href="/news" class="btn btn-primary text-sm">All news →</a>
+						</div>
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+							{#each data.recentNews as article (article.slug)}
+								<NewsCard {article} headingLevel="h3" />
+							{/each}
+						</div>
+					</div>
+				{/if}
 
 				<!-- Faculty Videos Preview -->
 				<div class="mb-12">

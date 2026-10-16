@@ -4,6 +4,9 @@
  */
 
 import { createServer } from 'http';
+import { createReadStream, statSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join, normalize, extname, sep } from 'node:path';
 
 // IMPORTANT: Set environment variables BEFORE importing the handler
 // The handler reads these at import time
@@ -24,8 +27,58 @@ process.env.HOST_HEADER = process.env.HOST_HEADER || 'x-forwarded-host';
 // Dynamic import AFTER env vars are set
 const { handler } = await import('./build/handler.js');
 
+// News images and PDFs are uploaded at runtime into build/client (see
+// src/lib/server/imageStore.ts and newsFiles.ts). adapter-node's static server
+// snapshots the file list at startup, so it would answer 404 for them until the
+// next restart: serve these two folders straight from disk instead.
+const CLIENT_DIR = join(dirname(fileURLToPath(import.meta.url)), 'build/client');
+const UPLOAD_PREFIXES = ['/images/news/', '/files/news/'];
+const CONTENT_TYPES = {
+	'.jpg': 'image/jpeg',
+	'.jpeg': 'image/jpeg',
+	'.png': 'image/png',
+	'.webp': 'image/webp',
+	'.pdf': 'application/pdf'
+};
+
+function serveUpload(req, res) {
+	if (req.method !== 'GET' && req.method !== 'HEAD') return false;
+	let pathname;
+	try {
+		pathname = decodeURIComponent((req.url || '/').split('?')[0]);
+	} catch {
+		return false;
+	}
+	if (!UPLOAD_PREFIXES.some((prefix) => pathname.startsWith(prefix))) return false;
+	const type = CONTENT_TYPES[extname(pathname).toLowerCase()];
+	const abs = join(CLIENT_DIR, normalize(pathname));
+	// Guard against path traversal outside build/client
+	if (!type || !abs.startsWith(CLIENT_DIR + sep)) return false;
+
+	let stats;
+	try {
+		stats = statSync(abs);
+	} catch {
+		return false;
+	}
+	if (!stats.isFile()) return false;
+
+	res.setHeader('Content-Type', type);
+	res.setHeader('Content-Length', stats.size);
+	res.setHeader('X-Content-Type-Options', 'nosniff');
+	// Image names are versioned on every upload; PDF names may be reused after a delete
+	res.setHeader('Cache-Control', type === 'application/pdf' ? 'public,max-age=3600' : 'public,max-age=31536000,immutable');
+	res.setHeader('Last-Modified', stats.mtime.toUTCString());
+	res.statusCode = 200;
+	if (req.method === 'HEAD') res.end();
+	else createReadStream(abs).pipe(res);
+	return true;
+}
+
 // Create HTTP server
-const server = createServer(handler);
+const server = createServer((req, res) => {
+	if (!serveUpload(req, res)) handler(req, res);
+});
 
 // Track if server is shutting down
 let isShuttingDown = false;

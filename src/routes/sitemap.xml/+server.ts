@@ -7,6 +7,7 @@ export async function GET({ url }) {
 
   const staticPages = [
     "",
+    "news",
     "project",
     "project/organization",
     "project/research",
@@ -49,10 +50,17 @@ export async function GET({ url }) {
 		ORDER BY year DESC, e_presentation.id ASC
 	`;
 
+  const news = await prisma.news_article.findMany({
+    where: { published: true },
+    select: { slug: true },
+    orderBy: { publishedAt: "desc" },
+  });
+
   const allPages = [
     ...staticPages.map((page) => `${domain}/${page}`),
     ...currentYearPages.map((page) => `${domain}/${config.currentYear}${page ? `/${page}` : ""}`),
     ...archiveYears.flatMap((year) => [`${domain}/${year}/lectures`, `${domain}/${year}/workshops`]),
+    ...news.map((a) => `${domain}/news/${a.slug}`),
     ...getPhotoYears().map((year) => `${domain}/photos/${year}`),
     // Cancelled sessions (badSessions) answer 404, even if they have presentations
     ...presentations

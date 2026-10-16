@@ -157,6 +157,7 @@ export const menus = {
   main: [
     { href: "/", label: "Home", title: "Home" },
     { href: "/2026", label: "IOEA 2026", title: "IOEA 2026" },
+    { href: "/news", label: "News", title: "News" },
     { href: "/project", label: "The project", title: "The project" },
     { href: "/community", label: "The community", title: "The community" },
     { href: "/archives", label: "Past editions", title: "Past editions" },

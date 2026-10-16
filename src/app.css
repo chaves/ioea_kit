@@ -375,3 +375,75 @@
 	}
 }
 
+
+/* News article body (public page + admin editor). Tailwind's preflight strips
+   list bullets and heading sizes, so the rich-text markup needs its own styles. */
+.news-content {
+	font-size: 1.05rem;
+	line-height: 1.75;
+	color: var(--color-text);
+}
+
+.news-content > * + * {
+	margin-top: 1em;
+}
+
+.news-content h2 {
+	font-size: 1.5rem;
+	margin-top: 1.75em;
+}
+
+.news-content h3 {
+	font-size: 1.25rem;
+	margin-top: 1.5em;
+}
+
+.news-content ul,
+.news-content ol {
+	padding-left: 1.5em;
+}
+
+.news-content ul {
+	list-style: disc;
+}
+
+.news-content ol {
+	list-style: decimal;
+}
+
+.news-content li + li {
+	margin-top: 0.35em;
+}
+
+.news-content a {
+	color: var(--color-primary-dark);
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+}
+
+.news-content a:hover {
+	color: var(--color-secondary-dark);
+}
+
+.news-content blockquote {
+	border-left: 4px solid var(--color-primary);
+	padding-left: 1rem;
+	color: var(--color-text-light);
+	font-style: italic;
+}
+
+.news-content hr {
+	border: 0;
+	border-top: 1px solid var(--color-border);
+	margin: 2em 0;
+}
+
+.news-content img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 0.5rem;
+}
+
+.news-content strong {
+	font-weight: 600;
+}

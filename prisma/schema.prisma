@@ -345,3 +345,36 @@ enum e_references_mustread {
   NO  @map("0")
   YES @map("1")
 }
+
+// News (same model as the SIOE public site)
+model news_article {
+  id          Int         @id @default(autoincrement())
+  slug        String      @unique @db.VarChar(191)
+  title       String      @db.VarChar(255)
+  content     String      @db.LongText
+  excerpt     String?     @db.Text
+  image       String?     @db.VarChar(255) // local path e.g. /images/news/filename.jpg
+  imageFit    String      @default("cover") @db.VarChar(16) // cover | contain
+  imageFocusX Int         @default(50) // 0..100
+  imageFocusY Int         @default(28) // 0..100 (top-biased default)
+  published   Boolean     @default(false)
+  publishedAt DateTime?
+  author      String?     @db.VarChar(255)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  files       news_file[]
+
+  @@index([published, publishedAt], map: "idx_news_article_published")
+}
+
+model news_file {
+  id        Int          @id @default(autoincrement())
+  articleId Int
+  filename  String       @db.VarChar(255) // stored filename e.g. my-article_report.pdf
+  label     String?      @db.VarChar(255) // display label (optional)
+  size      Int // file size in bytes
+  createdAt DateTime     @default(now())
+  article   news_article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@index([articleId])
+}

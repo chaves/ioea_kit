@@ -34,3 +34,5 @@ static/pdf
 releases
 shared
 logs
+# News PDFs uploaded at runtime (see src/lib/server/newsFiles.ts)
+static/files/news
