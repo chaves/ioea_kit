@@ -70,6 +70,39 @@
 						academy enables an international network of researchers able to work together to be
 						built up gradually.
 					</p>
+
+					<!-- Moved from the homepage, which now keeps a short lead -->
+					<h2 class="pb-2 mt-12 mb-6 text-2xl border-b-2 text-primary border-secondary">More than Twenty Years of the IOEA</h2>
+					<div>
+						<p class="text-base sm:text-[1.05rem] leading-relaxed mb-6 text-text">
+							In more than twenty years of existence, the <strong class="font-semibold text-primary">Institutional and Organizational Economics Academy</strong> (IOEA) has become one of the most prominent events in research on institutional and organizational economics.
+						</p>
+
+						<p class="text-base sm:text-[1.05rem] leading-relaxed mb-6 text-text">
+							Using rigorous scientific methods, <strong class="font-semibold text-primary">Institutional and Organizational Economics</strong> (IOE) focuses on the analysis of the economic impacts and on the evolutions of co-ordination frameworks: institutions, organizations and contracts. Main subjects of investigation cover issues that are essential in the design of efficient public policies and firm strategies. IOE put emphasis on applied analysis to confront the theory to facts to enrich the former accordingly. In addition, it is based on multi-disciplinarity to stimulate cross-fertilisation among political science, anthropology, sociology, management, law, and economics.
+						</p>
+
+						<p class="text-base sm:text-[1.05rem] leading-relaxed mb-6 text-text">
+							The IOEA organizes three types of activities:
+						</p>
+
+						<ol class="mb-6 ml-6 space-y-4 list-decimal">
+							<li class="pl-2 text-base sm:text-[1.05rem] leading-relaxed">
+								A one-week <strong class="font-semibold text-primary">spring school</strong> which is held every year at the Institut d'Etudes Scientifiques de Cargèse in Corsica (France) and combines lectures given by internationally recognized scholars, and workshops and seminars coordinated by young scientists known for their expertise either on a research topic or on a methodology;
+							</li>
+							<li class="pl-2 text-base sm:text-[1.05rem] leading-relaxed">
+								<strong class="font-semibold text-primary">Workshops</strong> focusing on a specific topic in the field
+							</li>
+						</ol>
+
+						<p class="text-base sm:text-[1.05rem] leading-relaxed mb-6 text-text">
+							Over the years, IOEA has continually built up a dense and wide network of researchers and students interested in this dynamic field.
+						</p>
+
+						<p class="text-base sm:text-[1.05rem] leading-relaxed mb-6 text-text">
+							The strong mobilization of scholars, the organization of complementary workshops and joint publications, the development of on-line resources, the benefit of well-suited facilities, the support of renowned universities, the reiterated financial support from numerous noteworthy institutions and the positive signal that these supports gives to researchers have all contributed to a long-term success. Today more than 350 alumni currently hold academic positions throughout the world, and many scientific co-operations were initiated in this framework.
+						</p>
+					</div>
 				</article>
 			</div>
 

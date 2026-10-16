@@ -42,6 +42,15 @@
 
 	const sessionOrdinal = $derived(getOrdinal(sessionNumber));
 
+	const aboutLinks = [
+		{ href: '/project', label: 'Goals of the IOEA' },
+		{ href: '/project/research', label: 'Research areas' },
+		{ href: '/community/faculty', label: 'The faculty' },
+		{ href: '/archives', label: 'Past editions' },
+		{ href: '/community/alumni', label: 'Alumni' },
+		{ href: 'https://learn.ioea.eu', label: 'Learning platform', external: true }
+	];
+
 	const combinedTestimonials = $derived<TestimonialCard[]>([
 		...randomTestimonials.map<TestimonialCard>((t) => ({
 			type: 'text' as const,
@@ -153,138 +162,132 @@
 	</section>
 {/if}
 
+<!-- About: a short lead beside the video. The full presentation lives on
+     /project, so the news above stay within the first screen. -->
 <section class="section-space">
 	<div class="container">
-		<div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
-			<div class="main-content">
-				<!-- Video Section -->
-				<div class="mb-12">
-					<div class="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.1)] bg-black">
-						{#if mainVideoLoaded}
-							<iframe
-								width="560"
-								height="315"
-								src="https://www.youtube.com/embed/{mainVideoId}?autoplay=1"
-								title="IOEA Presentation"
-								frameborder="0"
-								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-								allowfullscreen
-								class="absolute top-0 left-0 w-full h-full"
-							></iframe>
-						{:else}
-							<button
-								type="button"
-								class="flex absolute top-0 left-0 justify-center items-center p-0 w-full h-full bg-transparent border-0 transition-opacity duration-200 cursor-pointer hover:opacity-90"
-								onclick={loadMainVideo}
-								aria-label="Play IOEA Presentation"
-							>
-								<img
-									src={getThumbnailUrl(mainVideoId)}
-									alt="IOEA Presentation"
-									loading="lazy"
-									class="object-cover absolute top-0 left-0 w-full h-full"
-									onerror={(e) => {
-										// Fallback to hqdefault if maxresdefault doesn't exist
-										const img = e.currentTarget as HTMLImageElement;
-										img.src = `https://img.youtube.com/vi/${mainVideoId}/hqdefault.jpg`;
-									}}
-								/>
-								<div class="relative z-10 w-[68px] h-12 transition-transform duration-200 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:scale-110" aria-hidden="true">
-									<svg xmlns="http://www.w3.org/2000/svg" width="68" height="48" viewBox="0 0 68 48">
-										<path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.63-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"/>
-										<path d="M 45,24 27,14 27,34" fill="#fff"/>
-									</svg>
-								</div>
-							</button>
-						{/if}
+		<div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+			<div>
+				<h2 class="mb-5">About the IOEA</h2>
+				<p class="mb-6 text-lg leading-relaxed">
+					In more than twenty years of existence, the <strong class="font-semibold text-primary">Institutional and Organizational Economics Academy</strong>
+					has become one of the most prominent events in research on institutions, organizations and contracts.
+					Every spring, internationally recognized scholars and young researchers meet in Cargèse (Corsica)
+					for a week of lectures, workshops and seminars.
+				</p>
+				<dl class="grid grid-cols-3 gap-3 mb-8">
+					<div class="p-4 text-center rounded-lg bg-bg-alt">
+						<dt class="sr-only">Editions</dt>
+						<dd class="m-0"><span class="block font-serif text-2xl sm:text-3xl font-semibold text-primary whitespace-nowrap">{sessionNumber}</span><span class="text-sm text-text-light">editions since 2002</span></dd>
 					</div>
-				</div>
-
-				<!-- About Section -->
-				<div class="mb-12">
-					<p class="mb-4 text-lg leading-relaxed">
-						In more than twenty years of existence, the <strong class="font-semibold text-primary">Institutional and Organizational Economics Academy</strong> (IOEA) has become one of the most prominent events in research on institutional and organizational economics.
-					</p>
-
-					<p class="mb-4 text-lg leading-relaxed">
-						Using rigorous scientific methods, <strong class="font-semibold text-primary">Institutional and Organizational Economics</strong> (IOE) focuses on the analysis of the economic impacts and on the evolutions of co-ordination frameworks: institutions, organizations and contracts. Main subjects of investigation cover issues that are essential in the design of efficient public policies and firm strategies. IOE put emphasis on applied analysis to confront the theory to facts to enrich the former accordingly. In addition, it is based on multi-disciplinarity to stimulate cross-fertilisation among political science, anthropology, sociology, management, law, and economics.
-					</p>
-
-					<p class="mb-4 text-lg leading-relaxed">
-						The IOEA organizes three types of activities:
-					</p>
-
-					<ol class="mb-6 ml-6 space-y-4">
-						<li class="pl-2 text-lg leading-relaxed">
-							A one-week <strong class="font-semibold text-primary">spring school</strong> which is held every year at the Institut d'Etudes Scientifiques de Cargèse in Corsica (France) and combines lectures given by internationally recognized scholars, and workshops and seminars coordinated by young scientists known for their expertise either on a research topic or on a methodology;
+					<div class="p-4 text-center rounded-lg bg-bg-alt">
+						<dt class="sr-only">Alumni</dt>
+						<dd class="m-0"><span class="block font-serif text-2xl sm:text-3xl font-semibold text-primary whitespace-nowrap">350+</span><span class="text-sm text-text-light">alumni in academic positions</span></dd>
+					</div>
+					<div class="p-4 text-center rounded-lg bg-bg-alt">
+						<dt class="sr-only">Format</dt>
+						<dd class="m-0"><span class="block font-serif text-2xl sm:text-3xl font-semibold text-primary whitespace-nowrap">1 week</span><span class="text-sm text-text-light">each spring in Cargèse</span></dd>
+					</div>
+				</dl>
+				<ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 p-0 m-0 list-none">
+					{#each aboutLinks as link (link.href)}
+						<li class="border-b border-border">
+							<a
+								href={link.href}
+								class="flex justify-between items-center py-2.5 font-semibold text-primary hover:text-secondary"
+								{...link.external ? { target: '_blank', rel: 'noopener' } : {}}
+							>
+								{link.label}<span aria-hidden="true">→</span>
+							</a>
 						</li>
-						<li class="pl-2 text-lg leading-relaxed">
-							<strong class="font-semibold text-primary">Workshops</strong> focusing on a specific topic in the field
-						</li>
-					</ol>
-
-					<p class="mb-4 text-lg leading-relaxed">
-						Over the years, IOEA has continually built up a dense and wide network of researchers and students interested in this dynamic field.
-					</p>
-
-					<p class="mb-4 text-lg leading-relaxed">
-						The strong mobilization of scholars, the organization of complementary workshops and joint publications, the development of on-line resources, the benefit of well-suited facilities, the support of renowned universities, the reiterated financial support from numerous noteworthy institutions and the positive signal that these supports gives to researchers have all contributed to a long-term success. Today more than 350 alumni currently hold academic positions throughout the world, and many scientific co-operations were initiated in this framework.
-					</p>
-				</div>
-
-				<!-- Current Edition -->
-				<div class="mb-12">
-					<h2 class="mb-6">IOEA {currentYear}</h2>
-					{#if sessionOver}
-						<p class="mb-4 text-lg leading-relaxed">
-							The {currentYear} edition of the IOEA took place on {sessionDates} at the
-							Institut d'Études Scientifiques de Cargèse in Corsica, France.
-						</p>
-						<p class="mb-4 text-lg leading-relaxed">
-							The call for applications for the next session will be announced on this website.
-							<a href="/community/join">Join our mailing list</a> to be notified.
-						</p>
-					{:else}
-						<p class="mb-4 text-lg leading-relaxed">
-							The {currentYear} edition of the IOEA will take place in spring at the
-							Institut d'Études Scientifiques de Cargèse in Corsica, France.
-						</p>
-						<div class="p-6 my-6 rounded-lg bg-bg-alt">
-							<h3 class="mb-4 text-base">Important Dates</h3>
-							<ul class="p-0 m-0 list-none">
-								<li class="py-2 border-b border-border last:border-b-0">
-									<strong>Application Deadline:</strong> {appConfig.deadlines.application}   - [Earlier application is recommended] – notification of acceptance from Mid-February
-								</li>
-								<li class="py-2 border-b border-border last:border-b-0">
-									<strong>Registration:</strong> {appConfig.deadlines.registration}
-								</li>
-							</ul>
-						</div>
-					{/if}
-					{#if appConfig.callIsOpen}
-						<a href="/call" class="btn btn-primary">
-							Apply for IOEA {currentYear}
-						</a>
-					{/if}
-				</div>
-
+					{/each}
+				</ul>
 			</div>
-
-			<!-- Sidebar -->
-			<aside class="self-start lg:sticky lg:top-[100px]">
-				<Sidebar />
-				<div class="p-6 mt-6 text-center rounded-lg bg-bg-alt">
-					<p class="mb-4 text-[0.95rem] leading-relaxed">
-						<strong class="block mb-2 text-primary">Discover our on-line learning platform on its dedicated website:</strong>
-					</p>
-					<a href="https://learn.ioea.eu" target="_blank" rel="noopener" class="inline-block my-4 transition-opacity duration-200 hover:opacity-80">
-						<img src="/images/logo_learn.svg" alt="IOEA Learn" class="max-w-[180px] w-full h-auto" />
-					</a>
-					<p class="mt-4 mb-0 text-[0.9rem] text-text-light leading-normal">
-						<em>Learn everything about institutional and organizational economics!</em>
-					</p>
+			<div>
+				<div class="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.1)] bg-black">
+					{#if mainVideoLoaded}
+						<iframe
+							width="560"
+							height="315"
+							src="https://www.youtube.com/embed/{mainVideoId}?autoplay=1"
+							title="IOEA Presentation"
+							frameborder="0"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen
+							class="absolute top-0 left-0 w-full h-full"
+						></iframe>
+					{:else}
+						<button
+							type="button"
+							class="flex absolute top-0 left-0 justify-center items-center p-0 w-full h-full bg-transparent border-0 transition-opacity duration-200 cursor-pointer hover:opacity-90"
+							onclick={loadMainVideo}
+							aria-label="Play IOEA Presentation"
+						>
+							<img
+								src={getThumbnailUrl(mainVideoId)}
+								alt="IOEA Presentation"
+								loading="lazy"
+								class="object-cover absolute top-0 left-0 w-full h-full"
+								onerror={(e) => {
+									// Fallback to hqdefault if maxresdefault doesn't exist
+									const img = e.currentTarget as HTMLImageElement;
+									img.src = `https://img.youtube.com/vi/${mainVideoId}/hqdefault.jpg`;
+								}}
+							/>
+							<div class="relative z-10 w-[68px] h-12 transition-transform duration-200 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:scale-110" aria-hidden="true">
+								<svg xmlns="http://www.w3.org/2000/svg" width="68" height="48" viewBox="0 0 68 48">
+									<path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.63-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"/>
+									<path d="M 45,24 27,14 27,34" fill="#fff"/>
+								</svg>
+							</div>
+						</button>
+					{/if}
 				</div>
-			</aside>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Current edition, with the former sidebar widgets (program, photos,
+     brochure, mailing list) laid out as a row of cards -->
+<section class="section-space bg-bg-alt border-y border-border">
+	<div class="container">
+		<h2 class="mb-6">IOEA {currentYear}</h2>
+		<div class="max-w-3xl">
+			{#if sessionOver}
+				<p class="mb-4 text-lg leading-relaxed">
+					The {currentYear} edition of the IOEA took place on {sessionDates} at the
+					Institut d'Études Scientifiques de Cargèse in Corsica, France.
+				</p>
+				<p class="mb-4 text-lg leading-relaxed">
+					The call for applications for the next session will be announced on this website.
+					<a href="/community/join">Join our mailing list</a> to be notified.
+				</p>
+			{:else}
+				<p class="mb-4 text-lg leading-relaxed">
+					The {currentYear} edition of the IOEA will take place in spring at the
+					Institut d'Études Scientifiques de Cargèse in Corsica, France.
+				</p>
+				<div class="p-6 my-6 rounded-lg bg-white border border-border">
+					<h3 class="mb-4 text-base">Important Dates</h3>
+					<ul class="p-0 m-0 list-none">
+						<li class="py-2 border-b border-border last:border-b-0">
+							<strong>Application Deadline:</strong> {appConfig.deadlines.application}   - [Earlier application is recommended] – notification of acceptance from Mid-February
+						</li>
+						<li class="py-2 border-b border-border last:border-b-0">
+							<strong>Registration:</strong> {appConfig.deadlines.registration}
+						</li>
+					</ul>
+				</div>
+			{/if}
+			{#if appConfig.callIsOpen}
+				<a href="/call" class="btn btn-primary">
+					Apply for IOEA {currentYear}
+				</a>
+			{/if}
+		</div>
+		<div class="home-resources grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+			<Sidebar />
 		</div>
 	</div>
 </section>
@@ -450,3 +453,10 @@
 		</div>
 	</div>
 </section>
+
+<style>
+	.home-resources :global(.sidebar-widget) {
+		margin-bottom: 0;
+		height: 100%;
+	}
+</style>
