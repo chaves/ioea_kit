@@ -118,11 +118,40 @@
 					<a href="/call" class="px-8 py-4 text-lg btn btn-secondary">
 						Apply Now
 					</a>
+				{:else}
+					<a href="/community/join" class="px-8 py-4 text-lg btn btn-secondary">
+						Join our mailing list
+					</a>
 				{/if}
 			</div>
 		</div>
 	</div>
 </section>
+
+<!-- Latest News: full width right under the hero, like SIOE. The layout follows
+     the number of articles so a single one never sits alone in an empty grid. -->
+{#if data.recentNews.length > 0}
+	<section class="py-12 bg-bg-alt border-b border-border" aria-labelledby="latest-news">
+		<div class="container">
+			<div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 mb-8">
+				<h2 id="latest-news" class="mb-0">Latest News</h2>
+				<a href="/news" class="btn btn-primary text-sm">All news →</a>
+			</div>
+			{#if data.recentNews.length === 1}
+				<NewsCard article={data.recentNews[0]} headingLevel="h3" featured eager />
+			{:else}
+				<div class="grid grid-cols-1 sm:grid-cols-2 {data.recentNews.length > 2 ? 'lg:grid-cols-3' : ''} gap-6">
+					{#each data.recentNews as article, i (article.slug)}
+						<!-- Three cards: the third waits for the 3-column layout rather than orphaning on 2 columns -->
+						<div class={i === 2 ? 'sm:max-lg:hidden' : ''}>
+							<NewsCard {article} headingLevel="h3" eager={i === 0} />
+						</div>
+					{/each}
+				</div>
+			{/if}
+		</div>
+	</section>
+{/if}
 
 <section class="section-space">
 	<div class="container">
@@ -239,193 +268,10 @@
 					{/if}
 				</div>
 
-				<!-- Latest News -->
-				{#if data.recentNews.length > 0}
-					<div class="mb-12">
-						<div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 mb-6">
-							<h2 class="mb-0">Latest News</h2>
-							<a href="/news" class="btn btn-primary text-sm">All news →</a>
-						</div>
-						<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-							{#each data.recentNews as article (article.slug)}
-								<NewsCard {article} headingLevel="h3" />
-							{/each}
-						</div>
-					</div>
-				{/if}
-
-				<!-- Faculty Videos Preview -->
-				<div class="mb-12">
-					<h2 class="mb-6">Faculties speak about it!</h2>
-					<div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6">
-						{#each combinedTestimonials as item}
-							{#if item.type === 'video'}
-								<div class="flex flex-col gap-6 bg-white p-6 rounded-lg border border-border shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
-									<div class="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.08)] bg-black">
-										{#if loadedVideos.has(item.videoId)}
-											<iframe
-												src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1`}
-												title={`${item.name} - ${item.institution}`}
-												frameborder="0"
-												allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-												allowfullscreen
-												class="absolute top-0 left-0 w-full h-full"
-											></iframe>
-										{:else}
-											<button
-												type="button"
-												class="flex absolute top-0 left-0 justify-center items-center p-0 w-full h-full bg-transparent border-0 transition-opacity duration-200 cursor-pointer hover:opacity-90"
-												onclick={() => loadVideo(item.videoId)}
-												aria-label="Play {item.name}"
-											>
-												<img
-													src={getThumbnailUrl(item.videoId)}
-													alt="{item.name}"
-													loading="lazy"
-													class="object-cover absolute top-0 left-0 w-full h-full"
-													onerror={(e) => {
-														const img = e.currentTarget as HTMLImageElement;
-														img.src = `https://img.youtube.com/vi/${item.videoId}/hqdefault.jpg`;
-													}}
-												/>
-												<div class="relative z-10 w-[68px] h-12 transition-transform duration-200 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:scale-110" aria-hidden="true">
-													<svg xmlns="http://www.w3.org/2000/svg" width="68" height="48" viewBox="0 0 68 48">
-														<path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.63-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"/>
-														<path d="M 45,24 27,14 27,34" fill="#fff"/>
-													</svg>
-												</div>
-											</button>
-										{/if}
-									</div>
-									<div class="flex-1">
-										<div class="flex flex-col gap-1">
-											<strong class="font-semibold text-primary">{item.name}</strong>
-											<span class="text-xs text-text-light">{item.institution}</span>
-										</div>
-									</div>
-								</div>
-							{/if}
-						{/each}
-					</div>
-					<div class="mt-8 text-center">
-						<a href="/videos" class="inline-flex gap-2 items-center px-6 py-3 text-base font-semibold text-white no-underline rounded-lg transition-all duration-200 bg-secondary hover:bg-secondary-dark hover:shadow-lg hover:-translate-y-0.5">
-							Watch more faculty videos →
-						</a>
-					</div>
-				</div>
-
-				<!-- Participants' Impressions -->
-				<div class="mb-12">
-					<h2 class="mb-6">Participants' impressions</h2>
-					<div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6">
-						{#each [{ id: 'aKZikF2fXxQ', year: 2026 }, { id: 'avcC11fXzlA', year: 2025 }] as vid}
-						<div class="flex flex-col gap-6 bg-white p-6 rounded-lg border border-border shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
-							<div class="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.08)] bg-black">
-								{#if loadedVideos.has(vid.id)}
-									<iframe
-										src="https://www.youtube.com/embed/{vid.id}?autoplay=1"
-										title="IOEA {vid.year} - Participants' impressions"
-										frameborder="0"
-										allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-										allowfullscreen
-										class="absolute top-0 left-0 w-full h-full"
-									></iframe>
-								{:else}
-									<button
-										type="button"
-										class="flex absolute top-0 left-0 justify-center items-center p-0 w-full h-full bg-transparent border-0 transition-opacity duration-200 cursor-pointer hover:opacity-90"
-										onclick={() => loadVideo(vid.id)}
-										aria-label="Play IOEA {vid.year} - Participants' impressions"
-									>
-										<img
-											src={getThumbnailUrl(vid.id)}
-											alt="IOEA {vid.year} - Participants' impressions"
-											loading="lazy"
-											class="object-cover absolute top-0 left-0 w-full h-full"
-											onerror={(e) => {
-												const img = e.currentTarget as HTMLImageElement;
-												img.src = `https://img.youtube.com/vi/${vid.id}/hqdefault.jpg`;
-											}}
-										/>
-										<div class="relative z-10 w-[68px] h-12 transition-transform duration-200 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:scale-110" aria-hidden="true">
-											<svg xmlns="http://www.w3.org/2000/svg" width="68" height="48" viewBox="0 0 68 48">
-												<path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.63-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"/>
-												<path d="M 45,24 27,14 27,34" fill="#fff"/>
-											</svg>
-										</div>
-									</button>
-								{/if}
-							</div>
-							<div class="flex-1">
-								<div class="flex flex-col gap-1">
-									<strong class="font-semibold text-primary">Participants</strong>
-									<span class="text-xs text-text-light">IOEA {vid.year}</span>
-								</div>
-							</div>
-						</div>
-						{/each}
-					</div>
-				</div>
-
-				<!-- Testimonials Preview -->
-				<div class="mb-12">
-					<h2 class="mb-6">What Alumni & Faculty Say</h2>
-					<div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6 mb-6">
-						{#each combinedTestimonials as item, index}
-							{#if item.type === 'text'}
-								<div class="flex gap-6 bg-white p-6 rounded-lg border border-border shadow-[0_2px_8px_rgba(0,0,0,0.05)] flex-col text-center sm:flex-row sm:text-left">
-									<div class="overflow-hidden flex-shrink-0 mx-auto w-24 h-24 rounded-full sm:mx-0">
-										<img
-											src={item.photo}
-											alt={item.name}
-											class="object-cover w-full h-full"
-											onerror={(e) => {
-												const img = e.currentTarget as HTMLImageElement;
-												img.src = '/images/placeholder-person.jpg';
-											}}
-										/>
-									</div>
-									<div class="flex-1">
-										<blockquote class="italic text-text mb-2 m-0 p-0 text-[0.9rem] leading-relaxed">
-											"{getTruncatedQuote(item.quote, index)}"
-										</blockquote>
-										{#if item.quote.length > maxQuoteLength}
-											<button
-												type="button"
-												class="p-0 mb-3 text-xs font-semibold underline bg-transparent border-0 transition-colors duration-200 cursor-pointer text-secondary hover:text-secondary-dark"
-												onclick={() => toggleQuote(index)}
-											>
-												{expandedQuotes.has(index) ? 'Read less' : 'Read more'}
-											</button>
-										{/if}
-										<div class="flex flex-col gap-1">
-											<strong class="font-semibold text-primary">
-												{#if item.website}
-													<a href={item.website} target="_blank" rel="noopener" class="font-semibold text-primary hover:text-secondary">
-														{item.name}
-													</a>
-												{:else}
-													{item.name}
-												{/if}
-											</strong>
-											<span class="text-sm text-text-light">{item.position}</span>
-											<span class="text-xs text-text-light">{item.institution}</span>
-										</div>
-									</div>
-								</div>
-							{/if}
-						{/each}
-					</div>
-					<div class="mt-8 text-center">
-						<a href="/community/testimonials" class="inline-flex gap-2 items-center px-6 py-3 text-base font-semibold text-white no-underline rounded-lg transition-all duration-200 bg-secondary hover:bg-secondary-dark hover:shadow-lg hover:-translate-y-0.5">
-							Read more testimonials →
-						</a>
-					</div>
-				</div>
 			</div>
 
 			<!-- Sidebar -->
-			<aside class="sticky top-[100px] self-start hidden lg:block">
+			<aside class="self-start lg:sticky lg:top-[100px]">
 				<Sidebar />
 				<div class="p-6 mt-6 text-center rounded-lg bg-bg-alt">
 					<p class="mb-4 text-[0.95rem] leading-relaxed">
@@ -439,6 +285,168 @@
 					</p>
 				</div>
 			</aside>
+		</div>
+	</div>
+</section>
+
+<!-- Voices: full width, so the lower half of the page no longer leaves the
+     sidebar column empty -->
+<section class="section-space bg-white border-t border-border">
+	<div class="container">
+		<h2 class="mb-6">Faculties and participants speak about it!</h2>
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+			{#each combinedTestimonials as item}
+				{#if item.type === 'video'}
+					<div class="flex flex-col gap-6 bg-white p-6 rounded-lg border border-border shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+						<div class="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.08)] bg-black">
+							{#if loadedVideos.has(item.videoId)}
+								<iframe
+									src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1`}
+									title={`${item.name} - ${item.institution}`}
+									frameborder="0"
+									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+									allowfullscreen
+									class="absolute top-0 left-0 w-full h-full"
+								></iframe>
+							{:else}
+								<button
+									type="button"
+									class="flex absolute top-0 left-0 justify-center items-center p-0 w-full h-full bg-transparent border-0 transition-opacity duration-200 cursor-pointer hover:opacity-90"
+									onclick={() => loadVideo(item.videoId)}
+									aria-label="Play {item.name}"
+								>
+									<img
+										src={getThumbnailUrl(item.videoId)}
+										alt="{item.name}"
+										loading="lazy"
+										class="object-cover absolute top-0 left-0 w-full h-full"
+										onerror={(e) => {
+											const img = e.currentTarget as HTMLImageElement;
+											img.src = `https://img.youtube.com/vi/${item.videoId}/hqdefault.jpg`;
+										}}
+									/>
+									<div class="relative z-10 w-[68px] h-12 transition-transform duration-200 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:scale-110" aria-hidden="true">
+										<svg xmlns="http://www.w3.org/2000/svg" width="68" height="48" viewBox="0 0 68 48">
+											<path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.63-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"/>
+											<path d="M 45,24 27,14 27,34" fill="#fff"/>
+										</svg>
+									</div>
+								</button>
+							{/if}
+						</div>
+						<div class="flex-1">
+							<div class="flex flex-col gap-1">
+								<strong class="font-semibold text-primary">{item.name}</strong>
+								<span class="text-xs text-text-light">{item.institution}</span>
+							</div>
+						</div>
+					</div>
+				{/if}
+			{/each}
+			{#each [{ id: 'aKZikF2fXxQ', year: 2026 }, { id: 'avcC11fXzlA', year: 2025 }] as vid}
+				<div class="flex flex-col gap-6 bg-white p-6 rounded-lg border border-border shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+					<div class="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.08)] bg-black">
+						{#if loadedVideos.has(vid.id)}
+							<iframe
+								src="https://www.youtube.com/embed/{vid.id}?autoplay=1"
+								title="IOEA {vid.year} - Participants' impressions"
+								frameborder="0"
+								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+								allowfullscreen
+								class="absolute top-0 left-0 w-full h-full"
+							></iframe>
+						{:else}
+							<button
+								type="button"
+								class="flex absolute top-0 left-0 justify-center items-center p-0 w-full h-full bg-transparent border-0 transition-opacity duration-200 cursor-pointer hover:opacity-90"
+								onclick={() => loadVideo(vid.id)}
+								aria-label="Play IOEA {vid.year} - Participants' impressions"
+							>
+								<img
+									src={getThumbnailUrl(vid.id)}
+									alt="IOEA {vid.year} - Participants' impressions"
+									loading="lazy"
+									class="object-cover absolute top-0 left-0 w-full h-full"
+									onerror={(e) => {
+										const img = e.currentTarget as HTMLImageElement;
+										img.src = `https://img.youtube.com/vi/${vid.id}/hqdefault.jpg`;
+									}}
+								/>
+								<div class="relative z-10 w-[68px] h-12 transition-transform duration-200 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:scale-110" aria-hidden="true">
+									<svg xmlns="http://www.w3.org/2000/svg" width="68" height="48" viewBox="0 0 68 48">
+										<path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.63-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"/>
+										<path d="M 45,24 27,14 27,34" fill="#fff"/>
+									</svg>
+								</div>
+							</button>
+						{/if}
+					</div>
+					<div class="flex-1">
+						<div class="flex flex-col gap-1">
+							<strong class="font-semibold text-primary">Participants</strong>
+							<span class="text-xs text-text-light">IOEA {vid.year}</span>
+						</div>
+					</div>
+				</div>
+			{/each}
+		</div>
+		<div class="mt-8 text-center">
+			<a href="/videos" class="inline-flex gap-2 items-center px-6 py-3 text-base font-semibold text-white no-underline rounded-lg transition-all duration-200 bg-secondary hover:bg-secondary-dark hover:shadow-lg hover:-translate-y-0.5">
+				Watch more videos →
+			</a>
+		</div>
+
+		<h2 class="mt-16 mb-6">What Alumni &amp; Faculty Say</h2>
+		<div class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6 mb-6">
+			{#each combinedTestimonials as item, index}
+				{#if item.type === 'text'}
+					<div class="flex gap-6 bg-white p-6 rounded-lg border border-border shadow-[0_2px_8px_rgba(0,0,0,0.05)] flex-col text-center sm:flex-row sm:text-left">
+						<div class="overflow-hidden flex-shrink-0 mx-auto w-24 h-24 rounded-full sm:mx-0">
+							<img
+								src={item.photo}
+								alt={item.name}
+								class="object-cover w-full h-full"
+								onerror={(e) => {
+									const img = e.currentTarget as HTMLImageElement;
+									img.src = '/images/placeholder-person.jpg';
+								}}
+							/>
+						</div>
+						<div class="flex-1">
+							<blockquote class="italic text-text mb-2 m-0 p-0 text-[0.9rem] leading-relaxed">
+								"{getTruncatedQuote(item.quote, index)}"
+							</blockquote>
+							{#if item.quote.length > maxQuoteLength}
+								<button
+									type="button"
+									class="p-0 mb-3 text-xs font-semibold underline bg-transparent border-0 transition-colors duration-200 cursor-pointer text-secondary hover:text-secondary-dark"
+									onclick={() => toggleQuote(index)}
+								>
+									{expandedQuotes.has(index) ? 'Read less' : 'Read more'}
+								</button>
+							{/if}
+							<div class="flex flex-col gap-1">
+								<strong class="font-semibold text-primary">
+									{#if item.website}
+										<a href={item.website} target="_blank" rel="noopener" class="font-semibold text-primary hover:text-secondary">
+											{item.name}
+										</a>
+									{:else}
+										{item.name}
+									{/if}
+								</strong>
+								<span class="text-sm text-text-light">{item.position}</span>
+								<span class="text-xs text-text-light">{item.institution}</span>
+							</div>
+						</div>
+					</div>
+				{/if}
+			{/each}
+		</div>
+		<div class="mt-8 text-center">
+			<a href="/community/testimonials" class="inline-flex gap-2 items-center px-6 py-3 text-base font-semibold text-white no-underline rounded-lg transition-all duration-200 bg-secondary hover:bg-secondary-dark hover:shadow-lg hover:-translate-y-0.5">
+				Read more testimonials →
+			</a>
 		</div>
 	</div>
 </section>

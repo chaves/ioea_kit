@@ -19,9 +19,11 @@
 		headingLevel?: 'h2' | 'h3';
 		/** First card above the fold: its image is the LCP, so don't lazy-load it. */
 		eager?: boolean;
+		/** Horizontal card (image beside the text from md up), for a lone article on the homepage. */
+		featured?: boolean;
 	}
 
-	let { article, headingLevel = 'h2', eager = false }: Props = $props();
+	let { article, headingLevel = 'h2', eager = false, featured = false }: Props = $props();
 
 	const hasImage = $derived(Boolean(article.image));
 	const fitMode = $derived(normalizeImageFit(article.imageFit));
@@ -34,15 +36,16 @@
 	const webpSrcset = $derived(
 		thumb ? `${thumb} 800w, ${toWebpUrl(article.image)} 1200w` : toWebpUrl(article.image)
 	);
-	const sizes = '(min-width: 1024px) 400px, (min-width: 768px) 50vw, 100vw';
+	const sizes = $derived(featured ? '(min-width: 768px) 560px, 100vw' : '(min-width: 1024px) 400px, (min-width: 768px) 50vw, 100vw');
 </script>
 
-<article class="group flex flex-col h-full overflow-hidden bg-white rounded-xl border border-border shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-shadow duration-200 hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)]">
+<article class="group flex flex-col {featured ? 'md:flex-row' : ''} h-full overflow-hidden bg-white rounded-xl border border-border shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-shadow duration-200 hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)]">
 	{#if hasImage}
 		<!-- A mouse shortcut only: the title and "Read more" already link to the
 		     article, so the image is kept out of the tab order and screen readers. -->
-		<a href="/news/{article.slug}" class="block overflow-hidden flex-shrink-0" tabindex="-1" aria-hidden="true">
-			<div class="relative w-full aspect-[3/1] overflow-hidden bg-bg-alt">
+		<a href="/news/{article.slug}" class="block overflow-hidden flex-shrink-0 {featured ? 'md:w-1/2' : ''}" tabindex="-1" aria-hidden="true">
+			<!-- Featured: the social-image ratio (1.91:1), so the whole picture shows -->
+			<div class="relative w-full {featured ? 'aspect-[1.91/1] md:h-full' : 'aspect-[3/1]'} overflow-hidden bg-bg-alt">
 				{#if fitMode === 'contain'}
 					<picture>
 						<source srcset={webpSrcset} {sizes} type="image/webp" />
@@ -87,7 +90,7 @@
 		</a>
 	{/if}
 
-	<div class="p-6 flex flex-col flex-1">
+	<div class="{featured ? 'p-6 md:p-8 md:justify-center' : 'p-6'} flex flex-col flex-1">
 		<div class="flex items-center gap-2 text-xs text-text-muted mb-3">
 			<time datetime={article.publishedAt?.toISOString()}>{formatDate(article.publishedAt)}</time>
 			{#if article.author}
@@ -96,15 +99,15 @@
 			{/if}
 		</div>
 
-		<svelte:element this={headingLevel} class="text-lg mb-2 leading-tight">
+		<svelte:element this={headingLevel} class="{featured ? 'text-xl md:text-2xl mb-3' : 'text-lg mb-2'} leading-tight">
 			<a href="/news/{article.slug}" class="text-primary-dark hover:text-secondary">{article.title}</a>
 		</svelte:element>
 
 		{#if article.excerpt}
-			<p class="text-text-light text-sm leading-relaxed mb-4">{article.excerpt}</p>
+			<p class="text-text-light {featured ? 'text-base' : 'text-sm'} leading-relaxed mb-4">{article.excerpt}</p>
 		{/if}
 
-		<a href="/news/{article.slug}" class="mt-auto pt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-secondary">
+		<a href="/news/{article.slug}" class="{featured ? 'md:mt-2' : ''} mt-auto pt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-secondary">
 			Read more<span class="sr-only"> about {article.title}</span>
 			<span aria-hidden="true">→</span>
 		</a>

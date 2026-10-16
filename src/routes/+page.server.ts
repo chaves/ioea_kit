@@ -5,7 +5,7 @@ import { getRandomVideoTestimonials } from '#lib/data/videos.js';
 import { prisma } from '#lib/server/db.js';
 import { toNewsCard } from '#lib/utils/newsImage.js';
 
-const HOMEPAGE_NEWS_COUNT = 4;
+const HOMEPAGE_NEWS_COUNT = 3;
 
 export const load: PageServerLoad = async () => {
 	// The news block is optional: a database hiccup must not take the homepage down
