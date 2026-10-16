@@ -1,12 +1,13 @@
-import { error } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { config } from '#lib/config.js';
 
 export const load: PageServerLoad = async ({ parent }) => {
 	const { isCurrent } = await parent();
 
-	// This page is only available for the current year
+	// Only kept for the current year: past years redirect permanently so indexed URLs aren't lost
 	if (!isCurrent) {
-		throw error(404, 'Page not found');
+		throw redirect(301, `/${config.currentYear}/meetings`);
 	}
 
 	return {};

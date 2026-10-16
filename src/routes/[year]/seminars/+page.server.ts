@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { prisma } from '#lib/server/db.js';
 
@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 	const year = parseInt(params.year);
 
 	if (!isCurrent) {
-		throw error(404, 'Page not found');
+		throw redirect(301, `/${year}/lectures`);
 	}
 
 	const chairsData = await prisma.chairs.findMany({

@@ -7,9 +7,9 @@ export const load: PageServerLoad = async ({ params }) => {
 	const year = parseInt(params.year);
 	const isCurrent = year === staticConfig.currentYear;
 
-	// For archive years, redirect to lectures page
+	// For archive years, redirect permanently to the lectures page
 	if (!isCurrent) {
-		throw redirect(302, `/${year}/lectures`);
+		throw redirect(301, `/${year}/lectures`);
 	}
 
 	// Get lecturers (lectures) for this year

@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { prisma } from '#lib/server/db.js';
 import { config } from '#lib/config.js';
@@ -7,9 +7,9 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 	const { isCurrent } = await parent();
 	const year = parseInt(params.year);
 
-	// This page is only available for the current year
+	// Only kept for the current year: past years redirect permanently so indexed URLs aren't lost
 	if (!isCurrent) {
-		throw error(404, 'Page not found');
+		throw redirect(301, `/${year}/lectures`);
 	}
 
 	// Check if this year has student groups open
