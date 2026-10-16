@@ -175,20 +175,6 @@
 					Every spring, internationally recognized scholars and young researchers meet in Cargèse (Corsica)
 					for a week of lectures, workshops and seminars.
 				</p>
-				<dl class="grid grid-cols-3 gap-3 mb-8">
-					<div class="p-4 text-center rounded-lg bg-bg-alt">
-						<dt class="sr-only">Editions</dt>
-						<dd class="m-0"><span class="block font-serif text-2xl sm:text-3xl font-semibold text-primary whitespace-nowrap">{sessionNumber}</span><span class="text-sm text-text-light">editions since 2002</span></dd>
-					</div>
-					<div class="p-4 text-center rounded-lg bg-bg-alt">
-						<dt class="sr-only">Alumni</dt>
-						<dd class="m-0"><span class="block font-serif text-2xl sm:text-3xl font-semibold text-primary whitespace-nowrap">350+</span><span class="text-sm text-text-light">alumni in academic positions</span></dd>
-					</div>
-					<div class="p-4 text-center rounded-lg bg-bg-alt">
-						<dt class="sr-only">Format</dt>
-						<dd class="m-0"><span class="block font-serif text-2xl sm:text-3xl font-semibold text-primary whitespace-nowrap">1 week</span><span class="text-sm text-text-light">each spring in Cargèse</span></dd>
-					</div>
-				</dl>
 				<ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 p-0 m-0 list-none">
 					{#each aboutLinks as link (link.href)}
 						<li class="border-b border-border">
