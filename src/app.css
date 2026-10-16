@@ -74,6 +74,13 @@
 		@apply text-secondary;
 	}
 
+	/* Links set in white sit on a dark or coloured background (active menu item,
+	   footer icons): the teal above would vanish there, so they stay white and
+	   the hover shows through their background instead */
+	a.text-white:hover {
+		color: white;
+	}
+
 	/* Explicit class for inline text links that need to stand out */
 	a.text-link {
 		color: var(--color-primary-dark);
@@ -119,6 +126,8 @@
 	.btn-primary:hover {
 		@apply bg-primary-dark shadow-lg -translate-y-px;
 		box-shadow: 0 4px 8px rgba(93, 74, 120, 0.2);
+		/* Beats the global a:hover teal, unreadable on purple */
+		color: white;
 	}
 
 	.btn-secondary {
